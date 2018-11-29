@@ -127,7 +127,7 @@ void camera_free_think (int clientID, usercmd_t *cmd)
 	if (memcmp(&clients[clientID].old_pmove, &pm.s, sizeof(pm.s)))
 	{
 		pm.snapinitial = QTRUE;
-//		gci.dprintf ("pmove changed!\n");
+		//gci.dprintf ("pmove changed!\n");
 	}
 
 	pm.cmd = *cmd;

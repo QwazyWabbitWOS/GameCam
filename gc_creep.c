@@ -16,30 +16,30 @@ edict_t *camera_creep_target (int clientID)
 	int i;
 	edict_t *pTarget1st, *pTarget2nd;
 	edict_t *pBest1 = NULL, *pBest2 = NULL;
-    vec3_t vDistance;
+	vec3_t vDistance;
 	float fCurrent, fClosest1 = -1.0F, fClosest2 = -1.0F;
 
 	pTarget1st = Edict (clients[clientID].target + 1);
 
-    for (i = 0; i < maxclients->value; i++)
-    {
+	for (i = 0; i < maxclients->value; i++)
+	{
 		pTarget2nd = Edict(i + 1);
-        if (pTarget1st != pTarget2nd &&
+		if (pTarget1st != pTarget2nd &&
 			((clients[i].inuse &&
-			  clients[i].begin &&
-			  !clients[i].spectator) ||
-			 (pTarget2nd->inuse &&
-			  pTarget2nd->s.modelindex !=0)) &&
+			clients[i].begin &&
+			!clients[i].spectator) ||
+			(pTarget2nd->inuse &&
+			pTarget2nd->s.modelindex !=0)) &&
 			pTarget2nd->client &&
 			pTarget2nd->client->ps.pmove.pm_type != PM_SPECTATOR &&
 			pTarget2nd->client->ps.pmove.pm_type != PM_FREEZE &&
-		    clients[i].last_pmtype != PM_DEAD &&
+			clients[i].last_pmtype != PM_DEAD &&
 			clients[i].last_pmtype != PM_GIB &&
-            gci.inPVS (pTarget1st->s.origin, pTarget2nd->s.origin))
-        {
+			gci.inPVS (pTarget1st->s.origin, pTarget2nd->s.origin))
+		{
 			VectorSubtract(pTarget1st->s.origin, pTarget2nd->s.origin, vDistance);
 			fCurrent = VectorLength(vDistance);
-            if (sameTeam (pTarget1st, pTarget2nd))
+			if (sameTeam (pTarget1st, pTarget2nd))
 			{
 				if (fClosest1 < 0 || fCurrent < fClosest1)
 				{
@@ -55,9 +55,9 @@ edict_t *camera_creep_target (int clientID)
 					fClosest2 = fCurrent;
 				}
 			}
-        }
-    }
-    return ((pBest2)? pBest2:pBest1);
+		}
+	}
+	return ((pBest2)? pBest2:pBest1);
 }
 
 
@@ -90,7 +90,7 @@ void camera_creep_angle (int clientID)
 			else
 				clients[clientID].chase_angle = anglemod (clients[clientID].chase_angle + CREEP_ANGLE_STEP);
 		return;
-    }
+	}
 
 	VectorSubtract (target->s.origin, player->s.origin, vDiff);
 	target_distance = VectorLength (vDiff);

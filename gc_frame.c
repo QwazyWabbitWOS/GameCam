@@ -111,7 +111,6 @@ void RunFrame (void)
 			{ 
 				// not in limbo
 				switch (clients[clientID].mode) 
-	
 				{
 				case CAMERA_FREE:
 					camera_free_frame (clientID);

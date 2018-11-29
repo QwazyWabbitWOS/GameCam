@@ -67,9 +67,9 @@ void ShutdownGameCam (void)
 	gci.dprintf ("==== Shutdown (GameCam) ====\n");
 	// remove gc_count from server info
 	gci.cvar_forceset("gc_count","");
-    ge.Shutdown(); // shutdown game DLL
+	ge.Shutdown(); // shutdown game DLL
 #ifdef _WIN32
-    FreeLibrary(hGameDLL);
+	FreeLibrary(hGameDLL);
 #else
 	dlclose(hGameDLL);
 #endif
@@ -81,13 +81,13 @@ void InitGameCam (void)
 	/***
 	int i;
 	for (i=0; i<256; i++)
-		gci.dprintf ("[%.3d]=%c\n",i,i);
+	gci.dprintf ("[%.3d]=%c\n",i,i);
 	***/
 	gci.dprintf ("==== Init (GameCam "GAMECAMVERNUM" "__DATE__") ====\n");
 	ClearBuffer ();
 	clients = gci.TagMalloc (sizeof(clients_t) * ((int) maxclients->value), TAG_GAME);
 	memset (clients, 0, sizeof(clients_t) * ((int) maxclients->value));
-   	gci.cvar_forceset("gc_count","0");
+	gci.cvar_forceset("gc_count","0");
 	ParsePriorityList();
 	ctf_game = (strstr (game->string, "ctf") || strstr (game->string, "CTF"));
 	ge.Init();
@@ -99,49 +99,49 @@ void LoadGameModule(char *game_basedir, char *game_dir)
 	char GameLibPath[MAX_OSPATH];
 
 	// if no game dir or bad game dir then load game from baseq2
-    if (!game_dir || game_dir[0] == '\0' || 
+	if (!game_dir || game_dir[0] == '\0' || 
 		strchr (game_dir, '\\') || strchr (game_dir, '/') || strstr (game_dir, "..")) 
 	{
 		gci.cvar_forceset ("nextproxy","");
-        sprintf (GameLibPath,"%s/baseq2/" GAME_MODULE, basedir->string);
-        gci.dprintf ("...loading default game module \"%s\": ", GameLibPath);
-    } 
+		sprintf (GameLibPath,"%s/baseq2/" GAME_MODULE, basedir->string);
+		gci.dprintf ("...loading default game module \"%s\": ", GameLibPath);
+	} 
 	else if (game_basedir[0] != '\0') 
 	{
 		// load next proxy module
-        sprintf (GameLibPath, "%s/%s/%s/" PROXY_MODULE, basedir->string, game_basedir, game_dir);
-        gci.dprintf ("...loading proxy module \"%s\": ", GameLibPath);
+		sprintf (GameLibPath, "%s/%s/%s/" PROXY_MODULE, basedir->string, game_basedir, game_dir);
+		gci.dprintf ("...loading proxy module \"%s\": ", GameLibPath);
 	}
 	else 
 	{
 		// load real game module
-        sprintf (GameLibPath,"%s/%s/" GAME_MODULE, basedir->string, game_dir);
-        gci.dprintf ("...loading game module \"%s\": ", GameLibPath);
-    }
+		sprintf (GameLibPath,"%s/%s/" GAME_MODULE, basedir->string, game_dir);
+		gci.dprintf ("...loading game module \"%s\": ", GameLibPath);
+	}
 
 #ifdef _WIN32
-    hGameDLL = LoadLibrary (GameLibPath);
+	hGameDLL = LoadLibrary (GameLibPath);
 #else
 	hGameDLL = dlopen (GameLibPath, RTLD_LAZY);
 #endif
 
-    if (hGameDLL)
-        gci.dprintf ("ok\n");
-    else 
+	if (hGameDLL)
+		gci.dprintf ("ok\n");
+	else 
 	{
-        gci.dprintf("failed\n");
-        if (game_basedir[0] != '\0') 
+		gci.dprintf("failed\n");
+		if (game_basedir[0] != '\0') 
 		{ 
 			// failed to load proxy in chain - attempt to load game
 			gci.cvar_forceset ("nextproxy", "");
-            LoadGameModule ("", game->string);
-            return;
-        }
-        if (game_dir[0] == '\0')  // failed to load default game module
-            return;
-        LoadGameModule ("", "");   // attempt to load default module
-    }
-    return;
+			LoadGameModule ("", game->string);
+			return;
+		}
+		if (game_dir[0] == '\0')  // failed to load default game module
+			return;
+		LoadGameModule ("", "");   // attempt to load default module
+	}
+	return;
 }
 
 
@@ -152,16 +152,16 @@ game_export_t *GetGameAPI (game_import_t *gimport)
 	char CurrentProxy[MAX_OSPATH];
 	char NextProxy[MAX_OSPATH];
 	char *LoopProxy;
-    char *colon;
+	char *colon;
 	int nextcolon;
-    GetGameAPI_t GetGameAPI_f;
+	GetGameAPI_t GetGameAPI_f;
 
-    memcpy(&gci,gimport,sizeof(game_import_t)); 
+	memcpy(&gci,gimport,sizeof(game_import_t)); 
 
-//    gci.dprintf("\nGameCam v" GAMECAMVERNUM " " GAMECAMVERSTATUS "\n(C) 1998-99, Avi \"Zung!\" Rozen\ne-mail: zungbang@telefragged.com\n\n");
+	//gci.dprintf("\nGameCam v" GAMECAMVERNUM " " GAMECAMVERSTATUS "\n(C) 1998-99, Avi \"Zung!\" Rozen\ne-mail: zungbang@telefragged.com\n\n");
 
-    gc_version		= gci.cvar ("gc_version", GAMECAMVERSION, CVAR_NOSET);
-    gc_flags		= gci.cvar ("gc_flags", "18147", CVAR_ARCHIVE);
+	gc_version		= gci.cvar ("gc_version", GAMECAMVERSION, CVAR_NOSET);
+	gc_flags		= gci.cvar ("gc_flags", "18147", CVAR_ARCHIVE);
 	gc_count		= gci.cvar ("gc_count","0", CVAR_NOSET);
 	gc_password		= gci.cvar ("gc_password","", 0);
 	gc_maxcameras	= gci.cvar ("gc_maxcameras","4", CVAR_ARCHIVE);
@@ -173,11 +173,11 @@ game_export_t *GetGameAPI (game_import_t *gimport)
 	gc_teams		= gci.cvar ("gc_teams","", CVAR_ARCHIVE);
 	gc_update		= gci.cvar ("gc_update","5", CVAR_ARCHIVE);
 
-    proxy		= gci.cvar("proxy", "", CVAR_SERVERINFO | CVAR_LATCH);
+	proxy		= gci.cvar("proxy", "", CVAR_SERVERINFO | CVAR_LATCH);
 	nextproxy	= gci.cvar("nextproxy", "", CVAR_NOSET);
 
-    basedir		= gci.cvar("basedir", ".", CVAR_NOSET);
-    game		= gci.cvar("game", "", CVAR_SERVERINFO | CVAR_LATCH);
+	basedir		= gci.cvar("basedir", ".", CVAR_NOSET);
+	game		= gci.cvar("game", "", CVAR_SERVERINFO | CVAR_LATCH);
 	maxclients  = gci.cvar ("maxclients", "4", CVAR_SERVERINFO | CVAR_LATCH);
 	dedicated	= gci.cvar ("dedicated", "0", CVAR_NOSET);
 	sv_gravity	= gci.cvar ("sv_gravity", "800", 0);
@@ -196,21 +196,21 @@ game_export_t *GetGameAPI (game_import_t *gimport)
 
 	gci.cvar_forceset("gc_version",GAMECAMVERSION);
 
-    CurrentProxy[0]='\0';
-    NextProxy[0]='\0';
+	CurrentProxy[0]='\0';
+	NextProxy[0]='\0';
 
 	if ((proxy->string[0]!='\0') && (nextproxy->string[0]=='\0'))
-        gci.cvar_forceset("nextproxy",proxy->string);
-    if (nextproxy->string[0]!='\0' && strcmp(nextproxy->string,":")!=0) 
+		gci.cvar_forceset("nextproxy",proxy->string);
+	if (nextproxy->string[0]!='\0' && strcmp(nextproxy->string,":")!=0) 
 	{
-        if ((colon=strchr(nextproxy->string, ':'))==NULL)
-            strcpy(CurrentProxy, nextproxy->string);
-        else 
+		if ((colon=strchr(nextproxy->string, ':'))==NULL)
+			strcpy(CurrentProxy, nextproxy->string);
+		else 
 		{
-            strncpy(CurrentProxy,nextproxy->string,colon - nextproxy->string);
-            CurrentProxy[MIN(MAX_OSPATH-1,colon - nextproxy->string)]='\0';
-            // prevent infinite loops
-            if ((LoopProxy=strstr(colon+1,CurrentProxy))!=NULL) 
+			strncpy(CurrentProxy,nextproxy->string,colon - nextproxy->string);
+			CurrentProxy[MIN(MAX_OSPATH-1,colon - nextproxy->string)]='\0';
+			// prevent infinite loops
+			if ((LoopProxy=strstr(colon+1,CurrentProxy))!=NULL) 
 			{
 				// weird stuff: win95 considers "folder  " and "folder" to be the same
 				// while "  folder" and "folder" are different (should be different in
@@ -219,51 +219,51 @@ game_export_t *GetGameAPI (game_import_t *gimport)
 				while (LoopProxy[nextcolon] && isspace(LoopProxy[nextcolon]))
 					nextcolon++;
 				if ((LoopProxy[nextcolon]==':' ||
-                     LoopProxy[nextcolon]=='\0') &&
-				    (NextProxy[LoopProxy-NextProxy-1]==':')) 
+					LoopProxy[nextcolon]=='\0') &&
+					(NextProxy[LoopProxy-NextProxy-1]==':')) 
 				{
 					gci.dprintf("Warning: found a loop in proxy chain!\n");
 					colon--; // hack: this will cause next proxy load to fail
 				}
-            } 
-            strcpy(NextProxy,colon+1);
-        }
+			} 
+			strcpy(NextProxy,colon+1);
+		}
 		if (NextProxy[0]!='\0')
 			gci.cvar_forceset("nextproxy",NextProxy);
 		else
 			gci.cvar_forceset("nextproxy",":");
-    }
-    if ((CurrentProxy[0]!='\0') && strcmp(CurrentProxy,".."))
-        LoadGameModule("proxy",CurrentProxy);
-    else 
+	}
+	if ((CurrentProxy[0]!='\0') && strcmp(CurrentProxy,".."))
+		LoadGameModule("proxy",CurrentProxy);
+	else 
 	{
 		gci.cvar_forceset("nextproxy","");
-        LoadGameModule("",game->string);
+		LoadGameModule("",game->string);
 	}
 
 
-    if (hGameDLL == NULL) 
+	if (hGameDLL == NULL) 
 	{
-        gci.error("game module not found");
-        return NULL;
-    }
+		gci.error("game module not found");
+		return NULL;
+	}
 
 #ifdef _WIN32
-    GetGameAPI_f = (GetGameAPI_t) GetProcAddress (hGameDLL, "GetGameAPI");
+	GetGameAPI_f = (GetGameAPI_t) GetProcAddress (hGameDLL, "GetGameAPI");
 #else
-    GetGameAPI_f = (GetGameAPI_t) dlsym (hGameDLL, "GetGameAPI");
+	GetGameAPI_f = (GetGameAPI_t) dlsym (hGameDLL, "GetGameAPI");
 #endif
 
-    if (GetGameAPI_f == NULL) 
+	if (GetGameAPI_f == NULL) 
 	{
-        gci.error("can't get game API");
-        return NULL;
-    }
+		gci.error("can't get game API");
+		return NULL;
+	}
 
-    memcpy(&gi,gimport,sizeof(game_import_t));
-    
+	memcpy(&gi,gimport,sizeof(game_import_t));
+
 	// to capture API calls from game module change gi to point
-    // to local functions (i.e. gi.dprintf = proxy_dprintf;)
+	// to local functions (i.e. gi.dprintf = proxy_dprintf;)
 
 	gi.WriteChar = WriteChar;
 	gi.WriteByte = WriteByte;
@@ -288,18 +288,18 @@ game_export_t *GetGameAPI (game_import_t *gimport)
 	gi.argv = gc_argv;
 	gi.args = gc_args;
 
-    gce = GetGameAPI_f(&gi);
+	gce = GetGameAPI_f(&gi);
 
 	if (strcmp(nextproxy->string,":")==0)
 		gci.cvar_forceset("nextproxy","");
 
-    memcpy(&ge,gce,sizeof(game_export_t));
-    
-	// to capture API calls from server change gce to point
-    // to local functions (i.e. gce->ClientConnect = proxy_ClientConnect;)
+	memcpy(&ge,gce,sizeof(game_export_t));
 
-    gce->Init = InitGameCam;
-    gce->Shutdown = ShutdownGameCam;
+	// to capture API calls from server change gce to point
+	// to local functions (i.e. gce->ClientConnect = proxy_ClientConnect;)
+
+	gce->Init = InitGameCam;
+	gce->Shutdown = ShutdownGameCam;
 	gce->ClientCommand = ClientCommand;
 	gce->ServerCommand = ServerCommand;
 	gce->ClientConnect = ClientConnect;
@@ -310,6 +310,6 @@ game_export_t *GetGameAPI (game_import_t *gimport)
 	gce->RunFrame = RunFrame;
 	gce->SpawnEntities = SpawnEntities;
 
-    return gce;
+	return gce;
 }
 

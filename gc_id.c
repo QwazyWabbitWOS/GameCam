@@ -24,7 +24,7 @@ void Com_sprintf (char *dest, int size, char *fmt, ...)
 /*
 =====================================================================
 
-  INFO STRINGS
+INFO STRINGS
 
 
 =====================================================================
@@ -42,10 +42,10 @@ char *Info_ValueForKey (char *s, char *key)
 {
 	char	pkey[512];
 	static	char value[2][512];	// use two buffers so compares
-								// work without stomping on each other
+	// work without stomping on each other
 	static	int	valueindex;
 	char	*o;
-	
+
 	valueindex ^= 1;
 	if (*s == '\\')
 		s++;
@@ -89,7 +89,7 @@ void Info_RemoveKey (char *s, char *key)
 
 	if (strstr (key, "\\"))
 	{
-//		Com_Printf ("Can't use a key with a \\\n");
+		//		Com_Printf ("Can't use a key with a \\\n");
 		return;
 	}
 
@@ -221,14 +221,14 @@ char *COM_Parse (char **data_p)
 	data = *data_p;
 	len = 0;
 	com_token[0] = 0;
-	
+
 	if (!data)
 	{
 		*data_p = NULL;
 		return "";
 	}
-		
-// skip whitespace
+
+	// skip whitespace
 skipwhite:
 	while ( (c = *data) <= ' ')
 	{
@@ -239,17 +239,17 @@ skipwhite:
 		}
 		data++;
 	}
-	
-// skip // comments
+
+	// skip // comments
 	if (c=='/' && data[1] == '/')
 	{
 		while (*data && *data != '\n')
 			data++;
 		goto skipwhite;
 	}
-	
 
-// handle quoted strings specially
+
+	// handle quoted strings specially
 	if (c == '\"')
 	{
 		data++;
@@ -270,7 +270,7 @@ skipwhite:
 		}
 	}
 
-// parse a regular word
+	// parse a regular word
 	do
 	{
 		if (len < MAX_TOKEN_CHARS)
@@ -284,7 +284,7 @@ skipwhite:
 
 	if (len == MAX_TOKEN_CHARS)
 	{
-//		Com_Printf ("Token exceeded %i chars, discarded.\n", MAX_TOKEN_CHARS);
+		//		Com_Printf ("Token exceeded %i chars, discarded.\n", MAX_TOKEN_CHARS);
 		len = 0;
 	}
 	com_token[len] = 0;
@@ -297,7 +297,7 @@ skipwhite:
 /*
 =====================================================================
 
-  FILE NAMES
+FILE NAMES
 
 
 =====================================================================
@@ -312,7 +312,7 @@ COM_SkipPath
 char *COM_SkipPath (char *pathname)
 {
 	char	*last;
-	
+
 	last = pathname;
 	while (*pathname)
 	{
@@ -364,15 +364,15 @@ COM_FileBase
 void COM_FileBase (char *in, char *out)
 {
 	char *s, *s2;
-	
+
 	s = in + strlen(in) - 1;
-	
+
 	while (s != in && *s != '.')
 		s--;
-	
+
 	for (s2 = s ; s2 != in && *s2 != '/' ; s2--)
-	;
-	
+		;
+
 	if (s-s2 < 2)
 		out[0] = 0;
 	else
@@ -393,9 +393,9 @@ Returns the path up to, but not including the last /
 void COM_FilePath (char *in, char *out)
 {
 	char *s;
-	
+
 	s = in + strlen(in) - 1;
-	
+
 	while (s != in && *s != '/')
 		s--;
 
@@ -412,10 +412,10 @@ COM_DefaultExtension
 void COM_DefaultExtension (char *path, char *extension)
 {
 	char    *src;
-//
-// if path doesn't have a .EXT, append extension
-// (extension should include the .)
-//
+	//
+	// if path doesn't have a .EXT, append extension
+	// (extension should include the .)
+	//
 	src = path + strlen(path) - 1;
 
 	while (*src != '/' && src != path)
@@ -526,7 +526,7 @@ vec_t VectorNormalize (vec3_t v)
 		v[1] *= ilength;
 		v[2] *= ilength;
 	}
-		
+
 	return length;
 
 }
@@ -552,7 +552,7 @@ float VectorLength(vec3_t v)
 {
 	int		i;
 	float	length;
-	
+
 	length = 0;
 	for (i=0 ; i< 3 ; i++)
 		length += v[i]*v[i];
@@ -566,7 +566,7 @@ void vectoangles (vec3_t value1, vec3_t angles)
 {
 	float	forward;
 	int	yaw, pitch;
-	
+
 	if (value1[1] == 0 && value1[0] == 0)
 	{
 		yaw = 0;
@@ -631,7 +631,7 @@ char	*vtos (vec3_t v)
 float vectoyaw (vec3_t vec)
 {
 	float	yaw;
-	
+
 	if (/*vec[YAW] == 0 &&*/ vec[PITCH] == 0) 
 	{
 		yaw = 0;
@@ -687,7 +687,7 @@ static qboolean loc_CanSee (edict_t *targ, edict_t *inflictor)
 	inflictorID = numEdict(inflictor) - 1;
 
 	loc_buildboxpoints(targpoints, targ->s.origin, targ->mins, targ->maxs);
-	
+
 	VectorCopy(inflictor->s.origin, viewpoint);
 	viewpoint[2] += clients[inflictorID].viewheight;
 
@@ -714,7 +714,7 @@ void SetIDView(edict_t *ent, qboolean exclude_bots)
 	clientID = numEdict(ent) - 1;
 
 	ent->client->ps.stats[STAT_ID_VIEW] = 0;
-	
+
 	AngleVectors(clients[clientID].v_angle, forward, NULL, NULL);
 	VectorScale(forward, 1024, forward);
 	VectorAdd(ent->s.origin, forward, forward);
@@ -732,14 +732,14 @@ void SetIDView(edict_t *ent, qboolean exclude_bots)
 	{
 		who = Edict(i);
 		if (((clients[i-1].inuse && 
-			  clients[i-1].begin && 
-			  !clients[i-1].spectator) ||
-			 (!exclude_bots &&
-			  who->inuse &&
-			  who->s.modelindex != 0)) &&
-			 who->client &&
-			 who->client->ps.pmove.pm_type != PM_SPECTATOR &&
-			 who->client->ps.pmove.pm_type != PM_FREEZE)
+			clients[i-1].begin && 
+			!clients[i-1].spectator) ||
+			(!exclude_bots &&
+			who->inuse &&
+			who->s.modelindex != 0)) &&
+			who->client &&
+			who->client->ps.pmove.pm_type != PM_SPECTATOR &&
+			who->client->ps.pmove.pm_type != PM_FREEZE)
 		{
 			VectorSubtract(who->s.origin, ent->s.origin, dir);
 			VectorNormalize(dir);

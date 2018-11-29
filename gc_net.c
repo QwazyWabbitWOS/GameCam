@@ -134,7 +134,7 @@ void WriteBuffer(void)
 			bufpos += sizeof(float);
 			gci.WriteAngle(f);
 			break;
-		}
+	}
 }
 
 
@@ -254,7 +254,7 @@ void unicast (edict_t *ent, qboolean reliable)
 	if (wait_help == ent && 
 		write_buffer.data[0] == svc_layout)  // GameCam issued help
 	{
-				cameraID = numEdict(wait_camera) - 1;
+		cameraID = numEdict(wait_camera) - 1;
 		if (clients[cameraID].last_score != framenum)  // prevent overflow
 		{
 			WriteBuffer();

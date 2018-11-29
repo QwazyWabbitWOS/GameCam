@@ -13,7 +13,7 @@ camera_t *cameras = NULL;
 void camera_fixed_free (void)
 {
 	camera_t *current_camera;
-	
+
 	current_camera = cameras;
 	if (cameras == NULL)
 		return;
@@ -107,7 +107,7 @@ void camera_fixed_load (char *mapname)
 	if (strstr (mapname, ".")) // this is not a map
 		return;
 
-	
+
 	if (game->string[0] == '\0')
 	{
 		sprintf (cameraPath, "%s/baseq2/cameras/%s.cam", basedir->string, mapname);
@@ -119,11 +119,11 @@ void camera_fixed_load (char *mapname)
 		camfile = fopen (cameraPath, "rt");
 		if (camfile == NULL)
 		{
-		    sprintf (cameraPath, "%s/baseq2/cameras/%s.cam", basedir->string, mapname);
-		    camfile = fopen (cameraPath, "rt");
+			sprintf (cameraPath, "%s/baseq2/cameras/%s.cam", basedir->string, mapname);
+			camfile = fopen (cameraPath, "rt");
 		}
 	}
-	
+
 	if (camfile == NULL)
 		return;
 	while (camera_fixed_read_camera (camfile, name, origin, angles, &fov))
@@ -289,7 +289,7 @@ void camera_fixed_list (edict_t *ent)
 		int cam_count = 0;
 		camera_t *current_camera = cameras;
 		char camera_record[MAX_STRING_CHARS];
-		
+
 		do
 		{
 			cam_count++;
@@ -331,7 +331,7 @@ camera_t *camera_fixed_find (edict_t *ent)
 			if (best_camera == NULL || ((range = VectorLength (vDiff)) < minrange))
 			{
 				trace = gci.trace (ent->s.origin, NULL, NULL, current_camera->origin, 
-								   ent, CONTENTS_SOLID);
+					ent, CONTENTS_SOLID);
 				if (trace.fraction == 1) // camera can see target
 				{
 					minrange = range;

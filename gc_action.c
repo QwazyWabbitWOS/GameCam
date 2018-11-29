@@ -7,16 +7,16 @@
 // Legal Stuff:
 
 /*
-	The Client Camera is a product of Paul Jordan, and is available from
-	the Quake2 Camera homepage at http://home.austin.rr.com/thejordan/q2cam/, 
-    Or as part of the Eraser Bot at http://impact.frag.com.
+The Client Camera is a product of Paul Jordan, and is available from
+the Quake2 Camera homepage at http://home.austin.rr.com/thejordan/q2cam/, 
+Or as part of the Eraser Bot at http://impact.frag.com.
 
-	This program is a modification of the Quake2 Client Camera, and is
-    therefore in NO WAY supported by Paul Jordan.
+This program is a modification of the Quake2 Client Camera, and is
+therefore in NO WAY supported by Paul Jordan.
 
-	This program MUST NOT be sold in ANY form. If you have paid for 
-	this product, you should contact Paul Jordan immediately, via
-	the Quake2 Camera Client homepage.
+This program MUST NOT be sold in ANY form. If you have paid for 
+this product, you should contact Paul Jordan immediately, via
+the Quake2 Camera Client homepage.
 */
 
 #include "gamecam.h"
@@ -32,29 +32,29 @@ void CameraStaticThink(edict_t *ent, usercmd_t *ucmd);
 
 int NumPlayersVisible(edict_t *pViewer)
 {
-    int iCount=0;
+	int iCount=0;
 	int i;
 	edict_t *pTarget;
-    
+
 	for (i = 0; i < maxclients->value; i++) 
-    {
+	{
 		pTarget = Edict(i + 1);
-        if (((clients[i].inuse &&
-			  clients[i].begin &&
-			  !clients[i].spectator) ||
-			 (pTarget->inuse &&
-			  pTarget->s.modelindex != 0)) &&
+		if (((clients[i].inuse &&
+			clients[i].begin &&
+			!clients[i].spectator) ||
+			(pTarget->inuse &&
+			pTarget->s.modelindex != 0)) &&
 			pTarget->client &&
 			pTarget->client->ps.pmove.pm_type != PM_SPECTATOR &&
 			pTarget->client->ps.pmove.pm_type != PM_FREEZE)
-        {
-            if (IsVisible(pViewer, pTarget, MAX_VISIBLE_RANGE))
-            {
-                iCount++;
-            }
-        }
-    }
-    return iCount;
+		{
+			if (IsVisible(pViewer, pTarget, MAX_VISIBLE_RANGE))
+			{
+				iCount++;
+			}
+		}
+	}
+	return iCount;
 }
 
 
@@ -93,7 +93,7 @@ edict_t *PriorityTarget(edict_t *target, qboolean *override)
 
 				case CAMERA_TARGET_SHELL:
 					match = ((potential->s.effects & current->effects) != 0 &&
-							 potential->s.renderfx == current->renderfx);
+						potential->s.renderfx == current->renderfx);
 					break;
 
 				case CAMERA_TARGET_GUN:
@@ -128,9 +128,9 @@ MATCH_TARGET:
 					if (clients[favoriteID].num_visible < clients[i].num_visible)
 						favorite = potential;
 					else if (clients[favoriteID].num_visible == clients[i].num_visible &&
-							 favorite->client->ps.stats[STAT_FRAGS] < 
-						     potential->client->ps.stats[STAT_FRAGS])
-							 favorite = potential;
+						favorite->client->ps.stats[STAT_FRAGS] < 
+						potential->client->ps.stats[STAT_FRAGS])
+						favorite = potential;
 				} else
 					favorite = potential;
 			} 
@@ -153,9 +153,9 @@ MATCH_TARGET:
 
 edict_t *PlayerToFollow(int cameraID)
 {
-    edict_t *pViewer;
+	edict_t *pViewer;
 	edict_t *pBest=NULL;
-    int i, iPlayers, iBestCount=0;
+	int i, iPlayers, iBestCount=0;
 
 	// manual target selection
 	// (if it fails once then target is set to "auto")
@@ -163,10 +163,10 @@ edict_t *PlayerToFollow(int cameraID)
 	{
 		pViewer = Edict(clients[cameraID].select);
 		if (((clients[clients[cameraID].select - 1].inuse &&
-			  clients[clients[cameraID].select - 1].begin &&
-			  !clients[clients[cameraID].select - 1].spectator) ||
-			 (pViewer->inuse &&
-			  pViewer->s.modelindex != 0)) &&
+			clients[clients[cameraID].select - 1].begin &&
+			!clients[clients[cameraID].select - 1].spectator) ||
+			(pViewer->inuse &&
+			pViewer->s.modelindex != 0)) &&
 			pViewer->client &&
 			pViewer->client->ps.pmove.pm_type != PM_SPECTATOR &&
 			pViewer->client->ps.pmove.pm_type != PM_FREEZE)
@@ -191,10 +191,10 @@ edict_t *PlayerToFollow(int cameraID)
 		pViewer = Edict(i + 1);
 		clients[i].valid_target = QFALSE;
 		if (((clients[i].inuse &&
-			  clients[i].begin &&
-			  !clients[i].spectator) ||
-			 (pViewer->inuse &&
-			  pViewer->s.modelindex != 0)) &&
+			clients[i].begin &&
+			!clients[i].spectator) ||
+			(pViewer->inuse &&
+			pViewer->s.modelindex != 0)) &&
 			pViewer->client->ps.pmove.pm_type == PM_NORMAL)
 		{
 			iPlayers = NumPlayersVisible(pViewer);
@@ -223,16 +223,16 @@ edict_t *PlayerToFollow(int cameraID)
 
 void PointCamAtOrigin(edict_t *ent, vec3_t vLocation)
 {
-    int i, clientID;
+	int i, clientID;
 	vec3_t vDiff, vAngles;
 
 	clientID = numEdict(ent) - 1;
 
-    VectorSubtract(vLocation, ent->s.origin, vDiff);
-    vectoangles(vDiff, vAngles);
-    VectorCopy (vAngles, ent->s.angles);
-    VectorCopy (vAngles, ent->client->ps.viewangles);
-    VectorCopy (vAngles, clients[clientID].v_angle);
+	VectorSubtract(vLocation, ent->s.origin, vDiff);
+	vectoangles(vDiff, vAngles);
+	VectorCopy (vAngles, ent->s.angles);
+	VectorCopy (vAngles, ent->client->ps.viewangles);
+	VectorCopy (vAngles, clients[clientID].v_angle);
 	for (i=0 ; i<3 ; i++) 
 		ent->client->ps.pmove.delta_angles[i] = ANGLE2SHORT(clients[clientID].v_angle[i] - clients[clientID].cmd_angles[i]);
 }
@@ -241,8 +241,8 @@ void PointCamAtOrigin(edict_t *ent, vec3_t vLocation)
 void PointCamAtTarget(edict_t *ent)
 {
 	int i, clientID;
-    vec3_t vDiff, vAngles;
-    float fDifference;
+	vec3_t vDiff, vAngles;
+	float fDifference;
 
 	clientID = numEdict(ent) - 1;
 
@@ -251,42 +251,42 @@ void PointCamAtTarget(edict_t *ent)
 		!IsVisible (ent, clients[clientID].pTarget, 0))
 		return;
 
-    VectorSubtract(clients[clientID].pTarget->s.origin, ent->s.origin, vDiff);
-    vectoangles(vDiff, vAngles);
-    ent->s.angles[0] = vAngles[0];
-    ent->s.angles[2] = 0;
-    fDifference = vAngles[1] - ent->s.angles[1];
+	VectorSubtract(clients[clientID].pTarget->s.origin, ent->s.origin, vDiff);
+	vectoangles(vDiff, vAngles);
+	ent->s.angles[0] = vAngles[0];
+	ent->s.angles[2] = 0;
+	fDifference = vAngles[1] - ent->s.angles[1];
 
-    while (fabs(fDifference) > 180)
-    {
-        if (fDifference > 0)
-        {
-            fDifference -= 360;
-        }
-        else
-        {
-            fDifference += 360;
-        }
-    }
+	while (fabs(fDifference) > 180)
+	{
+		if (fDifference > 0)
+		{
+			fDifference -= 360;
+		}
+		else
+		{
+			fDifference += 360;
+		}
+	}
 
-    if (fabs(fDifference) > clients[clientID].fAngleLag)
-    {
+	if (fabs(fDifference) > clients[clientID].fAngleLag)
+	{
 		// GC: upto twice the angular velocity when |fDifference| > 20 deg
-        if (fDifference > 0)
-        {
-            ent->s.angles[1] += (fDifference <  20)? clients[clientID].fAngleLag : ((1 + ( fDifference - 20) / 160) * clients[clientID].fAngleLag);
-        }
-        else
-        {
-            ent->s.angles[1] -= (fDifference > -20)? clients[clientID].fAngleLag : ((1 + (-fDifference - 20) / 160) * clients[clientID].fAngleLag);
-        }
-    }
-    else
-    {
-        ent->s.angles[1] = vAngles[1];
-    }
+		if (fDifference > 0)
+		{
+			ent->s.angles[1] += (fDifference <  20)? clients[clientID].fAngleLag : ((1 + ( fDifference - 20) / 160) * clients[clientID].fAngleLag);
+		}
+		else
+		{
+			ent->s.angles[1] -= (fDifference > -20)? clients[clientID].fAngleLag : ((1 + (-fDifference - 20) / 160) * clients[clientID].fAngleLag);
+		}
+	}
+	else
+	{
+		ent->s.angles[1] = vAngles[1];
+	}
 
-    VectorCopy (ent->s.angles, ent->client->ps.viewangles);
+	VectorCopy (ent->s.angles, ent->client->ps.viewangles);
 	VectorCopy (ent->s.angles, clients[clientID].v_angle);
 	for (i=0 ; i<3 ; i++) 
 		ent->client->ps.pmove.delta_angles[i] = ANGLE2SHORT(clients[clientID].v_angle[i] - clients[clientID].cmd_angles[i]);
@@ -308,30 +308,30 @@ void FindCamPos (int clientID, float angle, vec3_t vOffsetPosition, vec3_t vCamP
 {
 	vec3_t forward;
 
-    AngleVectors(tv (clients[clientID].pTarget->client->ps.viewangles[PITCH],
+	AngleVectors(tv (clients[clientID].pTarget->client->ps.viewangles[PITCH],
 		clients[clientID].pTarget->client->ps.viewangles[YAW] + angle,
 		clients[clientID].pTarget->client->ps.viewangles[ROLL]), forward, NULL,NULL);
-    forward[2] = 0;
+	forward[2] = 0;
 
-    VectorNormalize(forward);
+	VectorNormalize(forward);
 
-    vCamPos[0] = clients[clientID].pTarget->s.origin[0] +
-        (vOffsetPosition[0] * forward[0]);
-        
-    vCamPos[1] = clients[clientID].pTarget->s.origin[1] +
-        (vOffsetPosition[1] * forward[1]);
+	vCamPos[0] = clients[clientID].pTarget->s.origin[0] +
+		(vOffsetPosition[0] * forward[0]);
 
-    vCamPos[2] = clients[clientID].pTarget->s.origin[2] + 
-        vOffsetPosition[2];
+	vCamPos[1] = clients[clientID].pTarget->s.origin[1] +
+		(vOffsetPosition[1] * forward[1]);
+
+	vCamPos[2] = clients[clientID].pTarget->s.origin[2] + 
+		vOffsetPosition[2];
 }
 
 
 void RepositionAtTarget (edict_t *ent, vec3_t vOffsetPosition)
 {
 	int i, clientID;
-    vec3_t vDiff;
-    vec3_t vCamPos;
-    trace_t trace;
+	vec3_t vDiff;
+	vec3_t vCamPos;
+	trace_t trace;
 	camera_t *camera;
 	qboolean snapto = QFALSE; // snapto towards target when jumping to new position
 
@@ -376,17 +376,17 @@ void RepositionAtTarget (edict_t *ent, vec3_t vOffsetPosition)
 	// try to be behind target, but if too close
 	// try to be on his right/left/front
 	FindCamPos (clientID, 0, vOffsetPosition, vCamPos);
-    trace = gci.trace( clients[clientID].pTarget->s.origin, NULL, NULL, vCamPos,
-            clients[clientID].pTarget, CONTENTS_SOLID);
+	trace = gci.trace( clients[clientID].pTarget->s.origin, NULL, NULL, vCamPos,
+		clients[clientID].pTarget, CONTENTS_SOLID);
 
-    if (trace.fraction < 1)
-    {
+	if (trace.fraction < 1)
+	{
 		VectorSubtract(trace.endpos, clients[clientID].pTarget->s.origin, vDiff);
 		if (VectorLength (vDiff) < 48)
 		{
 			FindCamPos (clientID, 90, vOffsetPosition, vCamPos);
 			trace = gci.trace( clients[clientID].pTarget->s.origin, NULL, NULL, vCamPos,
-					clients[clientID].pTarget, CONTENTS_SOLID);
+				clients[clientID].pTarget, CONTENTS_SOLID);
 			if (trace.fraction < 1)
 			{
 				VectorSubtract(trace.endpos, clients[clientID].pTarget->s.origin, vDiff);
@@ -394,7 +394,7 @@ void RepositionAtTarget (edict_t *ent, vec3_t vOffsetPosition)
 				{
 					FindCamPos (clientID, -90, vOffsetPosition, vCamPos);
 					trace = gci.trace( clients[clientID].pTarget->s.origin, NULL, NULL, vCamPos,
-							clients[clientID].pTarget, CONTENTS_SOLID);
+						clients[clientID].pTarget, CONTENTS_SOLID);
 					if (trace.fraction < 1)
 					{
 						VectorSubtract(trace.endpos, clients[clientID].pTarget->s.origin, vDiff);
@@ -402,7 +402,7 @@ void RepositionAtTarget (edict_t *ent, vec3_t vOffsetPosition)
 						{
 							FindCamPos (clientID, 180, vOffsetPosition, vCamPos);
 							trace = gci.trace( clients[clientID].pTarget->s.origin, NULL, NULL, vCamPos,
-									clients[clientID].pTarget, CONTENTS_SOLID);
+								clients[clientID].pTarget, CONTENTS_SOLID);
 						}
 					}
 				}
@@ -413,37 +413,37 @@ void RepositionAtTarget (edict_t *ent, vec3_t vOffsetPosition)
 		if (trace.plane.normal[2] > 0.8)
 			trace.endpos[2] += 4;
 		snapto = QTRUE;
-    }
+	}
 
-    if (fabs(trace.endpos[0]-ent->s.origin[0]) > clients[clientID].fXYLag)
-        if (trace.endpos[0] > ent->s.origin[0])
-            ent->s.origin[0] += clients[clientID].fXYLag; 
-        else
-            ent->s.origin[0] -= clients[clientID].fXYLag; 
-    else
-        ent->s.origin[0] = trace.endpos[0];
+	if (fabs(trace.endpos[0]-ent->s.origin[0]) > clients[clientID].fXYLag)
+		if (trace.endpos[0] > ent->s.origin[0])
+			ent->s.origin[0] += clients[clientID].fXYLag; 
+		else
+			ent->s.origin[0] -= clients[clientID].fXYLag; 
+	else
+		ent->s.origin[0] = trace.endpos[0];
 
-    if (fabs(trace.endpos[1]-ent->s.origin[1]) > clients[clientID].fXYLag)
-        if (trace.endpos[1] > ent->s.origin[1])
-            ent->s.origin[1] += clients[clientID].fXYLag; 
-        else
-            ent->s.origin[1] -= clients[clientID].fXYLag; 
-    else
-        ent->s.origin[1] = trace.endpos[1];
-    
-    if (fabs(trace.endpos[2]-ent->s.origin[2]) > clients[clientID].fZLag)
-        if (trace.endpos[2] > ent->s.origin[2])
-            ent->s.origin[2] += clients[clientID].fZLag; 
-        else
-            ent->s.origin[2] -= clients[clientID].fZLag; 
-    else
-        ent->s.origin[2] = trace.endpos[2];
+	if (fabs(trace.endpos[1]-ent->s.origin[1]) > clients[clientID].fXYLag)
+		if (trace.endpos[1] > ent->s.origin[1])
+			ent->s.origin[1] += clients[clientID].fXYLag; 
+		else
+			ent->s.origin[1] -= clients[clientID].fXYLag; 
+	else
+		ent->s.origin[1] = trace.endpos[1];
 
-    trace = gci.trace( clients[clientID].pTarget->s.origin, NULL, NULL, ent->s.origin,
-        clients[clientID].pTarget, CONTENTS_SOLID);
-    
-    if (trace.fraction < 1)
-    {
+	if (fabs(trace.endpos[2]-ent->s.origin[2]) > clients[clientID].fZLag)
+		if (trace.endpos[2] > ent->s.origin[2])
+			ent->s.origin[2] += clients[clientID].fZLag; 
+		else
+			ent->s.origin[2] -= clients[clientID].fZLag; 
+	else
+		ent->s.origin[2] = trace.endpos[2];
+
+	trace = gci.trace( clients[clientID].pTarget->s.origin, NULL, NULL, ent->s.origin,
+		clients[clientID].pTarget, CONTENTS_SOLID);
+
+	if (trace.fraction < 1)
+	{
 		VectorSubtract(trace.endpos, clients[clientID].pTarget->s.origin, vDiff);
 		VectorNormalize(vDiff);
 		VectorMA(trace.endpos, -8, vDiff, trace.endpos);
@@ -451,10 +451,10 @@ void RepositionAtTarget (edict_t *ent, vec3_t vOffsetPosition)
 		if (trace.plane.normal[2] > 0.8)
 			trace.endpos[2] += 4;
 
-        VectorCopy (trace.endpos, ent->s.origin);
-		
+		VectorCopy (trace.endpos, ent->s.origin);
+
 		snapto = QTRUE;
-    }
+	}
 
 	if (snapto)
 	{
@@ -474,23 +474,23 @@ void RepositionAtTarget (edict_t *ent, vec3_t vOffsetPosition)
 void RepositionAtOrigin(edict_t *ent, vec3_t vOffsetPosition)
 {
 	int i, clientID;
-    vec3_t vCamPos;
-    trace_t trace;
+	vec3_t vCamPos;
+	trace_t trace;
 
 	clientID = numEdict(ent) - 1;
 
 	clients[clientID].camera = NULL;
 	clients[clientID].fixed_switch_time = 0;
 
-    vCamPos[0] = vOffsetPosition[0] + 40;
-    vCamPos[1] = vOffsetPosition[1] + 40;
-    vCamPos[2] = vOffsetPosition[2] + 30;
+	vCamPos[0] = vOffsetPosition[0] + 40;
+	vCamPos[1] = vOffsetPosition[1] + 40;
+	vCamPos[2] = vOffsetPosition[2] + 30;
 
-    trace = gci.trace( vOffsetPosition, NULL, NULL, vCamPos,
-            clients[clientID].pTarget, CONTENTS_SOLID);
-    
-    if (trace.fraction < 1)
-    {
+	trace = gci.trace( vOffsetPosition, NULL, NULL, vCamPos,
+		clients[clientID].pTarget, CONTENTS_SOLID);
+
+	if (trace.fraction < 1)
+	{
 		vec3_t vDiff;
 
 		VectorSubtract(trace.endpos, vOffsetPosition, vDiff);
@@ -499,61 +499,61 @@ void RepositionAtOrigin(edict_t *ent, vec3_t vOffsetPosition)
 
 		if (trace.plane.normal[2] > 0.8)
 			trace.endpos[2] += 4;
-    }
+	}
 
-    if (fabs(trace.endpos[0]-ent->s.origin[0]) > clients[clientID].fXYLag)
-    {
-        if (trace.endpos[0] > ent->s.origin[0])
-        {
-            ent->s.origin[0] += clients[clientID].fXYLag; 
-        }
-        else
-        {
-            ent->s.origin[0] -= clients[clientID].fXYLag; 
-        }
-    }
-    else
-    {
-        ent->s.origin[0] = trace.endpos[0];
-    }
+	if (fabs(trace.endpos[0]-ent->s.origin[0]) > clients[clientID].fXYLag)
+	{
+		if (trace.endpos[0] > ent->s.origin[0])
+		{
+			ent->s.origin[0] += clients[clientID].fXYLag; 
+		}
+		else
+		{
+			ent->s.origin[0] -= clients[clientID].fXYLag; 
+		}
+	}
+	else
+	{
+		ent->s.origin[0] = trace.endpos[0];
+	}
 
-    if (fabs(trace.endpos[1]-ent->s.origin[1]) > clients[clientID].fXYLag)
-    {
-        if (trace.endpos[1] > ent->s.origin[1])
-        {
-            ent->s.origin[1] += clients[clientID].fXYLag; 
-        }
-        else
-        {
-            ent->s.origin[1] -= clients[clientID].fXYLag; 
-        }
-    }
-    else
-    {
-        ent->s.origin[1] = trace.endpos[1];
-    }
-    
-    if (fabs(trace.endpos[2]-ent->s.origin[2]) > clients[clientID].fZLag)
-    {
-        if (trace.endpos[2] > ent->s.origin[2])
-        {
-            ent->s.origin[2] += clients[clientID].fZLag; 
-        }
-        else
-        {
-            ent->s.origin[2] -= clients[clientID].fZLag; 
-        }
-    }
-    else
-    {
-        ent->s.origin[2] = trace.endpos[2];
-    }
+	if (fabs(trace.endpos[1]-ent->s.origin[1]) > clients[clientID].fXYLag)
+	{
+		if (trace.endpos[1] > ent->s.origin[1])
+		{
+			ent->s.origin[1] += clients[clientID].fXYLag; 
+		}
+		else
+		{
+			ent->s.origin[1] -= clients[clientID].fXYLag; 
+		}
+	}
+	else
+	{
+		ent->s.origin[1] = trace.endpos[1];
+	}
 
-    trace = gci.trace( vOffsetPosition, NULL, NULL, ent->s.origin,
-        clients[clientID].pTarget, CONTENTS_SOLID);
+	if (fabs(trace.endpos[2]-ent->s.origin[2]) > clients[clientID].fZLag)
+	{
+		if (trace.endpos[2] > ent->s.origin[2])
+		{
+			ent->s.origin[2] += clients[clientID].fZLag; 
+		}
+		else
+		{
+			ent->s.origin[2] -= clients[clientID].fZLag; 
+		}
+	}
+	else
+	{
+		ent->s.origin[2] = trace.endpos[2];
+	}
 
-    if (trace.fraction < 1)
-    {
+	trace = gci.trace( vOffsetPosition, NULL, NULL, ent->s.origin,
+		clients[clientID].pTarget, CONTENTS_SOLID);
+
+	if (trace.fraction < 1)
+	{
 		vec3_t vDiff;
 
 		VectorSubtract(trace.endpos, vOffsetPosition, vDiff);
@@ -563,13 +563,13 @@ void RepositionAtOrigin(edict_t *ent, vec3_t vOffsetPosition)
 		if (trace.plane.normal[2] > 0.8)
 			trace.endpos[2] += 4;
 
-        //VectorCopy(trace.endpos, ent->s.origin);
-    }
+		//VectorCopy(trace.endpos, ent->s.origin);
+	}
 
-    if (trace.fraction != 1)
-    {
-        VectorCopy(trace.endpos, ent->s.origin);
-    }
+	if (trace.fraction != 1)
+	{
+		VectorCopy(trace.endpos, ent->s.origin);
+	}
 
 	for (i=0 ; i<3 ; i++) 
 		ent->client->ps.pmove.origin[i] = (short) ent->s.origin[i]*8;
@@ -579,19 +579,19 @@ void RepositionAtOrigin(edict_t *ent, vec3_t vOffsetPosition)
 void CameraFollowThink(edict_t *ent, usercmd_t *ucmd)
 {
 	int clientID;
-    vec3_t vCameraOffset;
+	vec3_t vCameraOffset;
 
 	clientID = numEdict(ent) - 1;
 
 	if (clients[clientID].pTarget || (clients[clientID].pTarget = PlayerToFollow(clientID)) != NULL)
-    {
-        // just keep looking for action!
-        vCameraOffset[0] = -60;
-        vCameraOffset[1] = -60;
-        vCameraOffset[2] = 40;
-        RepositionAtTarget(ent, vCameraOffset);
-        PointCamAtTarget(ent);
-    }
+	{
+		// just keep looking for action!
+		vCameraOffset[0] = -60;
+		vCameraOffset[1] = -60;
+		vCameraOffset[2] = 40;
+		RepositionAtTarget(ent, vCameraOffset);
+		PointCamAtTarget(ent);
+	}
 }
 
 
@@ -620,101 +620,101 @@ void SwitchToNewTarget (int clientID, edict_t *pNewTarget)
 void CameraNormalThink(edict_t *ent, usercmd_t *ucmd)
 {
 	int clientID;
-    vec3_t vCameraOffset;
-    int iNumVis;
+	vec3_t vCameraOffset;
+	int iNumVis;
 	edict_t *pNewTarget;
 
 	clientID = numEdict(ent) - 1;
 
-    iNumVis = NumPlayersVisible (ent);
+	iNumVis = NumPlayersVisible (ent);
 	pNewTarget =  PlayerToFollow (clientID);
 
 	// only watch the dead if it's the one we followed
 	if (!clients[clientID].bWatchingTheDead && clients[clientID].pTarget && clients[numEdict(clients[clientID].pTarget) - 1].last_pmtype == PM_DEAD)
-    {
-        clients[clientID].bWatchingTheDead = QTRUE;
-        //clients[clientID].pTarget = pDeadPlayer;
-        clients[clientID].last_move_time = leveltime + CAMERA_DEAD_SWITCH_TIME;
-        PointCamAtTarget(ent);
-    }
-    else if (clients[clientID].bWatchingTheDead)
-    {
-        if (clients[clientID].last_move_time < leveltime || inSolid (ent))
-        {
-            clients[clientID].bWatchingTheDead = QFALSE;
-        }
-        else 
-        {
-            if (clients[numEdict(clients[clientID].pTarget) - 1].last_pmtype == PM_DEAD)
-            {
-               VectorCopy(clients[clientID].pTarget->s.origin, clients[clientID].vDeadOrigin);
-            }
-            PointCamAtOrigin(ent, clients[clientID].vDeadOrigin);
-            RepositionAtOrigin(ent, clients[clientID].vDeadOrigin);
-        }
-    }
-    else if ( iNumVis < 2 )
-    {
-        vCameraOffset[0] = -60;
-        vCameraOffset[1] = -60;
-        vCameraOffset[2] = 40;
+	{
+		clients[clientID].bWatchingTheDead = QTRUE;
+		//clients[clientID].pTarget = pDeadPlayer;
+		clients[clientID].last_move_time = leveltime + CAMERA_DEAD_SWITCH_TIME;
+		PointCamAtTarget(ent);
+	}
+	else if (clients[clientID].bWatchingTheDead)
+	{
+		if (clients[clientID].last_move_time < leveltime || inSolid (ent))
+		{
+			clients[clientID].bWatchingTheDead = QFALSE;
+		}
+		else 
+		{
+			if (clients[numEdict(clients[clientID].pTarget) - 1].last_pmtype == PM_DEAD)
+			{
+				VectorCopy(clients[clientID].pTarget->s.origin, clients[clientID].vDeadOrigin);
+			}
+			PointCamAtOrigin(ent, clients[clientID].vDeadOrigin);
+			RepositionAtOrigin(ent, clients[clientID].vDeadOrigin);
+		}
+	}
+	else if ( iNumVis < 2 )
+	{
+		vCameraOffset[0] = -60;
+		vCameraOffset[1] = -60;
+		vCameraOffset[2] = 40;
 
-        if (clients[clientID].last_move_time >= leveltime) 
-        {
+		if (clients[clientID].last_move_time >= leveltime) 
+		{
 			edict_t *pClosestTarget;
 
-            if ((pNewTarget != NULL) && (clients[clientID].override || (NumPlayersVisible (pNewTarget) > 1)))
-            {
+			if ((pNewTarget != NULL) && (clients[clientID].override || (NumPlayersVisible (pNewTarget) > 1)))
+			{
 				SwitchToNewTarget (clientID, pNewTarget);
-                RepositionAtTarget(ent, vCameraOffset);
-                PointCamAtTarget(ent);
-            }
-            else if ((pClosestTarget = ClosestVisible(ent, MAX_VISIBLE_RANGE, QFALSE)) != NULL)
-            {
+				RepositionAtTarget(ent, vCameraOffset);
+				PointCamAtTarget(ent);
+			}
+			else if ((pClosestTarget = ClosestVisible(ent, MAX_VISIBLE_RANGE, QFALSE)) != NULL)
+			{
 				SwitchToNewTarget (clientID, pClosestTarget);
-                RepositionAtTarget(ent, vCameraOffset);
-                PointCamAtTarget(ent);
-            }
-            else if (pNewTarget != NULL)
-            {
-                // look for someone new!
+				RepositionAtTarget(ent, vCameraOffset);
+				PointCamAtTarget(ent);
+			}
+			else if (pNewTarget != NULL)
+			{
+				// look for someone new!
 				SwitchToNewTarget (clientID, pNewTarget);
-                RepositionAtTarget(ent, vCameraOffset);
-                PointCamAtTarget(ent);
-                clients[clientID].last_move_time = 0;
-            }
-        }
-        else if (pNewTarget != NULL)
-        {
-            // just keep looking for action!
-            vCameraOffset[0] = -60;
-            vCameraOffset[1] = -60;
-            vCameraOffset[2] = 40;
+				RepositionAtTarget(ent, vCameraOffset);
+				PointCamAtTarget(ent);
+				clients[clientID].last_move_time = 0;
+			}
+		}
+		else if (pNewTarget != NULL)
+		{
+			// just keep looking for action!
+			vCameraOffset[0] = -60;
+			vCameraOffset[1] = -60;
+			vCameraOffset[2] = 40;
 			SwitchToNewTarget (clientID, pNewTarget);
-            RepositionAtTarget(ent, vCameraOffset);
-            PointCamAtTarget(ent);
-        }
-    }
-    // if we are done during a battle.
-    else if (clients[clientID].last_move_time < leveltime ||
-			 (clients[clientID].pTarget && 
-			  !gci.inPVS(ent->s.origin, clients[clientID].pTarget->s.origin)) ||
-			 (clients[clientID].pTarget && inSolid (ent)))
-    {
-        if (pNewTarget != NULL)
-        {
-            vCameraOffset[0] = -60;
-            vCameraOffset[1] = -60;
-            vCameraOffset[2] = 80;
+			RepositionAtTarget(ent, vCameraOffset);
+			PointCamAtTarget(ent);
+		}
+	}
+	// if we are done during a battle.
+	else if (clients[clientID].last_move_time < leveltime ||
+		(clients[clientID].pTarget && 
+		!gci.inPVS(ent->s.origin, clients[clientID].pTarget->s.origin)) ||
+		(clients[clientID].pTarget && inSolid (ent)))
+	{
+		if (pNewTarget != NULL)
+		{
+			vCameraOffset[0] = -60;
+			vCameraOffset[1] = -60;
+			vCameraOffset[2] = 80;
 			clients[clientID].pTarget = NULL;
 			SwitchToNewTarget (clientID, pNewTarget);
-            RepositionAtTarget(ent, vCameraOffset);
-            PointCamAtTarget(ent);
-            clients[clientID].last_move_time = leveltime + CAMERA_SWITCH_TIME;
-        }
-    }
-    else if (clients[clientID].pTarget != NULL)
-    {
+			RepositionAtTarget(ent, vCameraOffset);
+			PointCamAtTarget(ent);
+			clients[clientID].last_move_time = leveltime + CAMERA_SWITCH_TIME;
+		}
+	}
+	else if (clients[clientID].pTarget != NULL)
+	{
 		if (IsVisible (ent, clients[clientID].pTarget, 0))
 		{
 			if (!clients[clientID].camera) // reposition camera if too close or too far
@@ -725,56 +725,56 @@ void CameraNormalThink(edict_t *ent, usercmd_t *ucmd)
 				VectorSubtract (ent->s.origin, clients[clientID].pTarget->s.origin, vDiff);
 				distance = VectorLength (vDiff);
 				if (distance < CAMERA_MIN_RANGE || distance > CAMERA_MAX_RANGE)
-		            RepositionAtTarget(ent, tv (-60, -60, 80));
+					RepositionAtTarget(ent, tv (-60, -60, 80));
 			}
 			PointCamAtTarget(ent);
 		}
 		else
 			clients[clientID].last_move_time = 0;
-    }
+	}
 
-    pDeadPlayer = NULL;
+	pDeadPlayer = NULL;
 }
 
 
 void CameraStaticThink(edict_t *ent, usercmd_t *ucmd)
 {
 	int i, clientID;
-    trace_t trace;
-    vec3_t vEndFloor, vEndCeiling;
-    
+	trace_t trace;
+	vec3_t vEndFloor, vEndCeiling;
+
 	clientID = numEdict(ent) - 1;
 
-    vEndFloor[0] = ent->s.origin[0];
-    vEndFloor[1] = ent->s.origin[1];
-    vEndFloor[2] = ent->s.origin[2] - 40000;
-    trace = gci.trace(ent->s.origin, NULL, NULL, vEndFloor, ent, CONTENTS_SOLID);
+	vEndFloor[0] = ent->s.origin[0];
+	vEndFloor[1] = ent->s.origin[1];
+	vEndFloor[2] = ent->s.origin[2] - 40000;
+	trace = gci.trace(ent->s.origin, NULL, NULL, vEndFloor, ent, CONTENTS_SOLID);
 
-    VectorCopy (trace.endpos, vEndFloor );
+	VectorCopy (trace.endpos, vEndFloor );
 
-    vEndCeiling[0] = vEndFloor[0];
-    vEndCeiling[1] = vEndFloor[1];
-    vEndCeiling[2] = vEndFloor[2] + 175;
-    trace = gci.trace(vEndFloor, NULL, NULL, vEndCeiling, ent, CONTENTS_SOLID);
+	vEndCeiling[0] = vEndFloor[0];
+	vEndCeiling[1] = vEndFloor[1];
+	vEndCeiling[2] = vEndFloor[2] + 175;
+	trace = gci.trace(vEndFloor, NULL, NULL, vEndCeiling, ent, CONTENTS_SOLID);
 
-    VectorCopy (trace.endpos, ent->s.origin);
+	VectorCopy (trace.endpos, ent->s.origin);
 
 	while (inSolid(ent)) ent->s.origin[2] -= 1;
 
 	for (i=0 ; i<3 ; i++) 
 		ent->client->ps.pmove.origin[i] = (short) ent->s.origin[i]*8;
-    
-    if (clients[clientID].last_move_time < leveltime )
-    {
-        clients[clientID].last_move_time = leveltime + 2;
-        ent->s.angles[0] = 45;
-        ent->s.angles[1] = 0;
-        ent->s.angles[2] = 0;
-        VectorCopy (ent->s.angles, ent->client->ps.viewangles);
-	    VectorCopy (ent->s.angles, clients[clientID].v_angle);
+
+	if (clients[clientID].last_move_time < leveltime )
+	{
+		clients[clientID].last_move_time = leveltime + 2;
+		ent->s.angles[0] = 45;
+		ent->s.angles[1] = 0;
+		ent->s.angles[2] = 0;
+		VectorCopy (ent->s.angles, ent->client->ps.viewangles);
+		VectorCopy (ent->s.angles, clients[clientID].v_angle);
 		for (i=0 ; i<3 ; i++) 
 			ent->client->ps.pmove.delta_angles[i] = ANGLE2SHORT(clients[clientID].v_angle[i] - clients[clientID].cmd_angles[i]);
-    }
+	}
 }
 
 
@@ -803,13 +803,13 @@ void camera_action_setup (int clientID)
 		set_fov (ent, 90, QFALSE);
 
 	//clients[clientID].iMode = CAM_NORMAL_MODE;
-    clients[clientID].bWatchingTheDead = QFALSE;
+	clients[clientID].bWatchingTheDead = QFALSE;
 	clients[clientID].bWatchingTheWall = QFALSE;
-    clients[clientID].fXYLag = DAMP_VALUE_XY; 
+	clients[clientID].fXYLag = DAMP_VALUE_XY; 
 	clients[clientID].fZLag = DAMP_VALUE_Z;
 	clients[clientID].fAngleLag = DAMP_ANGLE_Y; 
-    clients[clientID].last_move_time = 0;
-    clients[clientID].last_switch_time = 0;
+	clients[clientID].last_move_time = 0;
+	clients[clientID].last_switch_time = 0;
 	clients[clientID].fixed_switch_time = 0;
 	clients[clientID].pTarget = NULL;
 	clients[clientID].camera = NULL;
@@ -877,7 +877,7 @@ void camera_action_begin (int clientID)
 	clients[clientID].bWatchingTheWall = QFALSE;
 	clients[clientID].pTarget = NULL;
 	clients[clientID].camera = NULL;
-    clients[clientID].last_switch_time = 0;
+	clients[clientID].last_switch_time = 0;
 	clients[clientID].fixed_switch_time = 0;
 
 	clients[clientID].oldbuttons = 0;
@@ -903,7 +903,7 @@ void camera_action_remove_target (int other)
 
 	pTarget = Edict(other + 1);
 
-    // force rethink on all cameras
+	// force rethink on all cameras
 	for (i = 0; i < maxclients->value; i++)
 		if (clients[i].inuse &&
 			clients[i].spectator &&
@@ -944,15 +944,15 @@ void camera_action_think (int clientID, usercmd_t *cmd)
 
 	ent = Edict(clientID + 1);
 
-    ent->client->ps.pmove.pm_type = PM_FREEZE;
-    ent->client->ps.pmove.gravity = 0;
+	ent->client->ps.pmove.pm_type = PM_FREEZE;
+	ent->client->ps.pmove.gravity = 0;
 
-    if (numPlayers() == 0)
-    {
-        CameraStaticThink(ent, cmd);
-    }
-    else
-    {
+	if (numPlayers() == 0)
+	{
+		CameraStaticThink(ent, cmd);
+	}
+	else
+	{
 		// keep tracking the same player until a new player is selected (with the attack key)
 		if (clients[clientID].iMode == CAM_FOLLOW_MODE &&
 			clients[clientID].pTarget && 
@@ -968,37 +968,37 @@ void camera_action_think (int clientID, usercmd_t *cmd)
 			{
 				pTarget = Edict(next + 1);
 				found = ((clients[next].inuse && clients[next].begin && !clients[next].spectator) ||
-						 (pTarget->inuse && pTarget->s.modelindex != 0)) &&
-						 pTarget->client->ps.pmove.pm_type == PM_NORMAL;
+					(pTarget->inuse && pTarget->s.modelindex != 0)) &&
+					pTarget->client->ps.pmove.pm_type == PM_NORMAL;
 			}
 			if (!found)
 				for (next = 0; next < target && !found; next++)
 				{
 					pTarget = Edict(next + 1);
 					found = ((clients[next].inuse && clients[next].begin && !clients[next].spectator) ||
-							 (pTarget->inuse && pTarget->s.modelindex != 0)) &&
-							 pTarget->client->ps.pmove.pm_type != PM_NORMAL;
+						(pTarget->inuse && pTarget->s.modelindex != 0)) &&
+						pTarget->client->ps.pmove.pm_type != PM_NORMAL;
 				}
 
-			if (found)
-				clients[clientID].pTarget = pTarget;
+				if (found)
+					clients[clientID].pTarget = pTarget;
 		}
 
 		clients[clientID].oldbuttons = cmd->buttons;
 
 
-        switch (clients[clientID].iMode)
-        {
-            case CAM_FOLLOW_MODE:
-                CameraFollowThink(ent, cmd);
-                break;
-            case CAM_NORMAL_MODE:
-            default:
-                CameraNormalThink(ent, cmd);
-                break;
+		switch (clients[clientID].iMode)
+		{
+		case CAM_FOLLOW_MODE:
+			CameraFollowThink(ent, cmd);
+			break;
+		case CAM_NORMAL_MODE:
+		default:
+			CameraNormalThink(ent, cmd);
+			break;
 
-        }
-    }
+		}
+	}
 }
 
 
@@ -1108,21 +1108,21 @@ qboolean ParsePriorityList (void)
 		current.path[j] = '\0';
 		switch (current.type) 
 		{
-			case CAMERA_TARGET_GUN:
-			case CAMERA_TARGET_MODEL2:
-			case CAMERA_TARGET_MODEL3:
-			case CAMERA_TARGET_MODEL4:
-				if (strlen (current.path) < 5)
-					goto ERR_BADTARGET;
-				break;
-			case CAMERA_TARGET_MODEL:
-				if (strchr (current.path, '/') == NULL)
-					goto ERR_BADTARGET;
-				break;
-			case CAMERA_TARGET_SHELL:
-				if (sscanf (current.path, "%d:%d", &current.effects, &current.renderfx) != 2)
-					goto ERR_BADTARGET;
-				break;
+		case CAMERA_TARGET_GUN:
+		case CAMERA_TARGET_MODEL2:
+		case CAMERA_TARGET_MODEL3:
+		case CAMERA_TARGET_MODEL4:
+			if (strlen (current.path) < 5)
+				goto ERR_BADTARGET;
+			break;
+		case CAMERA_TARGET_MODEL:
+			if (strchr (current.path, '/') == NULL)
+				goto ERR_BADTARGET;
+			break;
+		case CAMERA_TARGET_SHELL:
+			if (sscanf (current.path, "%d:%d", &current.effects, &current.renderfx) != 2)
+				goto ERR_BADTARGET;
+			break;
 		}
 		// skip white space
 		for (i += j; i < strlen(line) && line[i] && line[i] <= ' '; i++);
@@ -1140,7 +1140,7 @@ qboolean ParsePriorityList (void)
 		// save current entry
 		memcpy (last, &current, sizeof(priority_list_t));
 	}
-	
+
 	fclose (rfp);
 	gci.dprintf ("ok\n");
 	return QTRUE;

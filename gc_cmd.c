@@ -1387,13 +1387,13 @@ void Cmd_ActionCam_f (edict_t *ent)
 		/*
 		if (priority_list != NULL) 
 		{
-			clients[clientID].no_priority = !clients[clientID].no_priority;
-			clients[clientID].last_move_time = 0; // force re-think
-			if ((int) gc_flags->value & GCF_VERBOSE)
-				if (clients[clientID].no_priority)
-					gci.cprintf (ent, PRINT_HIGH, "target selection method is DEFAULT\n");
-				else
-					gci.cprintf (ent, PRINT_HIGH, "target selection method is PRIORITY\n");
+		clients[clientID].no_priority = !clients[clientID].no_priority;
+		clients[clientID].last_move_time = 0; // force re-think
+		if ((int) gc_flags->value & GCF_VERBOSE)
+		if (clients[clientID].no_priority)
+		gci.cprintf (ent, PRINT_HIGH, "target selection method is DEFAULT\n");
+		else
+		gci.cprintf (ent, PRINT_HIGH, "target selection method is PRIORITY\n");
 		}
 		*/
 		return;

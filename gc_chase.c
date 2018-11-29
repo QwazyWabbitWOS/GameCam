@@ -111,7 +111,7 @@ void camera_chase_frame (int clientID)
 
 	if (clients[clientID].target < 0)
 		return;
-	
+
 	ent	= Edict(clientID + 1);
 	target = Edict(clients[clientID].target + 1);
 
@@ -282,9 +282,9 @@ void camera_chase_frame (int clientID)
 		} 
 		if (target2nd[0])
 			sprintf(s, 
-				"xv 0 yb -76 %s \"Tracking %s\" xv 0 yb -68 string2 \"Chasing  %s\"",
-				(sameTeam (target, clients[clientID].creep_target))? "string2":"string", 
-				target2nd, target1st);
+			"xv 0 yb -76 %s \"Tracking %s\" xv 0 yb -68 string2 \"Chasing  %s\"",
+			(sameTeam (target, clients[clientID].creep_target))? "string2":"string", 
+			target2nd, target1st);
 		else
 			sprintf(s, "xv 0 yb -68 string2 \"Chasing  %s\"", target1st);
 		gci.WriteByte (svc_layout);

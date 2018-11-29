@@ -39,26 +39,26 @@ int PrevClient(int clientID)
 	{
 		target = Edict (prev + 1);
 		found = (clients[prev].inuse && 
-				 clients[prev].begin && 
-				 !clients[prev].spectator &&
-				 (chase_observers ||
-				  (target->client && 
-				   target->client->ps.pmove.pm_type != PM_SPECTATOR &&
-				   target->client->ps.pmove.pm_type != PM_FREEZE)));
+			clients[prev].begin && 
+			!clients[prev].spectator &&
+			(chase_observers ||
+			(target->client && 
+			target->client->ps.pmove.pm_type != PM_SPECTATOR &&
+			target->client->ps.pmove.pm_type != PM_FREEZE)));
 	}
 	if (!found)
 		for (prev = (int) maxclients->value - 1; prev > clientID && !found; prev--)
 		{
 			target = Edict (prev + 1);
 			found = (clients[prev].inuse &&
-					 clients[prev].begin && 
-					 !clients[prev].spectator &&
-					 (chase_observers ||
-					  (target->client && 
-					   target->client->ps.pmove.pm_type != PM_SPECTATOR &&
-					   target->client->ps.pmove.pm_type != PM_FREEZE)));
+				clients[prev].begin && 
+				!clients[prev].spectator &&
+				(chase_observers ||
+				(target->client && 
+				target->client->ps.pmove.pm_type != PM_SPECTATOR &&
+				target->client->ps.pmove.pm_type != PM_FREEZE)));
 		}
-	return (found)? prev + 1 : clientID;
+		return (found)? prev + 1 : clientID;
 }
 
 
@@ -73,26 +73,26 @@ int NextClient(int clientID)
 	{
 		target = Edict (next + 1);
 		found = (clients[next].inuse &&
-				 clients[next].begin && 
-				 !clients[next].spectator &&
-				 (chase_observers ||
-				  (target->client && 
-				   target->client->ps.pmove.pm_type != PM_SPECTATOR &&
-				   target->client->ps.pmove.pm_type != PM_FREEZE)));
+			clients[next].begin && 
+			!clients[next].spectator &&
+			(chase_observers ||
+			(target->client && 
+			target->client->ps.pmove.pm_type != PM_SPECTATOR &&
+			target->client->ps.pmove.pm_type != PM_FREEZE)));
 	}
 	if (!found)
 		for (next = 0; next < clientID && !found; next++)
 		{
 			target = Edict (next + 1);
 			found = (clients[next].inuse && 
-					 clients[next].begin && 
-					 !clients[next].spectator &&
-					 (chase_observers ||
-					  (target->client && 
-					   target->client->ps.pmove.pm_type != PM_SPECTATOR &&
-					   target->client->ps.pmove.pm_type != PM_FREEZE)));
+				clients[next].begin && 
+				!clients[next].spectator &&
+				(chase_observers ||
+				(target->client && 
+				target->client->ps.pmove.pm_type != PM_SPECTATOR &&
+				target->client->ps.pmove.pm_type != PM_FREEZE)));
 		}
-	return (found)? next - 1 : clientID;
+		return (found)? next - 1 : clientID;
 }
 
 
@@ -104,12 +104,12 @@ int ClosestClient(int clientID)
 	edict_t *ent, *target;
 	vec3_t diff;
 	qboolean chase_observers = ((((int) gc_flags->value) & GCF_CHASE_OBSERVERS) != 0);
-	
+
 	ent = Edict(clientID + 1);
 	// use SetIDView to find which client is in view
 	stat_id_view = ent->client->ps.stats[STAT_ID_VIEW]; // save
 	SetIDView (ent, QTRUE); // QTRUE means that only *real* clients are found (can't chase bots)
-//	SetIDView (ent, QFALSE);
+	//	SetIDView (ent, QFALSE);
 	other = ent->client->ps.stats[STAT_ID_VIEW];
 	ent->client->ps.stats[STAT_ID_VIEW] = stat_id_view; // restore
 	// if there's a client in view return its number
@@ -125,9 +125,9 @@ int ClosestClient(int clientID)
 			clients[i].begin && 
 			!clients[i].spectator &&
 			(chase_observers ||
-			 (target->client && 
-			  target->client->ps.pmove.pm_type != PM_SPECTATOR &&
-			  target->client->ps.pmove.pm_type != PM_FREEZE)))
+			(target->client && 
+			target->client->ps.pmove.pm_type != PM_SPECTATOR &&
+			target->client->ps.pmove.pm_type != PM_FREEZE)))
 		{
 			VectorSubtract(ent->s.origin, target->s.origin, diff);
 			range = VectorLength(diff);
@@ -138,7 +138,7 @@ int ClosestClient(int clientID)
 			}
 		}
 	}
-	
+
 	// no clients? -> return self
 	if (min_range < 0)
 		other = clientID;
@@ -149,20 +149,20 @@ int ClosestClient(int clientID)
 
 qboolean IsVisible(edict_t *pPlayer1, edict_t *pPlayer2, float maxrange)
 {
-    vec3_t vLength;
-    float distance;
+	vec3_t vLength;
+	float distance;
 	trace_t trace;
 
 	// check for looking through non-transparent water
 	if (!gci.inPVS(pPlayer1->s.origin, pPlayer2->s.origin))
 		return QFALSE;
 
-    trace = gci.trace (pPlayer1->s.origin, vec3_origin, vec3_origin, pPlayer2->s.origin, pPlayer1, MASK_SOLID);
-	
-    VectorSubtract(pPlayer1->s.origin, pPlayer2->s.origin, vLength);
-    distance = VectorLength(vLength);
-    
-    return ((maxrange == 0 || distance < maxrange) && trace.fraction == 1.0);
+	trace = gci.trace (pPlayer1->s.origin, vec3_origin, vec3_origin, pPlayer2->s.origin, pPlayer1, MASK_SOLID);
+
+	VectorSubtract(pPlayer1->s.origin, pPlayer2->s.origin, vLength);
+	distance = VectorLength(vLength);
+
+	return ((maxrange == 0 || distance < maxrange) && trace.fraction == 1.0);
 }
 
 
@@ -171,35 +171,35 @@ edict_t *ClosestVisible(edict_t *ent, float maxrange, qboolean pvs)
 	int i;
 	edict_t *pTarget;
 	edict_t *pBest = NULL;
-    vec3_t vDistance;
+	vec3_t vDistance;
 	float fCurrent, fClosest = -1.0F;
 
-    for (i = 0; i < maxclients->value; i++)
-    {
+	for (i = 0; i < maxclients->value; i++)
+	{
 		pTarget = Edict(i + 1);
-        if (pTarget != ent &&
+		if (pTarget != ent &&
 			((clients[i].inuse &&
-			  clients[i].begin &&
-			  !clients[i].spectator) ||
-			 (pTarget->inuse &&
-			  pTarget->s.modelindex !=0)) &&
+			clients[i].begin &&
+			!clients[i].spectator) ||
+			(pTarget->inuse &&
+			pTarget->s.modelindex !=0)) &&
 			pTarget->client &&
 			pTarget->client->ps.pmove.pm_type != PM_SPECTATOR &&
 			pTarget->client->ps.pmove.pm_type != PM_FREEZE &&
-		    clients[i].last_pmtype != PM_DEAD &&
+			clients[i].last_pmtype != PM_DEAD &&
 			clients[i].last_pmtype != PM_GIB &&
-            ((pvs)? gci.inPVS (ent->s.origin, pTarget->s.origin):IsVisible (ent, pTarget, maxrange)))
-        {
+			((pvs)? gci.inPVS (ent->s.origin, pTarget->s.origin):IsVisible (ent, pTarget, maxrange)))
+		{
 			VectorSubtract(pTarget->s.origin, ent->s.origin, vDistance);
 			fCurrent = VectorLength(vDistance);
-            if (fClosest < 0 || fCurrent < fClosest)
-            {
-                pBest = pTarget;
-                fClosest = fCurrent;
-            }
-        }
-    }
-    return pBest;
+			if (fClosest < 0 || fCurrent < fClosest)
+			{
+				pBest = pTarget;
+				fClosest = fCurrent;
+			}
+		}
+	}
+	return pBest;
 }
 
 
@@ -213,13 +213,13 @@ int numPlayers(void)
 	{
 		current = Edict(i+1);
 		if (((clients[i].inuse &&
-			  clients[i].begin &&
-			  !clients[i].spectator) ||
-			 (current->inuse &&
-			  current->s.modelindex != 0)) &&
-			 current->client &&
-			 current->client->ps.pmove.pm_type != PM_SPECTATOR &&
-			 current->client->ps.pmove.pm_type != PM_FREEZE)
+			clients[i].begin &&
+			!clients[i].spectator) ||
+			(current->inuse &&
+			current->s.modelindex != 0)) &&
+			current->client &&
+			current->client->ps.pmove.pm_type != PM_SPECTATOR &&
+			current->client->ps.pmove.pm_type != PM_FREEZE)
 			count ++;
 	}
 	return count;
@@ -237,8 +237,8 @@ int getBestClient (void)
 	{
 		current = Edict(i+1);
 		if ((clients[i].inuse &&
-			 clients[i].begin &&
-			 !clients[i].spectator) &&
+			clients[i].begin &&
+			!clients[i].spectator) &&
 			(clientID < 0 || current->client->ps.stats[STAT_FRAGS] > frags))
 		{
 			clientID = i;
@@ -267,7 +267,7 @@ qboolean detect_intermission (void)
 			clients[i].begin && 
 			!clients[i].spectator)
 			if (!(current->client->ps.stats[STAT_LAYOUTS] & 1) ||
-			    current->client->ps.pmove.pm_type != PM_FREEZE)
+				current->client->ps.pmove.pm_type != PM_FREEZE)
 			{
 				intermission = QFALSE;
 				break;
@@ -349,7 +349,7 @@ char *highlightText (char *text)
 int sortScores (const void *a, const void *b)
 {
 	return ((Edict(((int *)b)[0] + 1))->client->ps.stats[STAT_FRAGS] - 
-			(Edict(((int *)a)[0] + 1))->client->ps.stats[STAT_FRAGS]);
+		(Edict(((int *)a)[0] + 1))->client->ps.stats[STAT_FRAGS]);
 }
 
 
@@ -364,13 +364,13 @@ char *scoreBoard (char *text)
 		current = Edict(i + 1);
 
 		if (((clients[i].inuse &&
-			  clients[i].begin &&
-			  !clients[i].spectator) ||
-			 (current->inuse &&
-			  current->s.modelindex != 0)) &&
-			 current->client &&
-			 current->client->ps.pmove.pm_type != PM_SPECTATOR &&
-			 current->client->ps.pmove.pm_type != PM_FREEZE)
+			clients[i].begin &&
+			!clients[i].spectator) ||
+			(current->inuse &&
+			current->s.modelindex != 0)) &&
+			current->client &&
+			current->client->ps.pmove.pm_type != PM_SPECTATOR &&
+			current->client->ps.pmove.pm_type != PM_FREEZE)
 			hiscores[j++] = i;
 	}
 	if (j)
@@ -626,11 +626,11 @@ qboolean sameTeam (edict_t *player1, edict_t *player2)
 // limit angle to [-180, 180]
 float anglemod (float angle)
 {
-    while (fabs (angle) > 180)
-        if (angle > 0)
-            angle -= 360;
-        else
-            angle += 360;
+	while (fabs (angle) > 180)
+		if (angle > 0)
+			angle -= 360;
+		else
+			angle += 360;
 	return angle;
 }
 

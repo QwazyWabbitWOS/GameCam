@@ -457,7 +457,7 @@ void hideMenu (int clientID)
 
 	if (intermission)
 		return;
-	
+
 	PMenu_Close (ent);
 	ent->client->ps.stats[STAT_LAYOUTS] &= ~1;
 	if (clients[clientID].mode != CAMERA_CHASE)
@@ -688,7 +688,7 @@ void PMenu_Next(edict_t *ent)
 	} while (i != hnd->cur);
 
 	hnd->cur = i;
-	
+
 	PMenu_Update(ent);
 }
 
@@ -756,7 +756,7 @@ void PMenu_Select(edict_t *ent)
 
 	if (p->SelectFunc)
 		p->SelectFunc(ent, p, PMENU_FLAG_SELECT);
-	
+
 	if (clients[clientID].menu_hnd)
 		PMenu_Update(ent);
 }
