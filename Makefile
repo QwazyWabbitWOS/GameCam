@@ -58,8 +58,8 @@ clean:
 	-rm -f $(GAME_OBJS_GC)
 
 all:
-    -rm -f $(GAME_OBJS_GC)
-    make
+	-rm -f $(GAME_OBJS_GC)
+	make
 
 depends:
 	$(CC) $(CFLAGS) -MM *.c > dependencies
