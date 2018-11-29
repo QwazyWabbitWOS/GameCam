@@ -20,7 +20,7 @@ qboolean ClientConnect (edict_t *ent, char *userinfo)
 		Info_SetValueForKey (userinfo, "rejmsg", "match in progress - server is locked");
 		return QFALSE;
 	}
-	
+
 	clientID = numEdict(ent) - 1;
 
 	clients[clientID].instant_spectator = QFALSE;
@@ -29,7 +29,7 @@ qboolean ClientConnect (edict_t *ent, char *userinfo)
 	{
 		char *value;
 
-  		// check for a spectator
+		// check for a spectator
 		value = Info_ValueForKey (userinfo, "spectator");
 		if (*value && strcmp(value, "0")) 
 		{
@@ -41,7 +41,7 @@ qboolean ClientConnect (edict_t *ent, char *userinfo)
 				Info_SetValueForKey(userinfo, "rejmsg", "spectator password required or incorrect");
 				return QFALSE;
 			}
-			
+
 			// too many cameras
 			if (cam_count >= maxspectators->value) 
 			{
@@ -341,78 +341,6 @@ void SpawnEntities (char *mapname, char *entstring, char *spawnpoint)
 {
 	int i, clientID;
 
-	/*******
-	int j, k, ii, jj, kk, pc;
-	long int cells = 0;
-	qboolean done;
-	vec3_t pos, pos1;
-	FILE *wfp;
-
-	wfp = fopen ("ztn2dm5.mat", "wt");
-	gci.dprintf ("%%00");
-	for (i = -4096; i <= 4096; i += 16)
-	{
-		if ((i % 1024) == 0)
-		{
-			gci.dprintf ("\b\b");
-			gci.dprintf ("%.2d", (int) ((i + 4096) / 1024 * 12.5F));
-		}
-		pos[0] = (float) i;
-		for (j = -4096; j <= 4096; j += 16)
-		{
-			pos[1] = (float) j;
-			for (k = -4096; k <= 4096; k += 16)
-			{
-				pos[2] = (float) k;
-				pc = gci.pointcontents (pos); 
-				if (pc & MASK_SOLID) // skip solid cells
-					continue;
-				if (pc & MASK_WATER) // count water/lava/slime cells
-				{	
-					cells++;
-					fprintf (wfp, "%d %d %d\n", i,j,k);
-					continue;
-				}
-				*//*
-				// not solid or water, so check if at least one adjacent cell is solid/water
-				done = QFALSE;
-				for (ii = i - 16; !done && ii <= i + 16; ii += 16)
-				{
-					pos1[0] = (float) ii;
-					for (jj = j - 16; !done && jj <= j + 16; jj += 16)
-					{
-						pos1[1] = (float) jj;
-						for (kk = k - 16; !done && kk <= k + 16; kk += 16)
-						{
-							pos1[2] = (float) kk;
-							if (i != ii || j != jj || k != kk)
-							{
-								pc = gci.pointcontents (pos1); 
-								done = (pc & MASK_SOLID) || (pc & MASK_WATER);
-								if (done)
-								{
-									cells++;
-									fprintf (wfp, "%d %d %d\n", i,j,k);
-								}
-							}
-						}
-					}
-				}
-				*//*
-				pos[2] = (float) k - 16;
-				pc = gci.pointcontents (pos); 
-				if ((pc & MASK_SOLID) || (pc & MASK_WATER))
-				{
-					cells++;
-					fprintf (wfp, "%d %d %d\n", i,j,k + 16);
-				}
-			}
-		}
-	}
-	gci.dprintf ("\nskin cells: %d\n", cells);
-	fclose (wfp);
-
-	*******/
 	// new map: all clients need to enter the game first, so we
 	// remove all camera targets, and set begin flag to QFALSE
 	for (clientID = 0; clientID < maxclients->value; clientID++) 
