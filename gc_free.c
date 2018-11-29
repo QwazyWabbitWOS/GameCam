@@ -30,7 +30,7 @@ void camera_free_wrapup (int clientID)
 {
 	edict_t *ent;
 
-	ent = Edict(clientID+1);
+	ent = Edict(clientID + 1);
 
 	// restore status bar & remove layouts
 	if (clients[clientID].reset_layouts) 

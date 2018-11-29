@@ -141,10 +141,11 @@ void ticker_clear (edict_t *ent)
 
 void ticker_setup (edict_t *ent)
 {
-	int i, clientID;
+	int i;
+	//int clientID;
 	unsigned int j;
 
-	clientID = numEdict(ent) - 1;
+	//clientID = numEdict(ent) - 1;
 
 	for (i = 0, j = 0; j < strlen(camera_statusbar); j += MAX_QPATH, i++)
 	{
