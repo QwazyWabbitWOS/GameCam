@@ -41,6 +41,7 @@ void UpdateScore (int clientID)
 		} 
 	}
 	if (clients[clientID].mode != CAMERA_CHASE || wait_camera == NULL)
+	{
 		for (targetID = 0; targetID < maxclients->value; targetID++) 
 		{
 			target = Edict(targetID + 1);
@@ -70,8 +71,9 @@ void UpdateScore (int clientID)
 				ent->client->ps.stats[STAT_LAYOUTS] &= ~1;
 			gci.centerprintf (ent, "waiting for scoreboard\nto be available");
 		}
-		wait_camera = NULL;
-		wait_score = NULL;
+	}
+	wait_camera = NULL;
+	wait_score = NULL;
 }
 
 
