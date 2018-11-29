@@ -1,0 +1,36 @@
+Quake2 expects the game file to be in this directory.
+
+The BWAdmin file is named:
+gamei386.so
+
+BWAdmin expects the .so file to be named:
+gamei386.so.real
+
+Therefore we name the GameCam proxy so BWAdmin can find it.
+
+GameCam expects the game file to be named:
+gamei386.real.so
+
+
+So here's the order:
+
+  BWAdmin    ->       GameCam      ->       LOX Mod
+gamei386.so  ->  gamei386.so.real  ->   gamei386.real.so
+
+
+
+The GameCam and BWAdmin console variables are documented
+in the server.cfg file.
+
+All users have to do to is type "spectator 1" into their console
+to use the GameCam. Once in camera mode, they can control it from
+the menu.
+
+http://www.telefragged.com/zungbang/gamecam/index.html for documentation.
+
+12/20/2004
+QwazyWabbit
+
+P.S. Depending on how this works, I may either add the camera code
+to the LOX mod or leave it external and make a special binary that
+will link to something like: gamei386.lox.so instead of the above.

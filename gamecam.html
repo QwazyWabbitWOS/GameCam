@@ -1,0 +1,1396 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML>
+<HEAD>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta http-equiv="Keywords" content="GameCam proxy module quake2 client camera chasecam plugin">
+  <meta name="Author" content="Avi Rozen">
+  <TITLE>GameCam Manual</TITLE>
+</HEAD>
+
+<BODY BGCOLOR="white" TEXT="black">
+<font face="verdana" size="2">
+<table WIDTH="100%">
+	<tr>
+		<td nowrap ALIGN="LEFT">
+			<script>
+				document.write('<font face="verdana" size=1 color="cian"><b>'+
+								document.title+
+								'</b></font><font face="Verdana" size=1> | </font><font face="Verdana" size=1 color="blue">update: </font><font face="Verdana" size=1>'+
+								document.lastModified+'</font>')
+			</script>
+			<hr>
+		</td>
+	</tr>
+</table>
+<h2><font face="verdana" color="green">GameCam</font> 1.02 <small>final</small></font></font>
+<font face="verdana" size=-3 color="cian">
+<br><b>Copyright © 1998-99 by <a href="mailto:zungbang@telefragged.com?subject=GameCam feedback">Avi "Zung!" Rozen</a></b>
+</font>
+</h2>
+<font face="verdana" size=2>
+<a name="contents"><h3>Contents</h3></a>
+<ul>
+<a href="#intro">Features</a>
+<br>
+<a href="#install">Installation</a>
+<br>
+<a href="#use">Usage</a>
+<br>
+<a href="#config">Configuration</a> 
+<br>
+<a href="#compatibility">Compatibility</a>
+<br>
+<a href="#bugs">Bugs</a>
+<br>
+<a href="#feedback">Feedback</a>
+<br>
+<a href="#log">Change Log</a>
+<br>
+<a href="#download">Download</a>
+<br>
+<a href="#credits">Credits</a>
+<br>
+<a href="#legal">Legal Stuff</a>
+<br>
+</ul>
+
+<hr>
+
+<a name="intro"><h3>Features</h3></a>
+<h4>Introduction</h4>
+
+<font face="Verdana" color="green"><b>GameCam</b></font> is a <b>plug-in</b> mod, or, to be
+more accurate, an <b>API-proxy</b> mod. 
+<font face="Verdana" color="green"><b>GameCam</b></font> adds a client camera
+(spectator mode) to 
+<b>any</b> other <a href="http://www.idsoftware.com/quake2" target="_blank">Quake II</a> mod. This is done
+by literally adding external code to an existing mod, without having to know or modify its 
+source code.
+<p>
+<font face="Verdana" color="green"><b>GameCam</b></font> contains only the code for
+the camera, which makes it a very small download (~90KB, including the manual...). Note that
+<font face="Verdana" color="green"><b>GameCam</b></font> is a server-side mod, so clients don't have to download or install anything.
+
+
+<h4>Camera Modes</h4>
+<font face="Verdana" color="green"><b>GameCam</b></font> provides three camera modes:
+<ul>
+<li><b>ACTION</b> - based on <a href="http://home.austin.rr.com/thejordan/q2cam/" target="_blank">q2cam</a> 
+by Paul Jordan. This is the default camera mode in which the camera tracks the areas where 
+most of the players are. This usually means
+that it tracks the areas where most of the action takes place. Fixed camera positions may also be 
+defined, so that specific locations usually get filmed from the same point of view.</li>
+<li><b>CHASE</b> - this is a very much enhanced version of the original id software CTF chase camera.
+The <font face="Verdana" color="green"><b>GameCam</b></font> <b>CHASE</b>
+camera swivels around the player being chased to provide the best view of his/her
+closest opponent. Spectators also have the option to manually adjust the
+camera position themselves.</li>
+<li><b>FREE</b> - aka noclip: spectators move freely around the map, and can pass through walls, etc.
+This mode is usually disabled, and is mostly used for defining fixed cameras to be used with
+the <b>ACTION</b> camera.</li>
+</ul>
+The <font face="Verdana" color="green"><b>GameCam</b></font> <b>ACTION</b> camera 
+can be <a href="#config">configured</a> to focus on specific types of players, based on a priority list.
+This allows it to track CTF flag carriers, <a href="http://www.planetquake.com/headhunters" target="_blank">HeadHunters</a>
+with the most heads, Quad berserkers, etc.
+
+<h4>User Interface</h4> 
+
+The default settings of <font face="Verdana" color="green"><b>GameCam</b></font> make it replace
+the in-game spectator mode. This means that players can become spectators by simply typing
+<font face="courier new" size=2 color="orange"><b>spectator 1</b></font> (or
+<font face="courier new" size=2 color="orange"><b>spectator &lt</b><b>password&gt</b></font>),
+and return to the game with <font face="courier new" size=2 color="orange"><b>spectator 0</b></font>.
+This way players don't have to figure out any special camera commands.
+<p>
+While in spectator mode, players can access the camera menu. The menu allows spectators to switch
+camera modes, modify the camera options, get help about the camera keyboard
+binds, and return to the game. 
+<p>
+The menu provides access to the most useful features of <font face="Verdana" color="green"><b>GameCam</b></font> - 
+other features can be accessed via the <font face="courier new" size=2 color="orange"><b>camera</b></font>
+console command.
+
+<h4>Automatic Demo Recording</h4> 
+
+With this feature turned on, <font face="Verdana" color="green"><b>GameCam</b></font> makes
+the client record a demo of the game using a unique file name. The recording will be
+stopped upon changing levels and restarted with a different (unique) file name.
+
+<p>
+The demo file name format is as follows: 
+<font face="courier new" size=2><b>mapname-DDMMYY-HHMM.dm2</b></font>, where
+<font face="courier new" size=2><b>mapname</b></font> is the current map
+(e.g. <font face="courier new" size=2><b>q2dm1</b></font>), and the rest is
+the date and time (at the server!) when the recording started. This format makes it easy to 
+sort the demos by map and date/time.
+
+<p>
+This feature is available to all players even if they're not spectators! - just type
+<font face="courier new" size=2 color="orange"><b>camera demo</b></font>
+and start playing...
+
+<h4>General Admission Mode</h4> 
+<font face="Verdana" color="green"><b>GameCam</b></font> makes it easy to run and manage
+tournaments while playing mods that have not been specifically designed with tournaments in mind. 
+In General Admission mode all players start as spectators, and only a limited
+number of players are allowed to enter the game. The rest just sit back and enjoy the show ...
+
+<p>
+If a time-limit is set then the timer will start as soon as the first player
+exits spectator mode.
+
+<p>
+To switch players <b>during</b> the match (why?), one of the players must step
+down (become a spectator, or disconnect), and one of the spectators can then
+join the game.
+
+<p>
+Everyone will return to be spectators upon changing levels.
+
+
+<h4>Ticker Tape</h4> 
+
+This unique feature puts a scrolling line of animated text at the bottom 
+of the screen in <b>ACTION</b> and <b>FREE</b> modes. The contents of the tape
+and the way it scrolls (right, left, blink, etc.) can be configured using
+a simple scripting language. 
+
+<p>
+The text itself may include special characters,
+highlighted (green) text and escape sequences to print any console
+variable (e.g. <font face="courier new" size=2 color="orange"><b>hostname</b></font>), the time and date in various 
+formats and a simple running high-scores update.
+
+<p>
+The script is re-loaded upon level changes, and/or from within the script itself 
+using the reload script directive. This feature allows automatic updating of
+the ticker script using an external utility. 
+
+<h4>Other Features</h4>
+<font face="Verdana" color="green"><b>GameCam</b></font> provides other features as well:
+<ul>
+<li>spectators do not appear on the scoreboard (but can be listed with
+the <font face="courier new" size=2 color="orange"><b>players</b></font> console command),
+<li>the HUD is removed in <b>FREE</b> and <b>ACTION</b> modes,
+<li>player identification can be toggled,
+<li>the player's inventory can be inspected in <b>CHASE</b> mode (!)
+</ul>
+
+<h4>Performance</h4>
+<font face="Verdana" color="green"><b>GameCam</b></font> actually <b>reduces</b> the
+load on the server, since spectators do not generate network traffic for other players. A game with
+32 players is a lot more demanding than a match with 4 players and 28 spectators (which is 
+a lot more demanding than a match with 4 players and no spectators ...)
+
+<h4>Security Measures</h4>
+<font face="Verdana" color="green"><b>GameCam</b></font> provides features specifically designed
+to prevent lamers from cheating:
+<ul>
+<li>camera mode can be protected with a password, so that only authorized players may
+become spectators,
+<li>the number of spectators can be limited,
+<li>spectators return to the game as <b>new</b> clients, 
+<li>spectators suicide as soon as they return to the game (may be disabled),
+<li><b>CHASE</b> mode can be disabled, so that it is not abused,
+<li>spectators' chat messages can be disabled, so that they don't interfere with an on-going
+match, or try to tip off players (they can still chat with one another using
+<font face="courier new" size=2 color="orange"><b>say_team</b></font>),
+<li>standard (v3.20) flood protection on spectator chat messages,
+<li>spectators' names are changed from <b>name</b> to <b>[CAMERA]name</b>, so that it remains clear who's
+playing and who's just watching.
+</ul>
+Note that spectators can't improve their ranking on services like <a href="http://www.theclq.com" target="_blank">CLQ</a> by chasing high ranking players, because
+their names show up as <font face="courier new" size=2><b>[CAMERA]name</b></font> when queried by 
+<a href="http://www.gamespy.com/" target="_blank">GameSpy</a>, 
+<a href="http://www.activesw.com/people/steve/qstat.html" target="_blank">QStat</a> etc. Furthermore,
+mods with any logging facilities treat spectators as if they disconnected from the game.
+<p>
+ZBot detection is provided (on Win32 systems) via a separate plug-in module - <b>ZKick</b>, which can
+be used with <font face="Verdana" color="green"><b>GameCam</b></font> or independently.
+<b>ZKick</b> is available on the <a href="#download">download</a>
+page.
+<p>
+<font face="Verdana" color="green"><b>GameCam</b></font> can also
+be used together with the <a
+href="http://www.barrysworld.com/zarjazz">BW-Admin</a> and <a
+href="http://www.planetquake.com/q2admin">Q2Admin</a> server
+administration plugins (both on Win32 and Unix servers).
+
+<p align="right">
+<br>
+<a href="#contents"><small>table of contents</small></a>
+<hr>
+
+<a name="install"><h3>Installation</h3></a>
+
+<h4>Windows 95/98/NT</h4>
+
+<b>Simple:</b> create a folder named <b>release</b> under <b>C:\Quake2</b> (replace
+<b>C:</b> with the correct drive letter), and extract the contents of
+the distribution package (zip) to 
+<b>C:\Quake2\release\</b>. The package contains two files: <b>gamecam.html</b>
+ - the manual, and <b>gamex86.dll</b> - the binary. 
+
+<h4>Unix</h4>
+
+<small>(the instructions are for Linux, a similar procedure applies to
+Solaris with <b>gamesparc</b> instead of <b>gamei386</b>)</small>
+<p>
+Repeat the following for every mod for which you want to add <font
+face="Verdana" color="green"><b>GameCam</b></font>:
+<ol>
+<li>rename the game library from <b>gamei386.so</b> to
+<b>gamei386.real.so</b> 
+<li>extract the <font
+face="Verdana" color="green"><b>GameCam</b></font> <b>gamei386.so</b>
+to the mod directory
+</ol>
+You should now have two .so files in each mod directory: <b>gamei386.so</b> (<font
+face="Verdana" color="green"><b>GameCam</b></font>),
+and <b>gamei386.real.so</b> (the original game library).
+
+<h4>UnInstall</h4>
+
+<b>Windows 95/98/NT</b>:
+Delete the new <b>gamex86.dll</b> from the <b>release</b> folder.<br>
+<b>Unix</b>:
+Delete the new <b>gamei386.so</b> from each mod directory and rename
+<b>gamei386.real.so</b> back to <b>gamei386.so</b>.
+
+
+<h4><br><font face="Verdana" color="green"><b>GameCam</b></font> and Other Plug-in Mods</h4>
+
+<h5>BW-Admin and Q2Admin</h5>
+<small>(the following applies to both Win32 and Unix
+servers)</small>
+<p>
+Install <font face="Verdana" color="green"><b>GameCam</b></font>,
+create a new directory named <b>proxy</b> under the <b>quake2</b>
+directory. Place the <a
+href="http://www.barrysworld.com/zarjazz">BW-Admin</a> library under
+another new directory: <b>proxy/bwadmin</b> and/or <a
+href="http://www.planetquake.com/q2admin">Q2Admin</a> under
+<b>proxy/q2admin</b>. Make sure to place all the configuration files
+of these plugins at their correct locations, as if they were installed normally.
+<p>
+To activate the other plugin you have to launch the server with either
+<font face="courier new" size=2 color="orange"><b>+set proxy
+bwadmin</b></font> or <font face="courier new" size=2
+color="orange"><b>+set proxy q2admin</b></font> added to the command
+line. 
+<p>
+Note that I don't support this configuration. Use it at your own risk.
+
+<h5>ProxyMod Standard Mods (Win32)</h5>
+<font face="Verdana" color="green"><b>GameCam</b></font> can be used
+with any number of plug-in mods based on the <b>ProxyMod</b> (the
+"blank" plug-in) source code. These include <b>ProxyMod</b> itself,
+<b>ZKick</b>, <b>EntZ</b>, and the forthcoming <font face="Verdana"
+color="red"><b>GameBot</b></font>. 
+<p>
+To load any number of proxy modules you should follow the next
+procedure:
+<p>
+<ul>
+<li>place one proxy module in the <b>C:\Quake2\release</b> folder (I
+use <b>ProxyMod</b> - but you can use any other) 
+<li>create a new folder: <b>C:\Quake2\proxy</b>
+<li>place all other proxy mods in their own
+folders:
+<font face="Verdana" color="green"><b>GameCam</b></font> in
+<b>C:\Quake2\proxy\gamecam\</b>, 
+<b>EntZ</b> in
+<b>C:\Quake2\proxy\entz\</b>, <b>ZKick</b> in
+<b>C:\Quake2\proxy\zkick\</b>, etc.
+<li>to run a server with any of
+these plug-ins active you need to set the 
+<font face="courier new" size=2 color="orange"><b>proxy</b></font>
+cvar to a colon seperated list of proxy mods:
+<br>
+<font face="courier new" size=2 color="orange"><b>quake2 +set proxy zkick:entz:gamecam
+&lt</b><b>rest_of_command_line&gt</b></font>
+<br>
+will load <b>ProxyMod</b> (or whatever plug-in is installed in
+<b>C:\Quake2\release</b>), and then <b>ZKick</b>, <b>EntZ</b> and
+<font face="Verdana" color="green"><b>GameCam</b></font>, and then the
+real game DLL will be loaded from the folder specified by the <font
+face="courier new" size=2 color="orange"><b>game</b></font>
+cvar.
+</ul>
+
+<p align="right">
+<br>
+<a href="#contents"><small>table of contents</small></a>
+<hr>
+
+<a name="use"><h3>Usage</h3></a>
+
+The following sections explain how to use <font face="Verdana" color="green"><b>GameCam</b></font>
+on the <a href="#server">server</a> side and on the <a href="#client">client</a>'s side.
+
+<a name="server"><h4>Server Side</h4></a>
+
+<h5>Server Setup</h5>
+<font face="Verdana" color="green"><b>GameCam</b></font> is <b>transparent</b>. You should be able
+to setup a server for any game you want, the same way as before the installation:
+<br><font face="courier new" color="orange"><b>quake2 +set game &lt</b><b>gamedir</b><b>&gt</b></font>, etc.
+
+<p><font face="Verdana" color="green"><b>GameCam</b></font> prints a startup message to the console,
+before the game begins. 
+<font face="Verdana" color="green"><b>GameCam</b></font> also prints
+an <b>optional</b> welcome message to the players' console (saying 
+<font face="courier new"><b>"[GameCam]: type 'camera ?' for help"</b></font>).
+</p>
+
+<p>
+A set of <a href="#config">configuration</a> files for several mods (CTF, 
+<a href="http://www.planetquake.com/lmctf" target="_blank">LMCTF</a>,
+<a href="http://www.planetquake.com/headhunters" target="_blank">HeadHunters</a>,
+<a href="http://www.planetquake.com/rxn/qpong" target="_blank">QPong</a>, 
+<a href="http://www.planetquake.com/chicken" target="_blank">CTC</a>,
+<a href="http://www.planetquake.com/predator" target="_blank">Predator</a>,
+and <a href="http://www1.shore.net/~steqve/qm/tagyerit.html" target="_blank">TagYerIt</a>)  is available as a separate
+package. The configuration files are <b>optional</b> - <font face="Verdana" color="green"><b>GameCam</b></font>
+should work just fine without them, but may look better with them.
+Consult the <a href="#config">configuration section</a> for details.
+
+<h5>Console Variables</h5>
+<dl>
+
+<dt><font face="courier new" size=2 color="orange"><b>gc_version</b></font></dt>
+<dd><font face="verdana" size=2><font face="Verdana" color="green"><b>GameCam</b></font> version string (read-only).</dd>
+
+<dt><font face="courier new" size=2 color="orange"><b>gc_count</b></font></dt>
+<dd>Number of <font face="Verdana" color="green"><b>GameCam</b></font> spectators (serverinfo, read-only).</dd>
+
+<dt><font face="courier new" size=2 color="orange"><b>gc_flags</b></font></dt>
+<dd><font face="Verdana" color="green"><b>GameCam</b></font> configuration flags (archived, default is "18147").
+<br>
+This cvar works very much like 
+<font face="courier new" size=2 color="orange"><b>dmflags</b></font> - you add up the values
+for each flag to get the required setting:
+
+<p>
+<ul>
+<li>
+<font face="courier new" size=2><b>GCF_SUICIDE (1)</b></font> - 
+enable spectator suicide upon <font face="courier new" size=2 color="orange"><b>camera off</b></font>
+(default: on).
+</li>
+<li>
+<font face="courier new" size=2><b>GCF_ALLOW_CHASE (2)</b></font> - 
+enable <b>CHASE</b> mode (default: on).
+</li>
+<li>
+<font face="courier new" size=2><b>GCF_ALLOW_FREE (4)</b></font> - 
+enable <b>FREE</b> mode (default: off).
+</li>
+<li>
+<font face="courier new" size=2><b>GCF_ALLOW_SAY (8)</b></font> - 
+enable spectator chat (default: off).
+</li>
+<li>
+<font face="courier new" size=2><b>GCF_VERBOSE (16)</b></font> - 
+print message when changing camera mode (default: off).
+</li>
+<li>
+<font face="courier new" size=2><b>GCF_WELCOME (32)</b></font> - 
+enable welcome message (default: on).
+</li>
+<li>
+<font face="courier new" size=2><b>GCF_AVOID_BOTS (64)</b></font> - 
+avoid bots when showing scoreboard (default: on) - must be <b>on</b>
+for <a href="http://www.botepidemic.com/gladiator" target="_blank">Gladiator Bot</a> (otherwise
+it'll crash), and may be <b>off</b> for <a href="http://impact.frag.com" target="_blank">Eraser</a>.
+</li>
+<li>
+<font face="courier new" size=2><b>GCF_DEFAULT_ID (128)</b></font> - 
+turn player id display on by default (default: on).
+</li>
+<li>
+<font face="courier new" size=2><b>GCF_DEFAULT_TICKER (256)</b></font> - 
+turn ticker tape on by default (default: off).
+</li>
+<li>
+<font face="courier new" size=2><b>GCF_DEFAULT_FIXED (512)</b></font> - 
+turn fixed cameras on by default (default: on) - this only takes
+effect if the map has fixed cameras defined for it.
+</li>
+<li>
+<font face="courier new" size=2><b>GCF_DEFAULT_AUTO (1024)</b></font> - 
+turn auto chase camera position (creep camera) on by default (default: on).
+</li>
+<li>
+<font face="courier new" size=2><b>GCF_DEFAULT_DEMO (2048)</b></font> - 
+turn auto demo recording on by default (default: off).
+</li>
+<li>
+<font face="courier new" size=2><b>GCF_LOCK_SERVER (4096)</b></font> - 
+lock the server (refuse connection) in General Admission (tournament) mode
+when match is in progress (default: off).
+</li>
+<li>
+<font face="courier new" size=2><b>GCF_TEAMS (8192)</b></font> - 
+use the <font face="courier new" size=2 color="orange"><b>gc_teams</b></font> 
+cvar to distinguish between teams (default: off).
+</li>
+<li>
+<font face="courier new" size=2><b>GCF_SPECTATOR (16384)</b></font> - 
+replace in-game spectator mode (default: on) - flag is ignored in General Admission mode.
+Note that setting this flag causes
+<font face="courier new" size=2 color="orange"><b>spectator_password</b></font> to override
+<font face="courier new" size=2 color="orange"><b>gc_password</b></font>, and 
+<font face="courier new" size=2 color="orange"><b>maxspectators</b></font> to override
+<font face="courier new" size=2 color="orange"><b>gc_maxcameras</b></font>.
+</li>
+</ul>
+</dd>
+
+<dt><br><font face="courier new" size=2 color="orange"><b>gc_password</b></font></dt>
+<dd>Spectator mode password (default is "" - i.e. no password).</dd>
+
+<dt><font face="courier new" size=2 color="orange"><b>gc_maxcameras</b></font></dt>
+<dd>Maximum number of spectators allowed (archived, default is 4).
+Set this to 0, to allow all players to become spectators. Value is ignored in General Admission mode.</dd>
+
+<dt><font face="courier new" size=2 color="orange"><b>gc_maxplayers</b></font></dt>
+<dd>The maximum allowed players. This doesn't reject new clients,
+but rather prevents a spectator from joining the game with 
+<font face="courier new" size=2 color="orange"><b>camera off</b></font>,
+when enough players are already playing
+(default is 0, which disables this feature). Value is used only in General Admission mode.</dd>
+
+<dt><font face="courier new" size=2 color="orange"><b>gc_autocam</b></font></dt>
+<dd>Set this to 1 in order to put the server in <b>General Admission mode</b>,
+to force everyone to enter the game as spectators
+(latched, default is 0).</dd>
+
+<dt><font face="courier new" size=2 color="orange"><b>gc_motd</b></font></dt>
+<dd>The General Admission welcome message (default is 
+<font face="courier new"><b>
+"\!GameCam\! General Admission\nEnjoy the Show!\n\n\ntype '\!camera\!' to see the menu"</b></font>).</dd>
+
+<dt><font face="courier new" size=2 color="orange"><b>gc_ticker</b></font></dt>
+<dd>Name of ticker script, without extension (archived, default is "" - which loads an internal default script). Ticker script file name
+extension is "<b>.led</b>".</dd>
+
+<dt><font face="courier new" size=2 color="orange"><b>gc_maxscores</b></font></dt>
+<dd>The number of top scores to list on the ticker tape (archived, default is 5, set to 0 to list all players).</dd>
+
+<dt><font face="courier new" size=2 color="orange"><b>gc_teams</b></font></dt>
+<dd>Used with <b>GCF_TEAMS</b> to distinguish between teams
+(archived, default is "" - allowed values are "model", "skin", "gun", "model2", "model3", "model4").
+Used in creep-cam mode to help it prefer tracking the other team's players.</dd>
+
+<dt><font face="courier new" size=2 color="orange"><b>gc_update</b></font></dt>
+<dd>Number of minutes between timer updates in tournament mode (archived, default is 5 - 0 disables timer updates).</dd>
+
+<dt><font face="courier new" size=2 color="orange"><b>proxy</b></font></dt>
+<dd>Proxy module chain string (serverinfo, latched).</dd>
+
+<dt><font face="courier new" size=2 color="orange"><b>nextproxy</b></font></dt>
+<dd>Internal to proxy module loading mechanism (read-only).</dd>
+</dl>
+
+<a name="client"><h4>Client Side</h4></a>
+
+With the default settings <font face="Verdana" color="green"><b>GameCam</b></font> replaces the in-game
+spectator mode. Combined with the 
+<a href="#menu">camera menu</a>
+this means that clients don't need to use any of the following 
+<a href="#commands">commands</a>
+or 
+<a href="#keys">
+keyboard bindings</a> ...
+
+<p>
+<a name="menu"><h5>Camera Menu</h5></a>
+The camera menu can only be accessed by spectators. The menu can be toggled with the 
+<font face="courier new" size=2 color="orange"><b>camera</b></font> command or with the 
+<b>TAB</b> key (<font face="courier new" size=2 color="orange"><b>inven</b></font>), and its
+use is self evident. Note that most camera console commands are disabled while using the menu,
+and camera mode changes take effect only when the menu is removed.
+<p>
+The following console commands are enabled while the menu is displayed:
+<font face="courier new" size=2 color="orange"><b>camera off</b></font>,
+<font face="courier new" size=2 color="orange"><b>camera menu</b></font>,
+<font face="courier new" size=2 color="orange"><b>camera ?</b></font> and 
+<font face="courier new" size=2 color="orange"><b>camera</b></font>.
+
+
+<p>
+<a name="commands"><h5>Console Commands</h5></a>
+<dl>
+<dt><font face="courier new" size=2 color="orange"><b>camera</b></font></dt>
+<dd><font face="verdana" size=2>toggle camera menu on/off (works for spectators only)</font></dd>
+<dt><font face="courier new" size=2 color="orange"><b>camera menu</b></font></dt>
+<dd><font face="verdana" size=2>toggle camera menu on/off</font></dd>
+<dt><font face="courier new" size=2 color="orange"><b>camera ?</b></font></dt>
+<dd><font face="verdana" size=2>show help message</dd>
+<dt><font face="courier new" size=2 color="orange"><b>camera on [&lt</b><b>password</b><b>&gt]</b></font></dt>
+<dd><font face="verdana" size=2>enter spectator mode, with optional password</font></dd>
+<dt><font face="courier new" size=2 color="orange"><b>camera off [&lt</b><b>password</b><b>&gt]</b></font></dt>
+<dd><font face="verdana" size=2>exit spectator mode, with optional password (password needed only in General Admission mode)</font></dd>
+<dt><font face="courier new" size=2 color="orange"><b>camera id</b></font></dt>
+<dd><font face="verdana" size=2>toggle identification of player in view (<b>FREE</b> and <b>ACTION</b> camera modes)</font></dd>
+<dt><font face="courier new" size=2 color="orange"><b>camera free</b></font></dt>
+<dd><font face="verdana" size=2><b>FREE</b> camera mode</font></dd>
+<dt><font face="courier new" size=2 color="orange"><b>camera chase</b></font></dt>
+<dd><font face="verdana" size=2><b>CHASE</b> camera mode</font></dd>
+<dt><font face="courier new" size=2 color="orange"><b>camera action</b></font></dt>
+<dd><font face="verdana" size=2><b>ACTION</b> camera mode</font></dd>
+<dt><font face="courier new" size=2 color="orange"><b>camera action normal</b></font></dt>
+<dd><font face="verdana" size=2><b>ACTION</b> camera <b>NORMAL</b> sub-mode</font></dd>
+<dt><font face="courier new" size=2 color="orange"><b>camera action follow</b></font></dt>
+<dd><font face="verdana" size=2><b>ACTION</b> camera <b>FOLLOW</b> sub-mode</font></dd>
+<dt><font face="courier new" size=2 color="orange"><b>camera max_xy [&lt</b><b>value</b><b>&gt]</b></font></dt>
+<dd><font face="verdana" size=2>show/set maximum x/y lag for <b>ACTION</b> mode</font></dd>
+<dt><font face="courier new" size=2 color="orange"><b>camera max_z [&lt</b><b>value</b><b>&gt]</b></font></dt>
+<dd><font face="verdana" size=2>show/set maximum z lag for <b>ACTION</b> mode</font></dd>
+<dt><font face="courier new" size=2 color="orange"><b>camera max_angle [&lt</b><b>value</b><b>&gt]</b></font></dt>
+<dd><font face="verdana" size=2>show/set maximum yaw angle lag for <b>ACTION</b> mode</font></dd>
+<dt><font face="courier new" size=2 color="orange"><b>camera select [auto | &lt</b><b>id</b><b>&gt]</b></font></dt>
+<dd><font face="verdana" size=2>show/set current target in <b>ACTION</b>/<b>CHASE</b> mode 
+(<font face="courier new" size=2 color="orange"><b>auto</b></font> reverts to automatic target selection in <b>ACTION</b>
+mode)</font></dd>
+<dt><font face="courier new" size=2 color="orange"><b>camera chase auto</b></font></dt>
+<dd><font face="verdana" size=2>toggle camera auto position (creep-camera) in <b>CHASE</b> mode</font></dd>
+<dt><font face="courier new" size=2 color="orange"><b>camera demo</b></font></dt>
+<dd><font face="verdana" size=2>toggle auto demo recording</dd>
+<dt><font face="courier new" size=2 color="orange"><b>camera ticker</b></font></dt>
+<dd><font face="verdana" size=2>toggle display of ticker tape in <b>ACTION</b> and <b>FREE</b> mode</dd>
+<dt><font face="courier new" size=2 color="orange"><b>camera inven</b></font></dt>
+<dd><font face="verdana" size=2>toggle display of player inventory in <b>CHASE</b> mode</dd>
+<dt><font face="courier new" size=2 color="orange"><b>camera layout</b></font></dt>
+<dd><font face="verdana" size=2>toggle display of player layouts in <b>CHASE</b> mode (allows you to see if player is
+watching the scoreboard or uses menus)</dd>
+<dt><font face="courier new" size=2 color="orange"><b>camera fixed</b></font></dt>
+<dd><font face="verdana" size=2>toggle the use of fixed cameras in <b>ACTION</b> mode, when such
+cameras are defined</dd>
+<p>
+<dt>The following commands are available only on a non-dedicated server for client #0 in
+<b>FREE</b> mode:</dt>
+<dd><br></dd>
+<dt><font face="courier new" size=2 color="orange"><b>camera list</b></font></dt>
+<dd><font face="verdana" size=2>list all fixed cameras</dd>
+<dt><font face="courier new" size=2 color="orange"><b>camera add ["name"]</b></font></dt>
+<dd><font face="verdana" size=2>add camera at current position, view angles and fov (default name is "unnamed camera")</dd>
+<dt><font face="courier new" size=2 color="orange"><b>camera update ["name"]</b></font></dt>
+<dd><font face="verdana" size=2>update current camera (will add camera if new)</dd>
+<dt><font face="courier new" size=2 color="orange"><b>camera remove</b></font></dt>
+<dd><font face="verdana" size=2>remove the current camera</dd>
+<dt><font face="courier new" size=2 color="orange"><b>camera next</b></font></dt>
+<dd><font face="verdana" size=2>go to the next camera</dd>
+<dt><font face="courier new" size=2 color="orange"><b>camera prev</b></font></dt>
+<dd><font face="verdana" size=2>go to the previous camera</dd>
+<dt><font face="courier new" size=2 color="orange"><b>camera none</b></font></dt>
+<dd><font face="verdana" size=2>deselect current camera</dd>
+<dt><font face="courier new" size=2 color="orange"><b>camera save</b></font></dt>
+<dd><font face="verdana" size=2>save cameras to file <b>&lt</b><b>basedir&gt/&lt</b><b>game&gt/cameras/&lt</b><b>mapname&gt.cam</b></dd>
+</dl>
+
+<a name="keys"><h5>Keyboard Bindings</h5></a>
+<p>
+While in spectator mode (<font face="courier new" size=2 color="orange"><b>camera on</b></font>):
+<ul>
+<li>use <b>[</b> or <b>]</b> (<b>invprev</b>, <b>invnext</b>) to enter <b>CHASE</b> mode from
+<b>FREE</b> and <b>ACTION</b> modes
+<li>use <b>[</b> and <b>]</b> (<b>invprev</b>, <b>invnext</b>) to switch to the previous/next client while in <b>CHASE</b> mode
+<li>use <b>BACKSPACE</b> (<b>invdrop</b>) to enter <b>FREE</b> mode
+<li>use <b>ENTER</b> (<b>invuse</b>) to enter <b>ACTION</b> mode
+<li>use <b>TAB</b> (<b>inven</b>) to toggle the camera menu
+<li>use <b>F1</b> (<b>help</b>) or <b>X</b> (<b>score</b>) to toggle the scoreboard (updated every ~3 seconds)
+<li>use <b>CTRL</b> (<b>+attack</b>) to reset manual <b>CHASE</b> camera position 
+<li>use mouse or normal movement keys to manually adjust <b>CHASE</b> camera position (camera can be moved up/down and
+backward/forward, strafe left/right, turned up/down and left/right)
+</ul>
+
+<p align="right">
+<br>
+<a href="#contents"><small>table of contents</small></a>
+<hr>
+
+<a name="config"><h3>Configuration</h3></a>
+<font face="Verdana" color="green"><b>GameCam</b></font> should work just fine <b>without</b> any
+special configuration, but may look and behave much better <b>with</b> it.  
+The following first two sections explain how to tweak the <a href="#chase"><b>CHASE</b> camera</a> and
+the <a href="#action"><b>ACTION</b> camera</a> target selection. The third section
+deals with <a href="#fixed">fixed cameras</a> (how to define and use them), and   
+the last section is a 
+description of the simple script language used for programming the 
+<font face="Verdana" color="green"><b>GameCam</b></font> <a href="#ticker">ticker tape</a>.
+
+<a name="chase"><h4><b>CHASE</b> Camera Target Selection</h4></a>
+The <font face="Verdana" color="green"><b>GameCam</b></font> <b>CHASE</b> camera has two modes of operation:
+<ul>
+<li>
+<b>MANUAL</b> - this is the familiar CTF chase camera, only that spectators can adjust the
+camera position and view angles with the movement keys (or mouse). The camera  
+may be reset with the <b>CTRL</b> key (<b>+attack</b> command).
+</li>
+<li>
+<b>AUTO</b> - the computer adjusts the camera position and view angles automatically to provide
+the best view of the closest opponent. I refer to this mode as <b>creep-camera</b> because the first camera mod
+to ever use this concept was <a href="http://members.xoom.com/DBmandrake" target="_blank">CreepCam</a> for 
+(classic) Quake (but the <font face="Verdana" color="green"><b>GameCam</b></font> creep-camera
+uses my own original algorithm).
+</li>
+</ul>
+
+Obviously, in order to get the best results, <font face="Verdana" color="green"><b>GameCam</b></font> has to
+figure out who are the chased player's opponents and who are his team mates. The problem is
+that different mods use different ways to distinguish between teams.
+<p>
+By default <font face="Verdana" color="green"><b>GameCam</b></font> detects teams by following the next rules:
+<ul>
+<li>
+if either <b>DF_SKINTEAMS</b> (64) or <b>DF_MODELTEAMS</b> (128) is set
+in <font face="courier new" size=2 color="orange"><b>dmflags</b></font>, then 
+<font face="Verdana" color="green"><b>GameCam</b></font> detects teams by skin or by model (respectively)
+</li>
+<li>
+if the game folder name has the string "ctf" (or "CTF") in it, then
+<font face="Verdana" color="green"><b>GameCam</b></font> detects teams by skin
+</li>
+</ul>
+
+<p>
+But not all CTF games use skins for teams, and other mods use other methods (e.g. HeadHunters uses
+disks). <font face="Verdana" color="green"><b>GameCam</b></font> can be configured to distinguish between
+teams by looking at their model, skin, gun, and auxiliary models 2, 3 and 4 (e.g. HeadHunters disks).
+To do that just set the flag <b>GCF_TEAMS</b> (8192) in 
+<font face="courier new" size=2 color="orange"><b>gc_flags</b></font>, and set 
+<font face="courier new" size=2 color="orange"><b>gc_teams</b></font> to one of the following values:
+"skin", "model", "gun", "model2", "model3" or "model4".
+<p>
+Long explanation, short solution ...
+
+<a name="action"><h4><b>ACTION</b> Camera Target Selection</h4></a>
+The <b>ACTION</b> camera may be configured to focus on specific types of players,
+based on a priority list.
+<p>
+By default, the <b>ACTION</b> camera focuses on the player that can see the maximum number
+of players (favoring players with larger frag counts). This behavior may not suit some
+mods - e.g. in CTF the camera should favor flag carriers, and in HeadHunters the camera
+should focus on players carrying the largest number of heads.
+<p>
+When using the priority based target selection scheme, 
+<font face="Verdana" color="green"><b>GameCam</b></font> 
+first attempts to find a player that matches one of the potential targets
+specified in <b>gamecam.ini</b>. If a match is found, <font face="Verdana" color="green"><b>GameCam</b></font>
+focuses on that player (favoring players that see the most players and
+have the most frags). If a match is not found, <font face="Verdana" color="green"><b>GameCam</b></font>
+reverts to the default selection scheme, and attempts to find the
+spot where most of the players are located.
+<p>
+Each game folder should have its own <b>gamecam.ini</b> (if needed). This file holds
+a list of potential targets, grouped by priority. Each target is specified
+as <font face="courier new" size=2 color="orange"><b>"&lt</b><b>type&gt &lt</b><b>value&gt"</b></font>, where 
+<font face="courier new" size=2 color="orange"><b>&lt</b><b>type&gt</b></font>
+is one of the following:
+<ul>
+<li><font face="courier new" size=2 color="orange"><b>model</b></font> - player plugin model; 
+<font face="courier new" size=2 color="orange"><b>&lt</b><b>value&gt</b></font> is <b>&lt</b><b>model&gt/&lt</b><b>skin&gt</b>.
+<li><font face="courier new" size=2 color="orange"><b>gun</b></font> - player gunindex model (weapon view model); 
+<font face="courier new" size=2 color="orange"><b>&lt</b><b>value&gt</b></font> is the model's (<b>.md2</b>) file path.
+<li><font face="courier new" size=2 color="orange"><b>model2</b></font> - player modelindex2 model; 
+<font face="courier new" size=2 color="orange"><b>&lt</b><b>value&gt</b></font> is the model's (<b>.md2</b>) file path.
+<li><font face="courier new" size=2 color="orange"><b>model3</b></font> - player modelindex3 model (CTF flag, HH heads); 
+<font face="courier new" size=2 color="orange"><b>&lt</b><b>value&gt</b></font> is the model's (<b>.md2</b>) file path.
+<li><font face="courier new" size=2 color="orange"><b>model4</b></font> - player modelindex4 model; 
+<font face="courier new" size=2 color="orange"><b>&lt</b><b>value&gt</b></font> is the model's (<b>.md2</b>) file path.
+<li><font face="courier new" size=2 color="orange"><b>shell</b></font> - player shell; 
+<font face="courier new" size=2 color="orange"><b>&lt</b><b>value&gt</b></font> is a pair of numbers separated by a colon - <b>&lt</b><b>effect&gt:&lt</b><b>renderfx&gt</b>
+(e.g. quad is 32768:0, pentagram is 65536:0, and 256:&lt<b></b>color&gt is a color shell - 
+consult id software's source code for more values).
+</ul>
+<p>
+Several example configuration files are available for <a href="#download">download</a>.
+<p>
+Note that <b>gamecam.ini</b> contains the target list <b>only</b> and is not used for anything
+else. Any console variable setting should be placed in your server's configuration
+script (<b>autoexec.cfg</b>, <b>server.cfg</b> etc.).
+
+<a name="fixed"><h4>Fixed Cameras</h4></a>
+The <b>ACTION</b> camera can find its way around the map without any
+help. The dynamic behavior of the camera generates very cool shots most of
+the time. However, sometimes it looks better if the camera always films
+the action from the same position in certain areas of the map.
+
+<p>
+To enable this you can define fixed cameras for each area in each map that
+you think would be best covered from specific positions.
+<font face="Verdana" color="green"><b>GameCam</b></font> uses fixed cameras as
+long as the player being filmed is visible by some camera. When the player goes out of
+sight <font face="Verdana" color="green"><b>GameCam</b></font> reverts to the free moving
+<b>ACTION</b> camera, until another camera has the player in view.
+
+<p>
+So here's what you should do:
+<ul>
+<li>
+start up a listen (i.e. not dedicated) server and load the required map
+</li>
+<li>
+set the flag <b>GCF_ALLOW_FREE</b> (4) in 
+<font face="courier new" size=2 color="orange"><b>gc_flags</b></font>, so that you can
+enter <b>FREE</b> mode
+</li>
+<li>
+type 
+<font face="courier new" size=2 color="orange"><b>camera on</b></font>
+and then use the menu to switch to <b>FREE</b> mode (or type
+<font face="courier new" size=2 color="orange"><b>camera free</b></font>)
+</li>
+<li>
+move through the level to find a good spot for the camera, tweak the zoom (fov) to your liking
+and when ready type 
+<font face="courier new" size=2 color="orange"><b>camera add "&lt</b><b>name&gt"</b></font>
+(where <font face="courier new" size=2 color="orange"><b>"&lt</b><b>name&gt"</b></font> is the name
+of the camera, which is later displayed to spectators at the bottom of the screen)
+</li>
+<li>
+repeat the last step for all other spots
+</li>
+<li>
+use <font face="courier new" size=2 color="orange"><b>camera list</b></font>
+to list all the cameras, and
+<font face="courier new" size=2 color="orange"><b>camera next</b></font>
+or <font face="courier new" size=2 color="orange"><b>camera prev</b></font>
+to cycle thru the cameras and review your work
+</li>
+<li>
+use <font face="courier new" size=2 color="orange"><b>camera remove</b></font>
+to delete the current camera,
+and <font face="courier new" size=2 color="orange"><b>camera update ["&lt</b><b>name&gt"]</b></font>
+to modify its parameters
+</li>
+<li>
+save the cameras to file with
+<font face="courier new" size=2 color="orange"><b>camera save</b></font>
+(this will generate a file named <b>mapname.cam</b> under a new <b>cameras</b>
+sub-folder in the current game's folder, where <b>mapname</b> is the name of the current
+map)<br>
+(<b>Linux:</b> the <b>cameras</b> directory has to be created manually
+before you attempt to save!)
+
+</li>
+</ul> 
+The new camera file will be auto-loaded by <font face="Verdana" color="green"><b>GameCam</b></font>
+the next time you load that map, so that the above procedure can be used to edit an existing
+camera file. To test your work I recommend you run the map with bots, to see whether the resulting
+camera behavior looks good.
+<p>
+IMO it's not a good idea to cover all the map with cameras - a better approach seems
+to use fixed cameras to cover large (open) areas or strategic spots, and let the
+free moving camera have control over the rest of the map.
+
+<a name="ticker"><h4>Ticker Tape Scripts</h4></a>
+The <font face="Verdana" color="green"><b>GameCam</b></font> ticker tape can be programmed
+with a simple script language which is a subset of the script language used to program
+the <a href="http://solo.dc3.com/" target="_blank">Java LEDSign Applet</a>. 
+<p>
+<h5>Script Commands</h5>
+
+<ul>
+<li><b>Appear</b> - display text
+<li><b>Sleep</b> - wait (current text is kept unchanged)
+<li><b>ScrollLeft</b> - scroll text from right to left
+<li><b>ScrollRight</b> - scroll text from left to right
+<li><b>Blink</b> - blink text several <b>times</b> with a specified <b>delay</b>
+<li><b>Do</b> - begin loop
+<li><b>Repeat</b> - end loop (loop is executed a specified number of <b>times</b>)
+<li><b>Reload</b> - reloads the script file (this allows an external utility to update the 
+script automatically!)
+</ul>
+
+<h5>Commands Parameters</h5>
+All script commands have parameters:
+<ul>
+<li><b>delay</b> - delay in frames (10 frames = 1 second - applies to <b>Sleep</b> and <b>Blink</b> commands only)
+<li><b>times</b> - times to perform command (applies to <b>Repeat</b> and <b>Blink</b> commands only).
+Note that "<b>Repeat times=-1</b>" is used to generate infinite loops.
+<li><b>clear</b> - clear text flag (possible values: <b>true</b> or <b>false</b>),
+this parameter overrides any of the following
+<li><b>center</b> - center text flag (possible values: <b>true</b> or <b>false</b>)
+<li><b>startspace</b> - number of spaces before text (ignored if centered)
+<li><b>endspace</b> - number of spaces after text (ignored if centered)
+<li><b>text</b> - text to display (<b>must</b> be last parameter on the line)
+</ul>
+<p>
+Note that some parameters have no effect on some commands so they are simply
+ignored if encountered. 
+
+<h5>Text Codes</h5>
+The ticker text may include the following escape sequences and codes:
+<ul>
+<li><b>\!text\!</b> - highlight text
+<li><b>\"</b> - quotation mark
+<li><b>\\</b> - back slash
+<li><b>\x00</b> - special character: hexadecimal ascii code ('x' and two hex digits)
+<li><b>\000</b> - special character: octal ascii code (three octal digits)
+<li><b>\{$cvar$}</b> - any console variable (replace 'cvar' with name of cvar)
+<li><b>\{sb}</b> - top scores (number of entries controlled by <font face="courier new" size=2 color="orange"><b>gc_maxscores</b></font>)
+<li><b>\{tt}</b> - current time (12 hour format) 
+<li><b>\{hh}</b> - current hour (12 hour format)
+<li><b>\{HH}</b> - current hour (24 hour format)
+<li><b>\{hm}</b> - current minutes
+<li><b>\{ss}</b> - current seconds
+<li><b>\{am}</b> - "am" or "pm"
+<li><b>\{AM}</b> - "AM" or "PM"
+<li><b>\{dd}</b> - day of the week (Sun Mon etc.)
+<li><b>\{DD}</b> - day of the week (Sunday Monday etc.)
+<li><b>\{dn}</b> - day of the month
+<li><b>\{mn}</b> - month number (1-12)
+<li><b>\{mm}</b> - month name (Jan Feb etc.)
+<li><b>\{MM}</b> - month name (January February etc.)
+<li><b>\{yy}</b> - year (two last digits)
+<li><b>\{YY}</b> - year (four digits)
+</ul>
+These escape sequences are also available for the General Admission MOTD.
+<h5>Using The Script</h5>
+After writing down your script save it to the current game folder with extension 
+"<font face="courier new" size=2><b>.led</b></font>". Set 
+<font face="courier new" size=2 color="orange"><b>gc_ticker</b></font>
+to be the name of this script file without the extension (e.g. "myscript" for "myscript.led").
+The script will be loaded as soon as someone becomes a spectator.
+
+<h5>Example Script</h5>
+The following script is the internal script used by 
+<font face="Verdana" color="green"><b>GameCam</b></font>
+when <font face="courier new" size=2 color="orange"><b>gc_ticker</b></font>
+doesn't point to any valid script file.
+<p>
+<pre>
+Do
+   Appear center=true text=\!GameCam\! v1.02
+   Sleep delay=10
+   ScrollLeft center=true text=\x90\x80\x91 1998-99, Avi \"\!Zung!\!\" Rozen
+   Sleep delay=10
+   ScrollRight center=true text=http://www.telefragged.com/\!zungbang\!
+   Do
+      Sleep delay=3
+      Appear center=true text=http://www.telefragged.com/zungbang
+      Sleep delay=3
+      Appear center=true text=http://www.telefragged.com/\!zungbang\!
+   Repeat times=3
+   Sleep delay=10
+   ScrollLeft center=true text=\!TOP SCORES\! . . .
+   ScrollLeft endspace=39 text=\{sb}
+   Sleep delay=10
+   Appear center=true text=type '\!camera\!' to see the menu
+   Sleep delay=10
+   ScrollRight center=true text=\!GameCam\! v1.02
+Repeat times=-1
+</pre>
+
+<p align="right">
+<br>
+<a href="#contents"><small>table of contents</small></a>
+<hr>
+
+<a name="compatibility"><h3>Compatibility</h3></a>
+<font face="Verdana" color="green"><b>GameCam</b></font> has been tested with Quake II v3.20
+and the following mods <b>on public servers</b>: 
+<a href="http://www.planetquake.com/lithium" target="_blank">Lithium II</a> (see notes below),
+Zoid's CTF and other CTF variants,
+<a href="http://www.planetquake.com/arena" target="_blank">Rocket Arena II</a>,
+<a href="http://www.telefragged.com/weapons/" target="_blank">Weapons Of Destruction</a>,
+<a href="http://action.telefragged.com/" target="_blank">Action Quake 2</a>,
+<a href="http://www.planetquake.com/headhunters" target="_blank">HeadHunters 2</a>
+and more. I've tested <font face="Verdana" color="green"><b>GameCam</b></font> with several other mods 
+and it seems to work just fine.
+It's likely that <font face="Verdana" color="green"><b>GameCam</b></font> can work with most
+game modules out there, but there's no guarantee.
+<p>
+There are some known compatibility issues that I don't intend to address (for technical reasons):
+<ul>
+<li>
+The HUD and scoreboard are mostly broken with Lithium due to the unconventional layouts in this mod.
+But the camera itself works just fine.</li>
+<li>
+Some mods provide several formats for the scoreboard that can
+be cycled thru with the <font face="courier new" size=2 color="orange"><b>score</b></font> command - 
+<font face="Verdana" color="green"><b>GameCam</b></font> can only show the first format available.
+</li>
+<li>
+Some mods have parts of the scoreboard actually implemented as part of the statusbar (HUD). 
+<font face="Verdana" color="green"><b>GameCam</b></font> does its own handling of the HUD, so 
+it might not be able to show the scoreboard correctly in these cases.
+</li>
+<li>
+With a few mods the <b>ACTION</b> camera algorithm makes very little sense - and it'll look pretty
+stupid. Proper <a href="config.html" target="main">configuration</a> may solve this, but some
+mods are just too original to handle. Remember that <font face="Verdana" color="green"><b>GameCam</b></font>
+also has an enhanced <b>CHASE</b> camera ...
+</li>
+<li>
+<font face="Verdana" color="green"><b>GameCam</b></font> supports emulated clients (i.e. bots) only
+in <b>ACTION</b> mode (bots can't be chased). This feature has been tested with 
+<a href="http://impact.frag.com" target="_blank">Eraser v1.01</a>, 
+<a href="http://www.botepidemic.com/gladiator" target="_blank">Gladiator v0.9</a> and
+<a href="http://planetquake.com/crbot" target="_blank">CRBot v1.14</a> and is known to have
+some quirks (for example: when the spectator is the only client, 
+bot chat messages are not displayed, and the CTF scoreboard plaques are lost after a level
+change).<br>
+These problems are due to limitations inherent
+to the proxy module concept, and the fact that client emulation is just that: emulation.<br>
+Note that you should <b>clear</b> the flag <b>GCF_AVOID_BOTS</b> in 
+<font face="courier new" size=2 color="orange"><b>gc_flags</b></font>
+in order to view the scoreboard with Eraser or CRBot. This flag <b>must be set</b> with
+the Gladiator Bot, or else the server will barf an error and die as soon as you try to
+view the scoreboard (this means that you can't view the scoreboard unless there is another real
+client connected to the game).
+</li>
+</ul>
+<p>
+<font face="Verdana" color="green"><b>GameCam</b></font> overrides any game native 
+<font face="courier new" size=2 color="orange"><b>camera</b></font>
+console command (if it exists).
+<p>
+<p>
+Currently <font face="Verdana" color="green"><b>GameCam</b></font> is available
+for Win95/98/NT, Linux (libc5 and glibc) and Solaris (Sparc).
+
+<p align="right">
+<br>
+<a href="#contents"><small>table of contents</small></a>
+<hr>
+
+<a name="bugs"><h3>Bugs</h3></a>
+
+The following issues are known, and will <b>not</b> be dealt with:
+<ul>
+<li>The very first player to join the game in <b>General Admission Mode</b>, 
+will get several <font face="courier new"><b>"can't find pic:"</b></font>
+messages printed to the console. Ignore it. It's harmless.
+<li>
+<font face="Verdana" color="green"><b>GameCam</b></font> overflow protection may
+prevent the camera menu from being displayed if you view the scoreboard and call up
+the menu at the EXACT time when the scoreboard is updated (updates are 
+performed every 3 seconds or so). If this ever happens to you, just hit <b>ESC</b> and call up
+the menu again.
+</li>
+<li>In coop mode: if a spectator in <b>CHASE</b> mode uses the help key (<b>F1</b>) before the
+player does, the player's help icon will be removed. So just be polite
+to the player you're chasing, and wait for him/her to view the help screen first.
+<li>The client crashes (protection fault in <b>ref_soft.dll</b>) on <b>base3.bsp</b>, while
+in <b>FREE</b> camera mode, while moving in a solid area (wall etc.), when using
+<b>software</b> rendering mode.<br>
+This does not happen when using <b>3dfx openGL</b> rendering (the same <a href="http://www.telefragged.com/zungbang/gamecam/files/gcgpf.zip">demo</a>
+works in <b>3dfx openGL</b>, but crashes <b>software</b> rendering), so I'm inclined to blame <b>ref_soft.dll</b>.<br> 
+Any ideas? does it happen on any other map? - please let <a href="mailto:zungbang@telefragged.com?subject=GameCam feedback">me</a> know.
+</ul>
+
+<p align="right">
+<br>
+<a href="#contents"><small>table of contents</small></a>
+<hr>
+
+<a name="feedback"><h3>Feedback</h3></a>
+
+Please let <a href="mailto:zungbang@telefragged.com?subject=GameCam feedback">me</a>
+know of any bugs or compatibility issues that you encounter.
+
+<p>
+If you have improvement suggestions, requests, or need advice in
+configuring
+<font face="Verdana" color="green"><b>GameCam</b></font> to work
+with a specific mod, don't hesitate to contact me.
+
+<p>
+I would also very much like to know if you record demos with 
+<font face="Verdana" color="green"><b>GameCam</b></font> -<br><b>DO NOT</b>
+e-mail demos, just send me a URL :-)
+
+<p align="right">
+<br>
+<a href="#contents"><small>table of contents</small></a>
+<hr>
+
+<a name="log"><h3>Change Log</h3></a>
+<dl>
+
+
+<dt><b>22 Apr. 1999 v1.02 final</b></dt>
+<dd>
+<li>added: support for Unix
+<li>fixed bug: ticker tape scrolling was jittery
+</dd>
+
+<dt><b><br>19 Feb. 1999 v1.01 final</b></dt>
+<dd>
+<li>modified: spectator in <b>CHASE</b> mode now sees the same chat
+messages that the player sees (can't see other team's private messages)
+<li>modified: <font face="Verdana" color="green"><b>GameCam</b></font> spectators can't
+chase in-game spectators anymore (this wasn't a bug but rather a designed
+feature to help me debug another project)
+<li>modified: fixed-cameras stop following players when they get out of sight
+(camera no longer watches the walls!)
+<li>fixed bug: closest player prefered by <b>ACTION</b> camera over priority target and/or
+manually selected target (<font face="courier new" size=2 color="orange"><b>camera select</b></font>)
+</dd>
+
+<dt><b><br>15 Feb. 1999 v1.00 final</b> <small>(private release)</small></dt>
+<dd>
+<li>modified: creep camera less likely to "see thru walls" in 3dfx OpenGL
+(again)
+</dd>
+
+<dt><b><br>14 Feb. 1999 v0.92 beta</b> <small>(private release)</small></dt>
+<dd>
+<li>added standard flood protection for spectator chat messages (as in v3.20)
+<li>added diagnostic message if client can't return to game with 
+<font face="courier new" size=2 color="orange"><b>camera off</b></font>
+(may happen when 
+<font face="courier new" size=2 color="orange"><b>password</b></font>
+key in player's userinfo is not correct)
+<li>modified: enabled 
+<font face="courier new" size=2 color="orange"><b>camera off</b></font>,
+<font face="courier new" size=2 color="orange"><b>camera menu</b></font> and
+<font face="courier new" size=2 color="orange"><b>camera ?</b></font>
+(in addition to 
+<font face="courier new" size=2 color="orange"><b>camera</b></font>)
+while showing menu, other commands are disabled
+
+</dd>
+
+<dt><b><br>13 Feb. 1999 v0.91 beta</b> <small>(private release)</small></dt>
+<dd>
+<li>added new flag <b>GCF_SPECTATOR</b> to allow <font face="Verdana" color="green"><b>GameCam</b></font> to
+replace in-game spectator mode 
+(this means that <font face="courier new" size=2 color="orange"><b>spectator 1/0</b></font>
+may be used instead of 
+<font face="courier new" size=2 color="orange"><b>camera on/off</b></font>)
+<li>added security feature that makes the server add <b>[CAMERA]</b> prefix 
+to spectators' names when reporting to GameSpy, QStat etc.
+<li>added 
+<font face="courier new" size=2 color="orange"><b>camera select &lt</b><b>id&gt</b></font>
+in <b>CHASE</b> mode
+<li>added 
+<font face="courier new" size=2 color="orange"><b>camera inven</b></font>
+and made <b>TAB</b> key (<font face="courier new" size=2 color="orange"><b>inven</b></font>)
+always show the camera menu
+<li>added
+<font face="courier new" size=2 color="orange"><b>camera layout</b></font>
+and disabled all keyboard binds except: menu navigation,
+manual <b>CHASE</b> camera positioning (<b>CTRL</b> resets camera position),
+<b>[</b> and <b>]</b> to switch players or enter <b>CHASE</b> mode,
+<b>ENTER</b> to switch to <b>ACTION</b> mode and <b>BACKSPACE</b> to switch to <b>FREE</b> mode
+<li>modified: made <font face="courier new" size=2 color="orange"><b>help</b></font>
+behave the same as
+<font face="courier new" size=2 color="orange"><b>score</b></font>
+in deathmatch
+<li>modified: made creep-camera less likely to "see thru walls" when using 3dfx OpenGL rendering
+<li>modified: prevented camera mode changes when menu is removed during intermission
+<li>fixed bug: occasional "dumped unreliable" warning message upon level change, with auto
+demo recording turned on
+<li>fixed bug: <b>GCF_ALLOW_FREE</b> and <b>GCF_ALLOW_SAY</b> flags were swapped
+<li>fixed bug: scoreboard was broken in some mods due to <font face="Verdana" color="green"><b>GameCam</b></font>'s statusbar
+(the statusbar is now disabled when viewing the scoreboard in <b>ACTION</b> and <b>FREE</b>
+modes)
+
+</dd>
+
+<dt><b><br>07 Feb. 1999 v0.90 beta</b> <small>(private release)</small></dt>
+<dd>
+<li>added option to manually adjust <b>CHASE</b> camera position and view angles
+<li>added automatic camera positioning in <b>CHASE</b> mode (aka CreepCam)
+<li>added camera menu system
+<li>added automatic demo recording facility
+<li>added new cvar <font face="courier new" size=2 color="orange"><b>gc_flags</b></font> and removed
+<font face="courier new" size=2 color="orange"><b>gc_allow_say</b></font>,
+<font face="courier new" size=2 color="orange"><b>gc_allow_chase</b></font>,
+<font face="courier new" size=2 color="orange"><b>gc_suicide</b></font>,
+<font face="courier new" size=2 color="orange"><b>gc_verbose</b></font>,
+<font face="courier new" size=2 color="orange"><b>gc_welcome</b></font>
+<li>added option for spectators to chat privately with each other using
+<font face="courier new" size=2 color="orange"><b>say_team</b></font>
+(works even when camera chat is disabled)
+<li>added option to lock server during match (refuses connections)
+<li>added 10 sec count-down at end of match in tournament mode
+<li>added option to announce time left for match (in tournament mode) at a configurable rate
+<li>modified: made password required for 
+<font face="courier new" size=2 color="orange"><b>camera off</b></font>
+instead of
+<font face="courier new" size=2 color="orange"><b>camera on</b></font>
+in tournament mode
+<li>modified: <font face="courier new" size=2 color="orange"><b>gc_maxcameras</b></font>
+is now ignored in tournament mode
+<li>modified: <font face="courier new" size=2 color="orange"><b>gc_maxplayers</b></font>
+is now ignored when <b>not</b> in tournament mode
+<li>modified: <b>ACTION</b> camera snaps-to player instead of turning toward him
+when changing positions
+<li>modified: <b>ACTION</b> camera closes-in on the action if it's too far away
+<li>modified: improved <b>ACTION</b> camera player-body avoidance
+<li>modified: better handling of blank names for fixed cameras
+<li>fixed bug: <b>ACTION</b> camera could never find the closest player 
+<li>fixed bug: Gladiator Bot crashed when attempting to view the scoreboard
+(added flag <b>GCF_AVOID_BOTS</b> to disable the scoreboard if there are no other real clients)
+
+</dd>
+
+<dt><b><br>21 Jan. 1999 v0.31 beta</b> <small>(private release)</small></dt>
+<dd>
+<li>modified: fixed-camera transition logic redesigned to prevent the camera from
+"watching the walls" when a player goes out of view (works most of the time...)
+</dd>
+
+<dt><b><br>20 Jan. 1999 v0.30 beta</b> <small>(private release)</small></dt>
+<dd>
+<li>added fixed-camera system
+<li>added option to select specific player as target in <b>ACTION</b> mode
+<li>added programmable ticker tape
+<li>added esacpe sequences to tournament mode motd ({sb} etc.)
+<li>modified: minor source update to conform with Quake II v3.20 source code
+<li>modified: spectators are now frozen upon intermission
+<li>modified: new statusbar required redesign of overflow protection
+<li>modified: <b>ACTION</b> camera tries to avoid being inside players
+<li>modified: <b>ACTION</b> camera turn rate made proportional to angle difference
+<li>modified: <b>ACTION</b> camera now has a minimum stay time on players
+<li>modified: <b>ACTION</b> mode is now the default camera mode instead of <b>FREE</b> mode
+(this means that <b>FREE</b> mode can be truly disabled now)
+<li>modified: improved fov handling
+<li>fixed bug: <b>ACTION</b> camera "sinks" into solid when following player on elevators
+<li>fixed bug: (internal) negative index in gc_argv returns something other than ""
+</dd>
+
+<dt><b><br>28 Oct. 1998 v0.25 beta</b></dt>
+<dd>
+<li>fixed bug: <font face="courier new" color="orange"><b>timelimit</b></font> appeared as "30.00000" instead of "30"
+<li>modified: removed <font face="courier new" color="orange"><b>gc_maxcameras</b></font> from server info
+<li>added option to disable manual entry to <b>FREE</b> mode
+<li>added configurable welcome message to the General Admission Mode
+</dd>
+
+<dt><b><br>20 Oct. 1998 v0.24 beta</b> <small>(private release - "HeadGames Edition")</small></dt>
+<dd>
+<li>added a limited General Admission (Tournament) Mode</li>
+<li>fixed bug: spectators could not view the scoreboard during intermission</li>
+<li>fixed bug: entry/exit from camera mode crashed the server during intermission (camera entry/exit is now
+disabled during intermission)</li>
+</dd>
+
+<dt><br><b>27 Sep. 1998 v0.23 beta</b></dt>
+<dd>
+<li>fixed bug:  in some mods spectators caused all players to see the scoreboard</li>
+</dd>
+
+<dt><br><b>25 Sep. 1998 v0.22 beta</b></dt>
+<dd>
+<li>fixed bug: random gun model displayed upon changing levels (<b>FREE</b> mode)</li>
+</dd>
+
+<dt><br><b>24 Sep. 1998 v0.21 beta</b></dt>
+<dd>
+<li>added option to disable spectator suicide upon <font face="courier new" size=2 color="orange"><b>camera off</b></font></li>
+<li>fixed bug: potential spectator overflow upon <font face="courier new" size=2 color="orange"><b>camera off</b></font></li>
+<li>fixed bug: priority based target selection stopped working upon level change</li>
+<li>fixed bug: spectators were sometimes spawned outside the map (again...)</li>
+</dd>
+
+<dt><br><b>18 Sep. 1998 v0.20 beta</b> <small>(private release)</small></dt>
+<dd>
+<li>added spectator mode password protection</li>
+<li>added option to limit number of spectators</li>
+<li>added optional welcome message</li>
+<li>modified the camera help message</li>
+<li>added priority based target selection in <b>ACTION</b> camera mode</li>
+<li>fixed bug: spectators could sometimes overflow in <b>CHASE</b> camera mode</li>
+</dd>
+
+<dt><br><b>03 Sep. 1998 v0.14 beta</b></dt>
+<dd>
+<li>modified: <b>ACTION</b> camera will "watch the dead" only if the <b>current</b> player dies</li>
+<li>modified: <b>ACTION</b> camera will keep following the same player in <b>FOLLOW</b> sub-mode</li>
+<li>added option to manually switch to other players in <b>ACTION</b> mode</li>
+<li>fixed bug: <b>ACTION</b> camera was following players even after they were out of view</li>
+<li>fixed bug: <b>ACTION</b> camera was following players hidden in non-transparent water</li>
+<li>fixed bug: bot view angles were fixed at (0,0,0) in <b>ACTION</b> camera mode</li>
+<li>fixed bug: spectators were still spawned outside the map upon level change</li>
+</dd>
+
+<dt><br><b>29 Aug. 1998 v0.12 beta</b></dt>
+<dd>
+<li>added support for <b>emulated</b> clients (i.e. bots)<br>
+(<b>CHASE</b> mode enabled with <b>real</b> clients only)</li>
+<li>added option to view the client's layouts while in <b>CHASE</b> mode</li>
+<li>fixed bug: <b>ACTION</b> camera was following non-<font face="Verdana" color="green"><b>GameCam</b></font> spectators</li>
+<li>fixed bug: was displaying player id of non-<font face="Verdana" color="green"><b>GameCam</b></font> spectators</li>
+<li>fixed bug: spectators were sometimes spawned outside the map upon level change</li>
+</dd>
+
+<dt><br><b>19 Aug. 1998 v0.11 beta</b></dt>
+<dd>
+<li>fixed bug: spectators received repeat chat messages or none at all</li>
+</dd>
+
+<dt><br><b>17 Aug. 1998 v0.10 beta</b></dt>
+<dd>
+<li>first public release.</li>
+</dd>
+
+</dl>
+
+<p align="right">
+<br>
+<a href="#contents"><small>table of contents</small></a>
+<hr>
+
+<a name="download"><h3>Download</h3></a>
+<!--
+<dl>
+<dt><a
+href="http://www.telefragged.com/mirrors/mirror.pl?zungbang/gc102.zip"><font
+face="Courier New" color="black"><b>gc102.zip</b></font></a></dt> 
+<dd>
+<font face="Verdana" color="green"><b>GameCam</b></font> v1.02 Final - Win95/98/NT.
+</dd>
+
+<dt><br><a
+href="http://www.telefragged.com/mirrors/mirror.pl?zungbang/gc102_linux_glibc.tar.gz"><font
+face="Courier New" color="black"><b>gc102_linux_glibc.tar.gz</b></font></a></dt> 
+<dd>
+<font face="Verdana" color="green"><b>GameCam</b></font> v1.02 Final -
+Linux (glibc).
+</dd>
+
+<dt><br><a
+href="http://www.telefragged.com/mirrors/mirror.pl?zungbang/gc102_linux_libc5.tar.gz"><font
+face="Courier New" color="black"><b>gc102_linux_libc5.tar.gz</b></font></a></dt> 
+<dd>
+<font face="Verdana" color="green"><b>GameCam</b></font> v1.02 Final -
+Linux (libc5).
+</dd>
+
+<dt><br><a
+href="http://www.telefragged.com/mirrors/mirror.pl?zungbang/gc102_solaris_sparc.tar.gz"><font
+face="Courier New" color="black"><b>gc102_solaris_sparc.tar.gz</b></font></a></dt> 
+<dd>
+<font face="Verdana" color="green"><b>GameCam</b></font> v1.02 Final -
+Solaris (Sparc).
+</dd>
+
+<dt><br><a href="http://www.telefragged.com/mirrors/mirror.pl?zungbang/gcini025.zip"><font face="Courier New" color="black"><b>gcini025.zip</b></font></a></dt>
+<dd>
+The <font face="Verdana" color="green"><b>GameCam</b></font> configuration file package (optional).
+</dd>
+
+<dt><br><a href="http://www.telefragged.com/mirrors/mirror.pl?zungbang/ztncam.zip"><font face="Courier New" color="black"><b>ztncam.zip</b></font></a></dt>
+<dd>
+A set of fixed-camera definition files for the levels <b>ztn2dm1</b> thru <b>ztn2dm5</b>, courtesy
+of <a href="mailto:ignato@idle.com">Frank Cabanski</a>.<br>
+The <b>ZTN</b> deathmatch level series for <b>Quake II</b>
+can be found at <a href="http://www.planetquake.com/ztn" target="_blank">http://www.planetquake.com/ztn</a>
+</dd>
+
+<dt><br><a href="http://www.telefragged.com/mirrors/mirror.pl?zungbang/gcqst.zip"><font face="Courier New" color="black"><b>gcqst.zip</b></font></a></dt>
+<dd>
+A <a href="http://www.gamespy.com" target="_blank">GameSpy</a> custom-tab that you can use 
+to find <font face="Verdana" color="green"><b>GameCam</b></font>-enabled
+servers.
+</dd>
+
+<dt><br><a href="http://www.telefragged.com/mirrors/mirror.pl?zungbang/zkick101.zip"><font face="Courier New" color="black"><b>zkick101.zip</b></font></a></dt>
+<dd>
+<b>ZKick</b> is the (first) ZBot kick/log plug-in.
+<b>ZKick</b> can be used together with <font face="Verdana" color="green"><b>GameCam</b></font>,
+but this requires a special install procedure - so read the readme !<br><br>
+<b>ZKick</b> is an anti-ZBot plug-in <b>only</b>. If you're looking
+for administration features other than just aim-bot detection, you'd better take a look at
+<a href="http://www.barrysworld.com/zarjazz" target="_blank">BW-Admin</a> or 
+<a href="http://www.planetquake.com/q2admin" target="_blank">Q2Admin</a>.
+</dd>
+
+<dt><br><a
+href="http://www.telefragged.com/mirrors/mirror.pl?zungbang/pm103.zip"><font
+face="Courier New" color="black"><b>pm103.zip</b></font></a></dt> 
+<dd>
+<b>ProxyMod</b> v1.03 is a "blank" plug-in mod. It adds no new functionality. I use it as a loader for all
+the other plug-ins that I use/develop. The archive includes source code.
+</dd>
+
+<dt><br><a
+href="http://www.telefragged.com/mirrors/mirror.pl?zungbang/entz101.zip"><font
+face="Courier New" color="black"><b>entz101.zip</b></font></a></dt> 
+<dd>
+<b>EntZ</b> v1.01 replaces the built-in entity list with a list loaded from an external <b>.ent</b> file. 
+You can use it to move, add, remove and otherwise
+modify the entities in any map with most mods. The archive includes source code.
+</dd>
+
+</dl>
+-->
+
+The latest version of <font face="Verdana" color="green"><b>GameCam</b></font> can be found at the
+<font face="Verdana" color="green"><b>GameCam</b></font> web site: 
+<a href="http://www.telefragged.com/zungbang/gamecam/">http://www.telefragged.com/zungbang/gamecam</a>
+<p>
+
+<p align="right">
+<br>
+<a href="#contents"><small>table of contents</small></a>
+<hr>
+
+<a name="credits"><h3>Credits</h3></a>
+<dl>
+<dt><b>Paul Jordan</b></dt>
+<dd>For releasing the source code of his <a href="http://home.austin.rr.com/thejordan/q2cam/" target="_blank">action camera</a> (Thanks!)<br>
+(the link seems to be broken - you can find a modified version of the q2cam source as part of the 
+<a href="http://impact.frag.com/" target="_blank">Eraser Bot</a> source).</dd>
+
+<dt><br><b>Monsto Brukes</b></dt>
+<dd>The Main Man at <a href="http://www.planetquake.com/headhunters" target="_blank">HeadHunters</a>, for 
+ideas, suggestions, beta testing, promotion and confidence in beta-ware. And also for
+some kick-ass demos, that simply made me happy.</dd>
+
+<dt><br><b>Kip Kulich (aka devide)</b></dt>
+<dd>Master of <a href="http://frag.parrett.net"
+target="_blank">frag.parrett.net</a>, for compiling and testing the
+Linux binaries (you own man!).</dd>
+
+<dt><br><b>Frank Cabanski</b></dt>
+<dd>For suggestions, beta testing and those cool camera files for the ZTN maps.</dd>
+
+<dt><br><b>dhazel/trix</b></dt>
+<dd>For "discovering" <font face="Verdana" color="green"><b>GameCam</b></font>.</dd>
+
+<dt><br><b>id Software</b></dt>
+<dd>For Quake II. Duh.</dd>
+
+<dt><br><b>TeleFragged</b></dt>
+<dd>For hosting <font face="Verdana" color="green"><b>GameCam</b></font>.</dd>
+</dl>
+
+<p align="right">
+<br>
+<a href="#contents"><small>table of contents</small></a>
+<hr>
+
+<a name="legal"><h3>Legal Stuff</h3></a>
+
+<font face="Verdana" color="green"><b>GameCam</b></font> is Copyright
+© 1998-99, by Avi "Zung!" Rozen. 
+<p>
+<font face="Verdana" color="green"><b>GameCam</b></font> contains code
+fragments from id software's baseq2 and CTF source code, and from 
+q2cam by Paul Jordan - who have the respective copyright. 
+<p>
+<font face="Verdana" color="green"><b>GameCam</b></font> may be
+distributed freely as long as the distribution archives (zip and tar.gz files) remain unmodified.
+<p>
+<font face="Verdana" color="green"><b>GameCam</b></font> may not to be used for commercial purposes.
+
+<p align="right">
+<br>
+<a href="#contents"><small>table of contents</small></a>
+<hr>
+
+</font>
+</BODY>
+</HTML>
+
+
+
+

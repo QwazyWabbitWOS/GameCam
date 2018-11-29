@@ -1,0 +1,8 @@
+.svn/
+.BackupManager/
+Debug/
+Release/
+ipch/
+*.so
+*.sdf
+
