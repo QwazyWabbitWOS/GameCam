@@ -182,17 +182,19 @@ void RunFrame (void)
 			!clients[clientID].spectator) || 
 			(ent->inuse &&
 			ent->s.modelindex != 0))
+		{
 			if (ent->client->ps.pmove.pm_type != clients[clientID].last_pmtype) 
 			{
 				clients[clientID].last_pmtype = ent->client->ps.pmove.pm_type;
 				if (clients[clientID].last_pmtype == PM_DEAD)
 					pDeadPlayer = ent;
 			}
-			// update menu
-			if (clients[clientID].menu)
-				ent->client->ps.stats[STAT_LAYOUTS] |= 1;
-			else if (clients[clientID].menu_hnd)
-				PMenu_Close (ent);
+		}
+		// update menu
+		if (clients[clientID].menu)
+			ent->client->ps.stats[STAT_LAYOUTS] |= 1;
+		else if (clients[clientID].menu_hnd)
+			PMenu_Close (ent);
 	}
 }
 
