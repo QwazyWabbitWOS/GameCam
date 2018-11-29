@@ -8,7 +8,7 @@ ARCH=i386
 #
 
 #use these cflags to optimize this build
-CFLAGS=-O3 -m32 -DARCH=\"$(ARCH)\" -Wextra
+CFLAGS=-O3 -m32 -DARCH=\"$(ARCH)\" -Wall -Wextra
 #use these when debugging 
 #CFLAGS=-g -m32 -DARCH=\"$(ARCH)\" -Wall
 

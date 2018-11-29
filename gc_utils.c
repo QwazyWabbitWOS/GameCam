@@ -47,6 +47,7 @@ int PrevClient(int clientID)
 			target->client->ps.pmove.pm_type != PM_FREEZE)));
 	}
 	if (!found)
+	{
 		for (prev = (int) maxclients->value - 1; prev > clientID && !found; prev--)
 		{
 			target = Edict (prev + 1);
@@ -58,7 +59,8 @@ int PrevClient(int clientID)
 				target->client->ps.pmove.pm_type != PM_SPECTATOR &&
 				target->client->ps.pmove.pm_type != PM_FREEZE)));
 		}
-		return (found)? prev + 1 : clientID;
+	}
+	return (found) ? prev + 1 : clientID;
 }
 
 
@@ -81,6 +83,7 @@ int NextClient(int clientID)
 			target->client->ps.pmove.pm_type != PM_FREEZE)));
 	}
 	if (!found)
+	{
 		for (next = 0; next < clientID && !found; next++)
 		{
 			target = Edict (next + 1);
@@ -92,7 +95,8 @@ int NextClient(int clientID)
 				target->client->ps.pmove.pm_type != PM_SPECTATOR &&
 				target->client->ps.pmove.pm_type != PM_FREEZE)));
 		}
-		return (found)? next - 1 : clientID;
+	}
+	return (found) ? next - 1 : clientID;
 }
 
 
