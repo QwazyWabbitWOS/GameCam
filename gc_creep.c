@@ -63,12 +63,14 @@ edict_t *camera_creep_target (int clientID)
 
 void camera_creep_angle (int clientID)
 {
-	edict_t *camera, *target, *player;
+	//edict_t *camera;
+	edict_t *target;
+	edict_t *player;
 	vec3_t player2target, vDiff;
 	float best_angle, chase_diff, target_distance, target_yaw; 
 	float gamma, best_angle1, best_angle2, chase_diff1, chase_diff2;
 
-	camera = Edict (clientID + 1);
+	//camera = Edict (clientID + 1);
 	target = clients[clientID].creep_target;
 	player = Edict (clients[clientID].target + 1);
 
