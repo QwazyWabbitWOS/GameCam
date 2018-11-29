@@ -952,47 +952,51 @@ void Cmd_Players_f (edict_t *ent)
 	tail = NULL;
 	if (wait_cprintf != NULL) 
 		GameCommand(wait_cprintf, "players");
-	else 
+	else
+	{
 		if (wait_camera == NULL) 
 		{
 			wait_camera = ent;
 			wait_cprintf = ent;
 			GameCommand(ent, "players");
 		}
-		wait_camera = NULL;
-		wait_cprintf = NULL;
-		if (captured_print_message[0]) 
+	}
+	wait_camera = NULL;
+	wait_cprintf = NULL;
+	
+	if (captured_print_message[0]) 
+	{
+		tail = captured_print_message + strlen(captured_print_message) - 8;
+		if (strcmp(tail, "players\n"))
+			tail = NULL;
+		else 
 		{
-			tail = captured_print_message + strlen(captured_print_message) - 8;
-			if (strcmp(tail, "players\n"))
-				tail = NULL;
-			else 
-			{
-				while (tail > captured_print_message && *tail != '\n') tail--;
-				*tail = '\0';
-				tail++;
-			}
+			while (tail > captured_print_message && *tail != '\n') tail--;
+			*tail = '\0';
+			tail++;
 		}
+	}
 
-		for (i = 0; i < maxclients->value; i++)
-			if (clients[i].inuse && clients[i].spectator) 
-			{
-				if (gc_rename_client->value)
-					Com_sprintf (psmall, sizeof(psmall), "--- [CAMERA]%s\n",
-					Info_ValueForKey (clients[i].userinfo, "name"));
-				else
-					Com_sprintf (psmall, sizeof(psmall), "%s\n",
-					Info_ValueForKey (clients[i].userinfo, "name"));
-				if (strlen (psmall) + strlen(plarge) > sizeof(plarge) - 100 )
-				{	
-					// can't print all of them in one packet
-					strcat (plarge, "...\n");
-					break;
-				}
-				strcat (plarge, psmall);
+	for (i = 0; i < maxclients->value; i++)
+	{
+		if (clients[i].inuse && clients[i].spectator) 
+		{
+			if (gc_rename_client->value)
+				Com_sprintf (psmall, sizeof(psmall), "--- [CAMERA]%s\n",
+				Info_ValueForKey (clients[i].userinfo, "name"));
+			else
+				Com_sprintf (psmall, sizeof(psmall), "%s\n",
+				Info_ValueForKey (clients[i].userinfo, "name"));
+			if (strlen (psmall) + strlen(plarge) > sizeof(plarge) - 100 )
+			{	
+				// can't print all of them in one packet
+				strcat (plarge, "...\n");
+				break;
 			}
-
-			gci.cprintf (ent, PRINT_HIGH, "%s%s\n%s%i spectators\n", captured_print_message, plarge, (tail)? tail:"0 players\n", cam_count);
+			strcat (plarge, psmall);
+		}
+	}
+		gci.cprintf (ent, PRINT_HIGH, "%s%s\n%s%i spectators\n", captured_print_message, plarge, (tail)? tail:"0 players\n", cam_count);
 }
 
 
