@@ -972,6 +972,7 @@ void camera_action_think (int clientID, usercmd_t *cmd)
 					pTarget->client->ps.pmove.pm_type == PM_NORMAL;
 			}
 			if (!found)
+			{
 				for (next = 0; next < target && !found; next++)
 				{
 					pTarget = Edict(next + 1);
@@ -979,9 +980,9 @@ void camera_action_think (int clientID, usercmd_t *cmd)
 						(pTarget->inuse && pTarget->s.modelindex != 0)) &&
 						pTarget->client->ps.pmove.pm_type != PM_NORMAL;
 				}
-
-				if (found)
-					clients[clientID].pTarget = pTarget;
+			}
+			if (found)
+				clients[clientID].pTarget = pTarget;
 		}
 
 		clients[clientID].oldbuttons = cmd->buttons;
