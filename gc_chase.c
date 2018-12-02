@@ -106,7 +106,6 @@ void camera_chase_frame (int clientID)
 	vec3_t forward, right;
 	trace_t trace;
 	int i;
-	vec3_t oldgoal;
 	vec3_t angles;
 
 	if (clients[clientID].target < 0)
@@ -156,10 +155,7 @@ void camera_chase_frame (int clientID)
 	}
 
 	VectorCopy(target->s.origin, ownerv);
-	VectorCopy(ent->s.origin, oldgoal);
-
 	ownerv[2] += clients[clients[clientID].target].viewheight;
-
 	VectorCopy(target->client->ps.viewangles, angles);
 	angles[YAW] += clients[clientID].chase_angle;
 	if (angles[PITCH] > 56)
@@ -300,7 +296,7 @@ void camera_chase_frame (int clientID)
 void camera_chase_think (int clientID, usercmd_t *cmd)
 {
 	int i;
-	edict_t *ent, *pm_passent;
+	edict_t *ent;
 	pmove_t	pm;
 
 	if (intermission)
@@ -335,7 +331,6 @@ void camera_chase_think (int clientID, usercmd_t *cmd)
 			clients[clientID].chase_height = -128.0F;
 		clients[clientID].chase_angle = anglemod (clients[clientID].chase_angle + cmd->sidemove * (((float)cmd->msec) / 2500.0F));
 		VectorCopy (ent->client->ps.viewangles, oldangles);
-		pm_passent = ent;
 		ent->client->ps.pmove.pm_type = PM_SPECTATOR;
 		memset (&pm, 0, sizeof(pm));
 		ent->client->ps.pmove.gravity = (short) sv_gravity->value;
