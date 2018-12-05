@@ -17,7 +17,7 @@
 
 #if defined _HH_
 #define GAME_MODULE			"hhx86.dll"  //cascade with HeadHunters 
-#elif defined _LOX_
+#elif defined LOX
 #define GAME_MODULE	       	"gamex86.lox.dll"  //cascade with LOX
 #else
 #define GAME_MODULE	       	"gamex86.real.dll" //generic cascade
@@ -27,6 +27,38 @@
 #define GAMECAMPLATFORM 	"x86"
 #endif
 
+#ifdef __GNUC__
+void *hdll = NULL;
+
+#ifdef LINUXAXP
+	#define DLLNAME   "gameaxp.real.so"
+#elif defined(SOLARIS_INTEL)
+	#define DLLNAME   "gamei386.real.so"
+#elif defined(SOLARIS_SPARC)
+	#define DLLNAME   "gamesparc.real.so"
+#elif defined (LINUX)
+#if defined __i386__
+	#define DLLNAME "gamei386.real.so"
+#elif defined __x86_64__
+	#define DLLNAME "gamex86_64.real.so"
+#elif defined __arm__
+	#define DLLNAME "gamearm.real.so"
+#else
+	#error Unknown architecture
+#endif
+#else
+	#error Unknown GNUC OS
+
+#endif
+
+#elif defined(_WIN32)
+#define DLLNAME   "gamex86.real.dll"
+#define DLLNAMEMODDIR "gamex86.real.dll"
+#else
+#error Unknown OS
+#endif
+
+#if 0
 #ifdef ARCH		//defined in the Makefile
 #ifndef _HH_
 #define GAME_MODULE             "game" ARCH ".real.so"
@@ -35,6 +67,7 @@
 #endif
 #define PROXY_MODULE		"game" ARCH ".so"
 #define GAMECAMPLATFORM	    ARCH
+#endif
 #endif
 
 #ifndef GAME_MODULE
