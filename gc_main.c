@@ -21,7 +21,6 @@
 #endif
 
 #define PROXY_MODULE		"gamex86.dll"	//my name
-#define GAMECAM_PLATFORM 	"x86"
 #endif
 
 #ifdef __GNUC__
@@ -61,9 +60,7 @@ void *hGameDLL;
 #error Unknown OS
 #endif
 
-#ifdef ARCH		//defined in the Makefile
-#define GAMECAM_PLATFORM	    ARCH
-#endif
+#define GAMECAMVERSION  GAMECAMVERNUM " " __DATE__ " " GAMECAMVERSTATUS
 
 #ifndef GAME_MODULE
 #error Architecture not defined!

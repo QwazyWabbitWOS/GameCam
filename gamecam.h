@@ -12,12 +12,10 @@
 #endif
 #endif
 
-
 #define	GAME_API_VERSION	3
 
 #define GAMECAMVERNUM   "1.05qw"
 #define GAMECAMVERSTATUS "FINAL"
-#define GAMECAMVERSION  GAMECAMVERNUM " " GAMECAM_PLATFORM " " __DATE__ " " GAMECAMVERSTATUS
 
 #ifdef _WIN32
 	#include <windows.h>
