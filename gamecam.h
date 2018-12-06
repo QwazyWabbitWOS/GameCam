@@ -31,18 +31,18 @@
 void *hGameDLL;
 
 #ifdef LINUXAXP
-	#define DLLNAME   "gameaxp.real.so"
+	#define GAME_MODULE   "gameaxp.real.so"
 #elif defined(SOLARIS_INTEL)
-	#define DLLNAME   "gamei386.real.so"
+	#define GAME_MODULE   "gamei386.real.so"
 #elif defined(SOLARIS_SPARC)
-	#define DLLNAME   "gamesparc.real.so"
+	#define GAME_MODULE   "gamesparc.real.so"
 #elif defined (LINUX)
 #if defined __i386__
-	#define DLLNAME "gamei386.real.so"
+	#define GAME_MODULE "gamei386.real.so"
 #elif defined __x86_64__
-	#define DLLNAME "gamex86_64.real.so"
+	#define GAME_MODULE "gamex86_64.real.so"
 #elif defined __arm__
-	#define DLLNAME "gamearm.real.so"
+	#define GAME_MODULE "gamearm.real.so"
 #else
 	#error Unknown architecture
 #endif
@@ -52,7 +52,7 @@ void *hGameDLL;
 #endif
 
 #elif defined(_WIN32)
-#define DLLNAME   "gamex86.rea..dll"
+#define GAME_MODULE   "gamex86.real.dll"
 #define DLLNAMEMODDIR "gamex86.real.dll"
 #else
 #error Unknown OS
