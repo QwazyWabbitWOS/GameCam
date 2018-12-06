@@ -291,7 +291,7 @@ void unicast (edict_t *ent, qboolean reliable)
 void cprintf (edict_t *ent, int printlevel, char *fmt, ...) 
 {
 	int clientID, targetID;
-	va_list ap = "";
+	va_list ap;
 	char print_message[MAX_STRING_CHARS];
 
 	va_start(ap, fmt);

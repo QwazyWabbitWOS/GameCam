@@ -13,65 +13,6 @@
 #endif
 
 
-#ifdef _WIN32
-
-#if defined _HH_
-#define GAME_MODULE			"hhx86.dll"  //cascade with HeadHunters 
-#elif defined LOX
-#define GAME_MODULE	       	"gamex86.lox.dll"  //cascade with LOX
-#else
-#define GAME_MODULE	       	"gamex86.real.dll" //generic cascade
-#endif
-
-#define PROXY_MODULE		"gamex86.dll"	//my name
-#define GAMECAM_PLATFORM 	"x86"
-#endif
-
-#ifdef __GNUC__
-void *hGameDLL;
-
-#ifdef LINUXAXP
-	#define GAME_MODULE		"gameaxp.real.so"
-	#define PROXY_MODULE	"gameaxp.so"	//my name
-#elif defined(SOLARIS_INTEL)
-	#define GAME_MODULE		"gamei386.real.so"
-	#define PROXY_MODULE	"gamex86.so"	//my name
-#elif defined(SOLARIS_SPARC)
-	#define GAME_MODULE		"gamesparc.real.so"
-	#define PROXY_MODULE	"gamesparc.so"	//my name
-#elif defined (LINUX)
-#if defined __i386__
-	#define GAME_MODULE		"gamei386.real.so"
-	#define PROXY_MODULE	"gamex86.so"	//my name
-#elif defined __x86_64__
-	#define GAME_MODULE		"gamex86_64.real.so"
-	#define PROXY_MODULE	"gamex86_64.so"	//my name
-#elif defined __arm__
-	#define GAME_MODULE		"gamearm.real.so"
-	#define PROXY_MODULE	"gamearm.so"	//my name
-#else
-	#error Unknown architecture
-#endif
-#else
-	#error Unknown GNUC OS
-
-#endif
-
-#elif defined(_WIN32)
-#define GAME_MODULE   "gamex86.real.dll"
-#define DLLNAMEMODDIR "gamex86.real.dll"
-#else
-#error Unknown OS
-#endif
-
-#ifdef ARCH		//defined in the Makefile
-#define GAMECAM_PLATFORM	    ARCH
-#endif
-
-#ifndef GAME_MODULE
-#error Architecture not defined!
-#endif
-
 #define	GAME_API_VERSION	3
 
 #define GAMECAMVERNUM   "1.05qw"
