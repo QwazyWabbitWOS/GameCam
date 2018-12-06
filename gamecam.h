@@ -28,7 +28,7 @@
 #endif
 
 #ifdef __GNUC__
-void *hdll = NULL;
+void *hGameDLL = NULL;
 
 #ifdef LINUXAXP
 	#define DLLNAME   "gameaxp.real.so"
@@ -52,7 +52,7 @@ void *hdll = NULL;
 #endif
 
 #elif defined(_WIN32)
-#define DLLNAME   "gamex86.real.dll"
+#define DLLNAME   "gamex86.rea..dll"
 #define DLLNAMEMODDIR "gamex86.real.dll"
 #else
 #error Unknown OS
