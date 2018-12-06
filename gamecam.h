@@ -28,7 +28,7 @@
 #endif
 
 #ifdef __GNUC__
-void *hGameDLL = NULL;
+void *hGameDLL;
 
 #ifdef LINUXAXP
 	#define DLLNAME   "gameaxp.real.so"

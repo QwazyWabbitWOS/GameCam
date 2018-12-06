@@ -7,7 +7,7 @@
 #ifdef _WIN32
 	HMODULE hGameDLL;
 #else
-	void *hGameDLL;
+	void *hGameDLL = NULL;
 #endif
 
 game_import_t	gci; // original import functions (used by proxy)
