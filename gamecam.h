@@ -31,18 +31,24 @@
 void *hGameDLL;
 
 #ifdef LINUXAXP
-	#define GAME_MODULE   "gameaxp.real.so"
+	#define GAME_MODULE		"gameaxp.real.so"
+	#define PROXY_MODULE	"gameaxp.so"	//my name
 #elif defined(SOLARIS_INTEL)
-	#define GAME_MODULE   "gamei386.real.so"
+	#define GAME_MODULE		"gamei386.real.so"
+	#define PROXY_MODULE	"gamex86.so"	//my name
 #elif defined(SOLARIS_SPARC)
-	#define GAME_MODULE   "gamesparc.real.so"
+	#define GAME_MODULE		"gamesparc.real.so"
+	#define PROXY_MODULE	"gamesparc.so"	//my name
 #elif defined (LINUX)
 #if defined __i386__
-	#define GAME_MODULE "gamei386.real.so"
+	#define GAME_MODULE		"gamei386.real.so"
+	#define PROXY_MODULE	"gamex86.so"	//my name
 #elif defined __x86_64__
-	#define GAME_MODULE "gamex86_64.real.so"
+	#define GAME_MODULE		"gamex86_64.real.so"
+	#define PROXY_MODULE	"gamex86_64.so"	//my name
 #elif defined __arm__
-	#define GAME_MODULE "gamearm.real.so"
+	#define GAME_MODULE		"gamearm.real.so"
+	#define PROXY_MODULE	"gamearm.so"	//my name
 #else
 	#error Unknown architecture
 #endif
