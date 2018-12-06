@@ -24,7 +24,7 @@
 #endif
 
 #define PROXY_MODULE		"gamex86.dll"	//my name
-#define GAMECAMPLATFORM 	"x86"
+#define GAMECAM_PLATFORM 	"x86"
 #endif
 
 #ifdef __GNUC__
@@ -64,16 +64,8 @@ void *hGameDLL;
 #error Unknown OS
 #endif
 
-#if 0
 #ifdef ARCH		//defined in the Makefile
-#ifndef _HH_
-#define GAME_MODULE             "game" ARCH ".real.so"
-#else
-#define GAME_MODULE             "hh" ARCH ".so"
-#endif
-#define PROXY_MODULE		"game" ARCH ".so"
-#define GAMECAMPLATFORM	    ARCH
-#endif
+#define GAMECAM_PLATFORM	    ARCH
 #endif
 
 #ifndef GAME_MODULE
@@ -84,7 +76,7 @@ void *hGameDLL;
 
 #define GAMECAMVERNUM   "1.05qw"
 #define GAMECAMVERSTATUS "FINAL"
-#define GAMECAMVERSION  GAMECAMVERNUM " " GAMECAMPLATFORM " " __DATE__ " " GAMECAMVERSTATUS
+#define GAMECAMVERSION  GAMECAMVERNUM " " GAMECAM_PLATFORM " " __DATE__ " " GAMECAMVERSTATUS
 
 #ifdef _WIN32
 	#include <windows.h>
