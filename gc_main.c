@@ -13,51 +13,51 @@
 
 #ifdef _WIN32
 #if defined _HH_
-#define GAME_MODULE			"hhx86.dll"  //cascade with HeadHunters 
+  #define GAME_MODULE     "hhx86.dll"  //cascade with HeadHunters 
 #elif defined LOX
-#define GAME_MODULE	       	"gamex86.lox.dll"  //cascade with LOX
+  #define GAME_MODULE     "gamex86.lox.dll"  //cascade with LOX
 #else
-#define GAME_MODULE	       	"gamex86.real.dll" //generic cascade
+  #if defined Q2ADMIN
+    #define GAME_MODULE    "q2admin.dll" // cascade to q2admin
+  #else
+    #define GAME_MODULE    "gamex86.real.dll" // cascade to q2admin
+  #endif
 #endif
-
-#define PROXY_MODULE		"gamex86.dll"	//my name
+#define PROXY_MODULE    "gamex86.dll"	// the name loaded if cvar nextproxy is blank
 #endif
 
 #ifdef __GNUC__
 void *hGameDLL;
 
-#ifdef LINUXAXP
-	#define GAME_MODULE		"gameaxp.real.so"
-	#define PROXY_MODULE	"gameaxp.so"	//my name
-#elif defined(SOLARIS_INTEL)
-	#define GAME_MODULE		"gamei386.real.so"
-	#define PROXY_MODULE	"gamex86.so"	//my name
-#elif defined(SOLARIS_SPARC)
-	#define GAME_MODULE		"gamesparc.real.so"
-	#define PROXY_MODULE	"gamesparc.so"	//my name
-#elif defined (LINUX)
-#if defined __i386__
-	#define GAME_MODULE		"gamei386.real.so"
-	#define PROXY_MODULE	"gamex86.so"	//my name
-#elif defined __x86_64__
-	#define GAME_MODULE		"gamex86_64.real.so"
-	#define PROXY_MODULE	"gamex86_64.so"	//my name
-#elif defined __arm__
-	#define GAME_MODULE		"gamearm.real.so"
-	#define PROXY_MODULE	"gamearm.so"	//my name
+#if defined Q2ADMIN
+  #define GAME_MODULE     "q2admin.so"
 #else
-	#error Unknown architecture
-#endif
-#else
-	#error Unknown GNUC OS
-
-#endif
-
-#elif defined(_WIN32)
-#define GAME_MODULE   "gamex86.real.dll"
-#define DLLNAMEMODDIR "gamex86.real.dll"
-#else
-#error Unknown OS
+  #ifdef LINUXAXP
+    #define GAME_MODULE     "gameaxp.real.so"
+    #define PROXY_MODULE    "gameaxp.so"
+  #elif defined(SOLARIS_INTEL)
+    #define GAME_MODULE     "gamex86.real.so"
+    #define PROXY_MODULE    "gamex86.so"
+  #elif defined(SOLARIS_SPARC)
+    #define GAME_MODULE     "gamesparc.real.so"
+    #define PROXY_MODULE    "gamesparc.so"
+  #elif defined (LINUX)
+    #if defined __i386__
+      #define GAME_MODULE     "gamei386.real.so"
+      #define PROXY_MODULE    "gamei386.so"
+    #elif defined __x86_64__
+      #define GAME_MODULE     "gamex86_64.real.so"
+      #define PROXY_MODULE    "gamex86_64.so"
+    #elif defined __arm__
+      #define GAME_MODULE     "gamearm.real.so"
+      #define PROXY_MODULE    "gamearm.so"
+    #else
+      #error Unknown architecture
+    #endif
+    #else
+      #error Unknown GNUC OS
+    #endif
+  #endif
 #endif
 
 #define GAMECAMVERSION  GAMECAMVERNUM " " __DATE__ " " GAMECAMVERSTATUS

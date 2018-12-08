@@ -1,5 +1,19 @@
 ### GameCam v1.04 Linux Makefile ###
 
+# Cascade Proxy Technique:
+# This mod will name itself gamei386.so or gamex86_64.so under
+# Linux according to the build mode you choose. It will attempt
+# to load q2admin.so in the mod folder chosen by the dedicated
+# server startup command line. Q2admin will then attempt to load
+# the actual game mod, expecting it to be named gamei386.real.so 
+# or gamex86_64.real.so.
+
+# Load order: 
+# server
+# gamei386.so (this module)
+# q2admin.so (the q2admin mod)
+# gamei386.real.so (your game mod)
+
 # this nice line comes from the linux kernel makefile
 ARCH := $(shell uname -m | sed -e s/i.86/i386/ \
 	-e s/sun4u/sparc64/ -e s/arm.*/arm/ \
@@ -17,7 +31,7 @@ CC = gcc -std=c99 -Wall
 # this will let you build 32-bits on ia64 systems
 #
 # This is for native build
-CFLAGS=-O2 -DARCH="$(ARCH)" -DSTDC_HEADERS
+CFLAGS=-O2 -DARCH="$(ARCH)" -DSTDC_HEADERS -DQ2ADMIN
 # This is for 32-bit build on 64-bit host
 ifeq ($(ARCH),i386)
 CFLAGS =-m32 -O2 -DARCH="$(ARCH)" -DSTDC_HEADERS -I/usr/include
