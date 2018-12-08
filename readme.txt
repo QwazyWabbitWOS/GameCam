@@ -11,8 +11,24 @@ Installation
 ============
 Perform the following for each mod you want to add GameCam to:
 
-1. rename the existing gamex86.dll as gamex86.real.dll
-2. extract gamex86.dll from this archive to the mod directory
+On Linux:
+To run gamecam on Linux for your mod with q2admin:
+1. Rebuild GameCam with 'make all' 
+2. Rename your existing gamex86_64.so as gamex86.real.so
+3. Copy the Q2admin module to your mod folder and name it q2admin.so
+4. Copy the GameCam gamex86_64.so module to your mod folder.
+
+To run gamecam on Linux for your mod without q2admin:
+1. Comment out the line in Makfile containing -DQ2ADMIN
+2. Rebuild GameCam with make all 
+3. Rename the existing gamex86_64.so as gamex86_64.real.so
+4. Copy the GameCam gamex86_64.so module to your mod folder.
+
+On Windows:
+To run gamecam on Windows for your mod without q2admin:
+1. Rebuild GameCam with Visual Studio  
+2. Rename your existing gamex86.dll as gamex86.real.so
+3. Copy the GameCam gamex86.dll to the mod directory.
 
 That's it. Have fun.
 
