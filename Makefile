@@ -31,7 +31,7 @@ CC = gcc -std=c99 -Wall
 # this will let you build 32-bits on ia64 systems
 #
 # This is for native build
-CFLAGS=-O2 -DARCH="$(ARCH)" -DSTDC_HEADERS -DQ2ADMIN
+CFLAGS=-O2 -DARCH="$(ARCH)" -DSTDC_HEADERS
 # This is for 32-bit build on 64-bit host
 ifeq ($(ARCH),i386)
 CFLAGS =-m32 -O2 -DARCH="$(ARCH)" -DSTDC_HEADERS -I/usr/include
@@ -39,6 +39,9 @@ endif
 
 # use this when debugging
 #CFLAGS=-g -Og -DDEBUG -DARCH="$(ARCH)" -Wall -pedantic
+
+# This selects whether we want to use q2admin with our server.
+CFLAGS += -DQ2ADMIN
 
 # flavors of Linux
 ifeq ($(shell uname),Linux)

@@ -29,36 +29,38 @@
 #ifdef __GNUC__
 void *hGameDLL;
 
-#if defined Q2ADMIN
-  #define GAME_MODULE     "q2admin.so"
-#else
-  #ifdef LINUXAXP
-    #define GAME_MODULE     "gameaxp.real.so"
-    #define PROXY_MODULE    "gameaxp.so"
-  #elif defined(SOLARIS_INTEL)
-    #define GAME_MODULE     "gamex86.real.so"
-    #define PROXY_MODULE    "gamex86.so"
-  #elif defined(SOLARIS_SPARC)
-    #define GAME_MODULE     "gamesparc.real.so"
-    #define PROXY_MODULE    "gamesparc.so"
-  #elif defined (LINUX)
-    #if defined __i386__
-      #define GAME_MODULE     "gamei386.real.so"
-      #define PROXY_MODULE    "gamei386.so"
-    #elif defined __x86_64__
-      #define GAME_MODULE     "gamex86_64.real.so"
-      #define PROXY_MODULE    "gamex86_64.so"
-    #elif defined __arm__
-      #define GAME_MODULE     "gamearm.real.so"
-      #define PROXY_MODULE    "gamearm.so"
-    #else
-      #error Unknown architecture
-    #endif
-    #else
-      #error Unknown GNUC OS
-    #endif
+#ifdef LINUXAXP
+  #define GAME_MODULE     "gameaxp.real.so"
+  #define PROXY_MODULE    "gameaxp.so"
+#elif defined(SOLARIS_INTEL)
+  #define GAME_MODULE     "gamex86.real.so"
+  #define PROXY_MODULE    "gamex86.so"
+#elif defined(SOLARIS_SPARC)
+  #define GAME_MODULE     "gamesparc.real.so"
+  #define PROXY_MODULE    "gamesparc.so"
+#elif defined (LINUX)
+  #if defined __i386__
+    #define GAME_MODULE     "gamei386.real.so"
+    #define PROXY_MODULE    "gamei386.so"
+  #elif defined __x86_64__
+    #define GAME_MODULE     "gamex86_64.real.so"
+    #define PROXY_MODULE    "gamex86_64.so"
+  #elif defined __arm__
+    #define GAME_MODULE     "gamearm.real.so"
+    #define PROXY_MODULE    "gamearm.so"
+  #else
+    #error Unknown architecture
+  #endif
+  #else
+    #error Unknown GNUC OS
+  #endif
+  #if defined Q2ADMIN
+    #undef GAME_MODULE
+    #define GAME_MODULE     "q2admin.so"
   #endif
 #endif
+
+
 
 #define GAMECAMVERSION  GAMECAMVERNUM " " __DATE__ " " GAMECAMVERSTATUS
 
