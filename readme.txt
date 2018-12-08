@@ -27,7 +27,7 @@ To run gamecam on Linux for your mod without q2admin:
 On Windows:
 To run gamecam on Windows for your mod without q2admin:
 1. Rebuild GameCam with Visual Studio  
-2. Rename your existing gamex86.dll as gamex86.real.so
+2. Rename your existing gamex86.dll as gamex86.real.dll
 3. Copy the GameCam gamex86.dll to the mod directory.
 
 That's it. Have fun.
