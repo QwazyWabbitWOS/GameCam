@@ -99,7 +99,7 @@ void camera_fixed_load (char *mapname)
 	char cameraPath[MAX_OSPATH];
 	FILE *camfile = NULL;
 	camera_t* camera;
-	camera_t* current_camera = NULL;
+	camera_t* current_camera = cameras;
 	int cam_count = 0;
 	vec3_t origin, angles;
 	float fov;
@@ -127,11 +127,13 @@ void camera_fixed_load (char *mapname)
 
 	if (camfile == NULL)
 		return;
+
 	while (camera_fixed_read_camera (camfile, name, origin, angles, &fov))
 	{
 		cam_count++;
 		camera = gci.TagMalloc (sizeof (camera_t), TAG_GAME);
-		strcpy (camera->name, name);
+		assert(camera); // silence warnings
+		strcpy(camera->name, name);
 		VectorCopy (origin, camera->origin);
 		VectorCopy (angles, camera->angles);
 		camera->fov = fov;
@@ -153,7 +155,7 @@ void camera_fixed_load (char *mapname)
 	if (cameras)
 		cameras->prev = current_camera;
 	fclose (camfile);
-	gci.dprintf ("loaded %d cameras\n", cam_count);
+	gci.dprintf ("GameCam: loaded %d cameras\n", cam_count);
 }
 
 
@@ -166,7 +168,7 @@ void camera_fixed_save (char *mapname)
 
 	if (cameras == NULL || strstr (mapname, ".")) // this is not a map
 	{
-		gci.dprintf ("cameras not defined\n");
+		gci.dprintf ("GameCam: cameras not defined\n");
 		return;
 	}
 
@@ -187,7 +189,7 @@ void camera_fixed_save (char *mapname)
 	camfile = fopen (cameraPath, "wt");
 	if (camfile == NULL)
 	{
-		gci.dprintf ("camera_fixed_save: can't write to file - \"%s\"\n", cameraPath);
+		gci.dprintf ("GameCam: camera_fixed_save: can't write to file - \"%s\"\n", cameraPath);
 		return;
 	}
 	current_camera = cameras;
@@ -212,7 +214,7 @@ void camera_fixed_save (char *mapname)
 	}
 	while (current_camera != cameras);
 	fclose (camfile);
-	gci.dprintf ("cameras saved to \"%s\"\n", cameraPath);
+	gci.dprintf ("GameCam: cameras saved to \"%s\"\n", cameraPath);
 }
 
 
@@ -245,7 +247,7 @@ camera_t *camera_fixed_add (edict_t *ent, char *name)
 		cameras->next = cameras;
 		cameras->prev = cameras;
 	}
-	gci.dprintf ("camera \"%s\" added to list\n", camera->name);
+	gci.dprintf ("GameCam: camera \"%s\" added to list\n", camera->name);
 	return camera;
 }
 
@@ -262,7 +264,7 @@ void camera_fixed_update (camera_t *camera, edict_t *ent, char *name)
 	VectorCopy (ent->s.origin, camera->origin);
 	VectorCopy (ent->s.angles, camera->angles);
 	camera->fov = ent->client->ps.fov;
-	gci.dprintf ("camera \"%s\" updated\n", camera->name);
+	gci.dprintf ("GameCam: camera \"%s\" updated\n", camera->name);
 }
 
 
@@ -276,7 +278,7 @@ void camera_fixed_remove (camera_t *camera)
 	// remove from list
 	camera->next->prev = camera->prev;
 	camera->prev->next = camera->next;
-	gci.dprintf ("camera \"%s\" removed\n", camera->name);
+	gci.dprintf ("GameCam: camera \"%s\" removed\n", camera->name);
 	// free memory
 	gci.TagFree (camera);
 }
