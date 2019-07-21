@@ -6,11 +6,12 @@
 
 #include "gamecam.h"
 
+char	bigbuffer[0x10000];
+
 void Com_sprintf (char *dest, int size, char *fmt, ...)
 {
 	int		len;
 	va_list		argptr;
-	char	bigbuffer[0x10000];
 
 	va_start (argptr,fmt);
 	len = vsprintf (bigbuffer,fmt,argptr);
@@ -581,7 +582,7 @@ void vectoangles (vec3_t value1, vec3_t angles)
 		if (yaw < 0)
 			yaw += 360;
 
-		forward = (float) sqrt (value1[0]*value1[0] + value1[1]*value1[1]);
+		forward = (float) sqrtf (value1[0]*value1[0] + value1[1]*value1[1]);
 		pitch = (int) (atan2(value1[2], forward) * 180 / M_PI);
 		if (pitch < 0)
 			pitch += 360;

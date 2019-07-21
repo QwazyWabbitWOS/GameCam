@@ -57,7 +57,7 @@ void RunFrame (void)
 			strcpy (s_save_timelimit, timelimit->string);
 			if (match_started)
 			{
-				sprintf (s_timelimit, "%f", timelimit->value + match_offsetframes / 600.0F);
+				sprintf (s_timelimit, "%f", timelimit->value + match_offsetframes / 600.0);
 				gci.cvar_set ("timelimit", s_timelimit);
 			}
 			else

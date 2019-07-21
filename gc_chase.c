@@ -270,7 +270,8 @@ void camera_chase_frame (int clientID)
 		target1st[0] = '\0';
 		target2nd[0] = '\0';
 		strcpy (target1st, ConfigStrings[CS_PLAYERSKINS + clients[clientID].target]);
-		*(strstr (target1st, "\\")) = '\0';
+		char* tp = strstr(target1st, "\\");
+		if (tp) *tp = '\0';
 		if (clients[clientID].chase_auto && clients[clientID].creep_target)
 		{
 			strcpy (target2nd, ConfigStrings[CS_PLAYERSKINS + numEdict (clients[clientID].creep_target) - 1]);

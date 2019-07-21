@@ -31,7 +31,7 @@ qboolean camera_fixed_read_camera (FILE *camfile, char *name, vec3_t origin, vec
 {
 	qboolean done;
 	char line[MAX_STRING_CHARS];
-	char classname[MAX_INFO_VALUE];
+	char classname[MAX_INFO_VALUE] = { 0 };
 
 	name[0] = '\0';
 	VectorClear (origin);
@@ -98,7 +98,8 @@ void camera_fixed_load (char *mapname)
 {
 	char cameraPath[MAX_OSPATH];
 	FILE *camfile = NULL;
-	camera_t *camera, *current_camera = NULL;
+	camera_t* camera;
+	camera_t* current_camera = NULL;
 	int cam_count = 0;
 	vec3_t origin, angles;
 	float fov;

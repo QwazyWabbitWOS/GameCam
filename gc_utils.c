@@ -387,7 +387,8 @@ char *scoreBoard (char *text)
 			char currentName[MAX_INFO_VALUE];
 
 			strcpy (currentName, ConfigStrings[CS_PLAYERSKINS + hiscores[i]]);
-			*(strstr (currentName, "\\")) = '\0';
+			char* tp = strstr (currentName, "\\"); // chomp off skin
+			if (tp) *tp = '\0';
 			sprintf (currentScore, " %s - %d \213", currentName, (Edict(hiscores[i] + 1))->client->ps.stats[STAT_FRAGS]);
 			if (strlen (text) + strlen (currentScore) < MAX_STRING_CHARS)
 				strcat (text, currentScore);
@@ -405,7 +406,7 @@ char *motd (char *motdstr)
 {
 	int i = 0;
 	qboolean highlight = QFALSE;
-	static char motdprint[MAX_STRING_CHARS + 1];
+	static char motdprint[MAX_STRING_CHARS];
 
 	motdprint[0] = '\0';
 	while (i < MAX_STRING_CHARS && *motdstr)
@@ -443,7 +444,7 @@ char *motd (char *motdstr)
 				int j = 0;
 				cvar_t *temp_cvar;
 				char esc_code[MAX_STRING_CHARS];
-				char temp_motd[MAX_STRING_CHARS + 1];
+				char temp_motd[MAX_STRING_CHARS];
 
 				struct tm *today;
 				time_t sysclock;
@@ -504,7 +505,7 @@ char *motd (char *motdstr)
 						sprintf (temp_motd, "%d", 1900 + today->tm_year);
 					if (highlight)
 						highlightText (temp_motd);
-					temp_motd[MAX_STRING_CHARS - i] = '\0'; // clip
+					temp_motd[MAX_STRING_CHARS - i - 1] = '\0'; // clip
 					strcpy (&motdprint[i], temp_motd);
 					i = strlen (motdprint) - 1;
 				}
@@ -513,8 +514,8 @@ char *motd (char *motdstr)
 		motdstr++;
 		i++;
 	}
-	if (i == MAX_STRING_CHARS)
-		i--;
+	if (i >= MAX_STRING_CHARS)
+		i = MAX_STRING_CHARS - 1;
 	motdprint[i] = '\0';
 	return motdprint;
 }
@@ -593,7 +594,9 @@ qboolean sameTeam (edict_t *player1, edict_t *player2)
 	client2 = numEdict (player2) - 1;
 	skin1 = strstr (ConfigStrings[CS_PLAYERSKINS + client1], "\\") + 1;
 	skin2 = strstr (ConfigStrings[CS_PLAYERSKINS + client2], "\\") + 1;
-	if ((((int) dmflags->value) & DF_SKINTEAMS) || 
+	assert(skin1);
+	assert(skin2);
+	if ((((int) dmflags->value) & DF_SKINTEAMS) ||
 		((((int) gc_flags->value) & GCF_TEAMS) && strcmp (gc_teams->string, "skin") == 0) ||
 		(!(((int) gc_flags->value) & GCF_TEAMS) && ctf_game))
 	{

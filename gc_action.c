@@ -88,7 +88,10 @@ edict_t *PriorityTarget(edict_t *target, qboolean *override)
 				{
 				case CAMERA_TARGET_MODEL:
 					skin = strstr (ConfigStrings[CS_PLAYERSKINS + i], "\\") + 1;
-					match = (strcmp (skin, current->path) == 0);
+					if (skin)
+						match = (strcmp(skin, current->path) == 0);
+					else
+						match = QFALSE;
 					break;
 
 				case CAMERA_TARGET_SHELL:
@@ -415,7 +418,7 @@ void RepositionAtTarget (edict_t *ent, vec3_t vOffsetPosition)
 		snapto = QTRUE;
 	}
 
-	if (fabs(trace.endpos[0]-ent->s.origin[0]) > clients[clientID].fXYLag)
+	if (fabsf(trace.endpos[0]-ent->s.origin[0]) > clients[clientID].fXYLag)
 		if (trace.endpos[0] > ent->s.origin[0])
 			ent->s.origin[0] += clients[clientID].fXYLag; 
 		else
@@ -423,7 +426,7 @@ void RepositionAtTarget (edict_t *ent, vec3_t vOffsetPosition)
 	else
 		ent->s.origin[0] = trace.endpos[0];
 
-	if (fabs(trace.endpos[1]-ent->s.origin[1]) > clients[clientID].fXYLag)
+	if (fabsf(trace.endpos[1]-ent->s.origin[1]) > clients[clientID].fXYLag)
 		if (trace.endpos[1] > ent->s.origin[1])
 			ent->s.origin[1] += clients[clientID].fXYLag; 
 		else
@@ -431,7 +434,7 @@ void RepositionAtTarget (edict_t *ent, vec3_t vOffsetPosition)
 	else
 		ent->s.origin[1] = trace.endpos[1];
 
-	if (fabs(trace.endpos[2]-ent->s.origin[2]) > clients[clientID].fZLag)
+	if (fabsf(trace.endpos[2]-ent->s.origin[2]) > clients[clientID].fZLag)
 		if (trace.endpos[2] > ent->s.origin[2])
 			ent->s.origin[2] += clients[clientID].fZLag; 
 		else
@@ -501,7 +504,7 @@ void RepositionAtOrigin(edict_t *ent, vec3_t vOffsetPosition)
 			trace.endpos[2] += 4;
 	}
 
-	if (fabs(trace.endpos[0]-ent->s.origin[0]) > clients[clientID].fXYLag)
+	if (fabsf(trace.endpos[0]-ent->s.origin[0]) > clients[clientID].fXYLag)
 	{
 		if (trace.endpos[0] > ent->s.origin[0])
 		{
@@ -517,7 +520,7 @@ void RepositionAtOrigin(edict_t *ent, vec3_t vOffsetPosition)
 		ent->s.origin[0] = trace.endpos[0];
 	}
 
-	if (fabs(trace.endpos[1]-ent->s.origin[1]) > clients[clientID].fXYLag)
+	if (fabsf(trace.endpos[1]-ent->s.origin[1]) > clients[clientID].fXYLag)
 	{
 		if (trace.endpos[1] > ent->s.origin[1])
 		{
@@ -533,7 +536,7 @@ void RepositionAtOrigin(edict_t *ent, vec3_t vOffsetPosition)
 		ent->s.origin[1] = trace.endpos[1];
 	}
 
-	if (fabs(trace.endpos[2]-ent->s.origin[2]) > clients[clientID].fZLag)
+	if (fabsf(trace.endpos[2]-ent->s.origin[2]) > clients[clientID].fZLag)
 	{
 		if (trace.endpos[2] > ent->s.origin[2])
 		{
@@ -1135,10 +1138,12 @@ qboolean ParsePriorityList (void)
 			last = priority_list = gci.TagMalloc (sizeof(priority_list_t), TAG_GAME);
 		else 
 		{
-			last->next = gci.TagMalloc (sizeof(priority_list_t), TAG_GAME);
+			last = priority_list;
+			last->next = gci.TagMalloc(sizeof(priority_list_t), TAG_GAME);
 			last = last->next;
 		}
 		// save current entry
+		assert(last);
 		memcpy (last, &current, sizeof(priority_list_t));
 	}
 
