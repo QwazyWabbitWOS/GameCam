@@ -142,10 +142,10 @@ can mess up the server's parsing
 qboolean Info_Validate (char *s)
 {
 	if (strstr (s, "\""))
-		return QFALSE;
+		return false;
 	if (strstr (s, ";"))
-		return QFALSE;
-	return QTRUE;
+		return false;
+	return true;
 }
 
 void Info_SetValueForKey (char *s, char *key, char *value)
@@ -696,10 +696,10 @@ static qboolean loc_CanSee (edict_t *targ, edict_t *inflictor)
 	{
 		trace = gci.trace (viewpoint, vec3_origin, vec3_origin, targpoints[i], inflictor, MASK_SOLID);
 		if (trace.fraction == 1.0)
-			return QTRUE;
+			return true;
 	}
 
-	return QFALSE;
+	return false;
 }
 
 

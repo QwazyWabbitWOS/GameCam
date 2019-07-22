@@ -11,9 +11,9 @@ float leveltime = 0.0F;
 long match_startframe = 0;
 long match_offsetframes = 0;
 long match_updateframes = 0;
-qboolean match_10sec = QFALSE;
-qboolean match_started = QFALSE;
-qboolean intermission = QFALSE;
+qboolean match_10sec = false;
+qboolean match_started = false;
+qboolean intermission = false;
 int best_clientID;
 
 void RunFrame (void)
@@ -45,7 +45,7 @@ void RunFrame (void)
 			}
 			if (timelimit->value && !match_10sec && ((long) (timelimit->value * 600.0F)) - (framenum - match_startframe) <= 100)
 			{
-				match_10sec = QTRUE;
+				match_10sec = true;
 				gci.sound (gce->edicts, CHAN_AUTO, gci.soundindex ("world/10_0.wav"), 1, ATTN_NONE, 0);
 			}
 		}
@@ -77,7 +77,7 @@ void RunFrame (void)
 		{
 			best_clientID = getBestClient ();
 			for (clientID = 0; clientID < maxclients->value; clientID++)
-				clients[clientID].intermission = QFALSE;
+				clients[clientID].intermission = false;
 		}
 	}
 
@@ -140,13 +140,13 @@ void RunFrame (void)
 				{
 					if (!clients[clientID].intermission)
 					{
-						clients[clientID].intermission = QTRUE;
+						clients[clientID].intermission = true;
 						ticker_remove_statusbar (ent);
 						if (clients[clientID].last_score != framenum) // prevent overflow
 						{ 
 							gci.WriteByte (svc_layout);
 							gci.WriteString (clients[best_clientID].layout);
-							gci.unicast(ent, QTRUE);
+							gci.unicast(ent, true);
 							clients[clientID].last_score = framenum;
 						}
 						ent->client->ps.stats[STAT_LAYOUTS] &= ~2;

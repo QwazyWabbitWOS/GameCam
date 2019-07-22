@@ -32,7 +32,7 @@ int PrevClient(int clientID)
 {
 	int prev;
 	edict_t *target;
-	qboolean found = QFALSE;
+	qboolean found = false;
 	qboolean chase_observers = ((((int) gc_flags->value) & GCF_CHASE_OBSERVERS) != 0);
 
 	for (prev = clientID - 1; prev >= 0 && !found; prev--)
@@ -68,7 +68,7 @@ int NextClient(int clientID)
 {
 	int next;
 	edict_t *target;
-	qboolean found = QFALSE;
+	qboolean found = false;
 	qboolean chase_observers = ((((int) gc_flags->value) & GCF_CHASE_OBSERVERS) != 0);
 
 	for (next = clientID + 1; next < (int) maxclients->value && !found; next++)
@@ -112,8 +112,8 @@ int ClosestClient(int clientID)
 	ent = Edict(clientID + 1);
 	// use SetIDView to find which client is in view
 	stat_id_view = ent->client->ps.stats[STAT_ID_VIEW]; // save
-	SetIDView (ent, QTRUE); // QTRUE means that only *real* clients are found (can't chase bots)
-	//	SetIDView (ent, QFALSE);
+	SetIDView (ent, true); // true means that only *real* clients are found (can't chase bots)
+	//	SetIDView (ent, false);
 	other = ent->client->ps.stats[STAT_ID_VIEW];
 	ent->client->ps.stats[STAT_ID_VIEW] = stat_id_view; // restore
 	// if there's a client in view return its number
@@ -159,7 +159,7 @@ qboolean IsVisible(edict_t *pPlayer1, edict_t *pPlayer2, float maxrange)
 
 	// check for looking through non-transparent water
 	if (!gci.inPVS(pPlayer1->s.origin, pPlayer2->s.origin))
-		return QFALSE;
+		return false;
 
 	trace = gci.trace (pPlayer1->s.origin, vec3_origin, vec3_origin, pPlayer2->s.origin, pPlayer1, MASK_SOLID);
 
@@ -255,8 +255,8 @@ int getBestClient (void)
 
 qboolean detect_intermission (void)
 {
-	qboolean intermission = QTRUE;
-	qboolean found = QFALSE;
+	qboolean intermission = true;
+	qboolean found = false;
 	int i;
 	edict_t *current;
 
@@ -273,7 +273,7 @@ qboolean detect_intermission (void)
 			if (!(current->client->ps.stats[STAT_LAYOUTS] & 1) ||
 				current->client->ps.pmove.pm_type != PM_FREEZE)
 			{
-				intermission = QFALSE;
+				intermission = false;
 				break;
 			}
 	}	
@@ -405,7 +405,7 @@ char *scoreBoard (char *text)
 char *motd (char *motdstr)
 {
 	int i = 0;
-	qboolean highlight = QFALSE;
+	qboolean highlight = false;
 	static char motdprint[MAX_STRING_CHARS];
 
 	motdprint[0] = '\0';
@@ -527,15 +527,15 @@ qboolean trimcmp (char *a, char *b)
 	char *pos_head, *pos_tail;
 
 	if ((pos_head = pos_tail = strstr (a, b)) == NULL)
-		return QFALSE;
+		return false;
 	while (pos_head != a)
 		if (!isspace (*(--pos_head)))
-			return QFALSE;
+			return false;
 	pos_tail += strlen (b);
 	while (*pos_tail)
 		if (!isspace (*(pos_tail++)))
-			return QFALSE;
-	return QTRUE;
+			return false;
+	return true;
 }
 
 
@@ -549,7 +549,7 @@ qboolean blank_or_remark (char *line)
 
 
 // set client fov (make sure fov in userinfo is the same)
-// if force is QTRUE then fov is set to "90" or "90.0"
+// if force is true then fov is set to "90" or "90.0"
 // so that client is forced to change info - letting us
 // to modify the name reported to GameSpy by the server
 // (the name stuff is done in ClientUserinfoChanged)
@@ -576,7 +576,7 @@ void set_fov (edict_t *ent, float fov, qboolean force)
 	}
 	gci.WriteByte (svc_stufftext);
 	gci.WriteString (fov_cmd);
-	gci.unicast (ent, QTRUE);
+	gci.unicast (ent, true);
 }
 
 
@@ -588,7 +588,7 @@ qboolean sameTeam (edict_t *player1, edict_t *player2)
 	// no teams
 	if ((((int)(dmflags->value) & (DF_MODELTEAMS | DF_SKINTEAMS)) == 0) && 
 		gc_teams->string[0] == '\0' && !ctf_game)
-		return QFALSE;
+		return false;
 	// detect teams by model/skin
 	client1 = numEdict (player1) - 1;
 	client2 = numEdict (player2) - 1;
@@ -625,8 +625,8 @@ qboolean sameTeam (edict_t *player1, edict_t *player2)
 		if (strcmp (gc_teams->string, "model4") == 0)
 			return (player1->s.modelindex4 == player2->s.modelindex4);
 	}
-	// QFALSE by default
-	return QFALSE;
+	// false by default
+	return false;
 }
 
 

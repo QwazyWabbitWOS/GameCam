@@ -274,7 +274,7 @@ void unicast (edict_t *ent, qboolean reliable)
 		duplicate_score = (clients[clientID].last_score == framenum ||  clients[clientID].limbo_time != 0);
 		clients[clientID].last_score = framenum;
 	} else
-		duplicate_score = QFALSE;
+		duplicate_score = false;
 
 	if (write_buffer.data[0] == svc_inventory)
 		memcpy (clients[clientID].items, &write_buffer.data[1], MAX_ITEMS * sizeof(short));

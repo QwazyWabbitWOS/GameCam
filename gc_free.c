@@ -21,7 +21,7 @@ void camera_free_setup (int clientID)
 	ent->s.event = 0;
 	// reset fov
 	if (gc_set_fov->value)
-		set_fov (ent, 90, QFALSE);
+		set_fov (ent, 90, false);
 
 	ticker_clear (ent);
 }
@@ -36,12 +36,12 @@ void camera_free_wrapup (int clientID)
 	if (clients[clientID].reset_layouts) 
 		ticker_wrapup (ent);
 
-	clients[clientID].inven = QFALSE;
-	clients[clientID].score = QFALSE;
-	clients[clientID].help = QFALSE;
-	clients[clientID].menu = QFALSE;
-	clients[clientID].layouts = QFALSE;
-	clients[clientID].statusbar_removed = QFALSE;
+	clients[clientID].inven = false;
+	clients[clientID].score = false;
+	clients[clientID].help = false;
+	clients[clientID].menu = false;
+	clients[clientID].layouts = false;
+	clients[clientID].statusbar_removed = false;
 
 	ent->client->ps.stats[STAT_LAYOUTS] = 0;
 }
@@ -55,16 +55,16 @@ void camera_free_begin (int clientID)
 
 	// reset fov
 	if (gc_set_fov->value)
-		set_fov (ent, 90, QFALSE);
+		set_fov (ent, 90, false);
 
 	ticker_clear (ent);
 
-	clients[clientID].inven = QFALSE;
-	clients[clientID].score = QFALSE;
-	clients[clientID].help = QFALSE;
-	clients[clientID].menu = QFALSE;
-	clients[clientID].layouts = QFALSE;
-	clients[clientID].statusbar_removed = QFALSE;
+	clients[clientID].inven = false;
+	clients[clientID].score = false;
+	clients[clientID].help = false;
+	clients[clientID].menu = false;
+	clients[clientID].layouts = false;
+	clients[clientID].statusbar_removed = false;
 }
 
 
@@ -90,7 +90,7 @@ void camera_free_frame (int clientID)
 	{
 		ent->client->ps.stats[STAT_ID_VIEW] = 0;
 		if (clients[clientID].id)
-			SetIDView(ent, QFALSE); // QFALSE means that we id bots too);
+			SetIDView(ent, false); // false means that we id bots too);
 	}
 }
 
@@ -126,7 +126,7 @@ void camera_free_think (int clientID, usercmd_t *cmd)
 
 	if (memcmp(&clients[clientID].old_pmove, &pm.s, sizeof(pm.s)))
 	{
-		pm.snapinitial = QTRUE;
+		pm.snapinitial = true;
 		//gci.dprintf ("pmove changed!\n");
 	}
 

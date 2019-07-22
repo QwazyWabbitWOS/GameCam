@@ -9,6 +9,7 @@
 #pragma warning(disable : 4100)	// C4100 unreferenced formal parameter
 #if _MSC_VER > 1500
 #pragma warning(disable : 4996)	// disable warnings from VS 2010 about deprecated CRT functions (_CRT_SECURE_NO_WARNINGS).
+#pragma warning(disable : 4459)	// declaration of 'var' hides global declaration.
 #endif
 #endif
 
@@ -67,7 +68,7 @@
 
 
 typedef unsigned char 		byte;
-typedef enum bool_n {QFALSE, QTRUE} qboolean;
+typedef enum {false, true} qboolean;
 
 #ifndef NULL
 #define NULL ((void *)0)

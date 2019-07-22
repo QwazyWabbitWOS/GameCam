@@ -334,7 +334,7 @@ void Menu_Fixed_f (edict_t *ent, struct pmenu_s *entry, int flag)
 				clients[clientID].camera = NULL;
 				clients[clientID].fixed_switch_time = -1.0F;
 				if (gc_set_fov->value)
-					set_fov (ent, 90, QFALSE);
+					set_fov (ent, 90, false);
 			}
 		}
 		break;
@@ -368,7 +368,7 @@ void Menu_Creep_f (edict_t *ent, struct pmenu_s *entry, int flag)
 		else
 			strcpy (entry->option, "ON");
 		clients[clientID].chase_auto = !clients[clientID].chase_auto;
-		clients[clientID].update_chase = QTRUE;
+		clients[clientID].update_chase = true;
 		break;
 	}
 }
@@ -508,11 +508,11 @@ void PMenu_Open (edict_t *ent, pmenu_t *entries, int cur, int num, pmenuhnd_t *p
 		hnd->cur = i;
 
 	clients[clientID].menu_hnd = hnd;
-	clients[clientID].inven = QFALSE;
-	clients[clientID].score = QFALSE;
-	clients[clientID].help = QFALSE;
-	clients[clientID].layouts = QFALSE;
-	clients[clientID].menu = QTRUE;
+	clients[clientID].inven = false;
+	clients[clientID].score = false;
+	clients[clientID].help = false;
+	clients[clientID].layouts = false;
+	clients[clientID].menu = true;
 
 	PMenu_Update (ent);
 }
@@ -543,9 +543,9 @@ void PMenu_Close (edict_t *ent)
 		PMenu_FreeMenu (ent, clients[clientID].menu_hnd);
 		clients[clientID].menu_hnd = parent;
 	}
-	clients[clientID].menu = QFALSE;
+	clients[clientID].menu = false;
 	if (clients[clientID].spectator && clients[clientID].mode == CAMERA_CHASE)
-		clients[clientID].update_chase = QTRUE;
+		clients[clientID].update_chase = true;
 }
 
 
@@ -568,7 +568,7 @@ void PMenu_Parent (edict_t *ent)
 	else
 	{
 		if (clients[clientID].spectator && clients[clientID].mode == CAMERA_CHASE)
-			clients[clientID].update_chase = QTRUE;
+			clients[clientID].update_chase = true;
 		ent->client->ps.stats[STAT_LAYOUTS] &= ~1;
 	}
 }
@@ -582,7 +582,7 @@ void PMenu_Update(edict_t *ent)
 	int x;
 	pmenuhnd_t *hnd;
 	char *t;
-	qboolean alt = QFALSE;
+	qboolean alt = false;
 	int clientID;
 
 	clientID = numEdict (ent) - 1;
@@ -612,7 +612,7 @@ void PMenu_Update(edict_t *ent)
 		t = p->text;
 		if (*t == '*') 
 		{
-			alt = QTRUE;
+			alt = true;
 			t++;
 		}
 		if (p->option && *(p->option))
@@ -646,12 +646,12 @@ void PMenu_Update(edict_t *ent)
 			sprintf(string + strlen(string), "string2 \"%s\" ", line);
 		else
 			sprintf(string + strlen(string), "string \"%s\" ", line);
-		alt = QFALSE;
+		alt = false;
 	}
 
 	gci.WriteByte (svc_layout);
 	gci.WriteString (string);
-	gci.unicast (ent, QTRUE);
+	gci.unicast (ent, true);
 	ent->client->ps.stats[STAT_LAYOUTS] |= 1;
 	//gci.dprintf ("strlen(menu)=%d\n", strlen (string));
 }

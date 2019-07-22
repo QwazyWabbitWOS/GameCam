@@ -11,19 +11,19 @@ vec3_t spawn_origin;
 qboolean ClientConnect (edict_t *ent, char *userinfo)
 {
 	int clientID;
-	qboolean client_success = QFALSE;
+	qboolean client_success = false;
 
 	if (gc_autocam->value && 
 		(((int) gc_flags->value) & GCF_LOCK_SERVER) &&
 		match_started)
 	{
 		Info_SetValueForKey (userinfo, "rejmsg", "match in progress - server is locked");
-		return QFALSE;
+		return false;
 	}
 
 	clientID = numEdict(ent) - 1;
 
-	clients[clientID].instant_spectator = QFALSE;
+	clients[clientID].instant_spectator = false;
 
 	if (!gc_autocam->value && (((int) gc_flags->value) & GCF_SPECTATOR))
 	{
@@ -39,18 +39,18 @@ qboolean ClientConnect (edict_t *ent, char *userinfo)
 				strcmp(spectator_password->string, value)) 
 			{
 				Info_SetValueForKey(userinfo, "rejmsg", "spectator password required or incorrect");
-				return QFALSE;
+				return false;
 			}
 
 			// too many cameras
 			if (cam_count >= maxspectators->value) 
 			{
 				Info_SetValueForKey(userinfo, "rejmsg", "Server spectator limit is full");
-				return QFALSE;
+				return false;
 			}
 
 			// don't connect to game
-			clients[clientID].instant_spectator = QTRUE;
+			clients[clientID].instant_spectator = true;
 		}
 	}
 	clients[clientID].spectator = clients[clientID].instant_spectator;
@@ -77,8 +77,8 @@ qboolean ClientConnect (edict_t *ent, char *userinfo)
 		clients[clientID].demo =	   ((((int) gc_flags->value) & GCF_DEFAULT_DEMO)  != 0);
 		clients[clientID].limbo_time = 0;
 		clients[clientID].target = -1;
-		clients[clientID].welcome = QFALSE;
-		clients[clientID].begin = QFALSE;
+		clients[clientID].welcome = false;
+		clients[clientID].begin = false;
 		strcpy (clients[clientID].userinfo, userinfo);
 
 	}
@@ -95,12 +95,12 @@ void InstantSpectator (edict_t *ent)
 
 	ge.ClientDisconnect (ent);
 	// misc setup
-	clients[clientID].spectator = QTRUE;
-	clients[clientID].instant_spectator = QFALSE;
+	clients[clientID].spectator = true;
+	clients[clientID].instant_spectator = false;
 	ent->client->ps.pmove.pm_type = PM_SPECTATOR;
 	// reset fov
 	if (gc_set_fov->value)
-		set_fov (ent, 90, QFALSE);
+		set_fov (ent, 90, false);
 	// setup action camera
 	camera_action_setup (clientID);
 	cam_count++;
@@ -116,7 +116,7 @@ void ClientBegin (edict_t *ent)
 	int clientID, i;
 
 	clientID = numEdict(ent) - 1;
-	clients[clientID].begin = QTRUE;
+	clients[clientID].begin = true;
 	clients[clientID].ticker_frame = 0; // force update of ticker
 	// reset flood protection
 	clients[clientID].flood_locktill = 0;
@@ -170,11 +170,11 @@ void ClientBegin (edict_t *ent)
 		ge.ClientBegin (ent);
 		if (((int) gc_flags->value & GCF_WELCOME) && !clients[clientID].welcome) 
 		{
-			clients[clientID].welcome = QTRUE;
+			clients[clientID].welcome = true;
 			// stufftext looks better (cprintf at first frame shown only on console)
 			gci.WriteByte (svc_stufftext);
 			gci.WriteString ("echo [GameCam]: type 'camera ?' for help\n");
-			gci.unicast (ent, QTRUE);
+			gci.unicast (ent, true);
 			//gci.cprintf (ent, PRINT_HIGH, "[GameCam]: type 'camera ?' for help\n");
 		}
 	}
@@ -187,9 +187,9 @@ void ClientDisconnect (edict_t *ent)
 	char s_cam_count[5];
 
 	clientID = numEdict(ent) - 1;
-	clients[clientID].inuse = QFALSE;
-	clients[clientID].reset_layouts = QFALSE;
-	clients[clientID].welcome = QFALSE;
+	clients[clientID].inuse = false;
+	clients[clientID].reset_layouts = false;
+	clients[clientID].welcome = false;
 	if (!clients[clientID].spectator) 
 	{
 		// make sure spectators are not following a disconnected client
@@ -218,8 +218,8 @@ void ClientDisconnect (edict_t *ent)
 		sprintf (s_cam_count,"%d", cam_count);
 		gci.cvar_forceset ("gc_count", s_cam_count);
 	}
-	clients[clientID].begin = QFALSE;
-	clients[clientID].spectator = QFALSE;
+	clients[clientID].begin = false;
+	clients[clientID].spectator = false;
 	clients[clientID].limbo_time = 0;
 	clients[clientID].target = -1;
 }
@@ -244,7 +244,7 @@ void ClientUserinfoChanged (edict_t *ent, char *userinfo)
 			if (*spectator && strcmp (spectator, "0") != 0 && !clients[clientID].spectator)
 			{
 				strcpy (clients[clientID].userinfo, userinfo);
-				SpectatorBegin (ent, spectator, QTRUE);
+				SpectatorBegin (ent, spectator, true);
 				return;
 			}
 			else if ((*spectator == '\0' || strcmp (spectator, "0") == 0) &&
@@ -342,12 +342,12 @@ void SpawnEntities (char *mapname, char *entstring, char *spawnpoint)
 	int i, clientID;
 
 	// new map: all clients need to enter the game first, so we
-	// remove all camera targets, and set begin flag to QFALSE
+	// remove all camera targets, and set begin flag to false
 	for (clientID = 0; clientID < maxclients->value; clientID++) 
 	{
 		if (clients[clientID].inuse) 
 		{
-			clients[clientID].begin = QFALSE;
+			clients[clientID].begin = false;
 			clients[clientID].camera =  NULL;
 			if (!clients[clientID].spectator) 
 			{
@@ -365,11 +365,11 @@ void SpawnEntities (char *mapname, char *entstring, char *spawnpoint)
 	for (i = CS_MODELS + 1; i < CS_LIGHTS; i++)
 		ConfigStrings[i][0] = '\0';
 	FindModels (entstring);
-	intermission = QFALSE;
+	intermission = false;
 	match_offsetframes = 0;
 	match_updateframes = 0;
-	match_started = QFALSE;
-	match_10sec = QFALSE;
+	match_started = false;
+	match_10sec = false;
 	if (cam_count)
 		ticker_init ();
 	ge.SpawnEntities (mapname, entstring, spawnpoint);

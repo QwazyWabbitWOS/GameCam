@@ -105,7 +105,7 @@ void SpectatorBegin (edict_t *ent, char *password, qboolean validate)
 					gci.cprintf(ent, PRINT_HIGH, "spectator password incorrect\n");
 					gci.WriteByte (svc_stufftext);
 					gci.WriteString ("spectator 0\n");
-					gci.unicast(ent, QTRUE);
+					gci.unicast(ent, true);
 					return;
 				}
 			}
@@ -127,7 +127,7 @@ void SpectatorBegin (edict_t *ent, char *password, qboolean validate)
 				gci.cprintf(ent, PRINT_HIGH, "no more cameras allowed\n");
 				gci.WriteByte (svc_stufftext);
 				gci.WriteString ("spectator 0\n");
-				gci.unicast(ent, QTRUE);
+				gci.unicast(ent, true);
 				return;
 			}
 		}
@@ -148,7 +148,7 @@ void SpectatorBegin (edict_t *ent, char *password, qboolean validate)
 			{
 				gci.WriteByte (svc_stufftext);
 				gci.WriteString ("spectator 1\n");
-				gci.unicast(ent, QTRUE);
+				gci.unicast(ent, true);
 			}
 		}
 	}
@@ -164,11 +164,11 @@ void SpectatorBegin (edict_t *ent, char *password, qboolean validate)
 	if (validate)
 		ge.ClientDisconnect (ent);
 	// misc setup
-	clients[clientID].spectator = QTRUE;
+	clients[clientID].spectator = true;
 	ent->client->ps.pmove.pm_type = PM_SPECTATOR;
 	// reset fov
 	if (gc_set_fov->value)
-		set_fov (ent, 90, QFALSE);
+		set_fov (ent, 90, false);
 	// setup camera mode
 	switch (clients[clientID].mode) 
 	{
@@ -220,7 +220,7 @@ void SpectatorEnd (edict_t *ent,  char *password)
 			gci.cprintf (ent, PRINT_HIGH, "no more players allowed\n");
 			return;
 		}
-		match_started = QTRUE;
+		match_started = true;
 		match_startframe = framenum;
 	}
 
@@ -232,7 +232,7 @@ void SpectatorEnd (edict_t *ent,  char *password)
 		{
 			gci.WriteByte (svc_stufftext);
 			gci.WriteString ("spectator 0\n");
-			gci.unicast(ent, QTRUE);
+			gci.unicast(ent, true);
 		}
 	}
 
@@ -253,14 +253,14 @@ void CameraOff (edict_t *ent)
 	switch (clients[clientID].mode) 
 	{
 	case CAMERA_FREE:
-		clients[clientID].reset_layouts = QTRUE;
+		clients[clientID].reset_layouts = true;
 		camera_free_wrapup (clientID);
 		break;
 	case CAMERA_CHASE:
 		camera_chase_wrapup (clientID);
 		break;
 	case CAMERA_ACTION:
-		clients[clientID].reset_layouts = QTRUE;
+		clients[clientID].reset_layouts = true;
 		camera_action_wrapup (clientID);
 	}
 }
@@ -274,13 +274,13 @@ void ReturnToGame (edict_t *ent)
 
 	clientID = numEdict(ent) - 1;
 
-	clients[clientID].spectator = QFALSE;
+	clients[clientID].spectator = false;
 	cam_count--;
 	sprintf (s_cam_count,"%d", cam_count);
 	gci.cvar_forceset ("gc_count", s_cam_count);
 	// reset fov
 	if (gc_set_fov->value)
-		set_fov (ent, 90, QFALSE);
+		set_fov (ent, 90, false);
 	// re-connect client to game
 	success = ge.ClientConnect (ent, clients[clientID].userinfo);
 	if (success) 
@@ -296,23 +296,23 @@ void ReturnToGame (edict_t *ent)
 		{
 			gci.WriteByte (svc_stufftext);
 			gci.WriteString ("kill\n");
-			gci.unicast (ent, QTRUE);
+			gci.unicast (ent, true);
 		}
 	} 
 	else 
 	{
 		gci.cprintf (ent, PRINT_HIGH, "can't return to game - \"%s\"\n", Info_ValueForKey (clients[clientID].userinfo, "rejmsg"));
-		SpectatorBegin (ent, "", QFALSE);
+		SpectatorBegin (ent, "", false);
 	}
 }
 
 
 void demoOFF (edict_t *ent)
 {
-	clients[numEdict (ent) - 1].demo = QFALSE;
+	clients[numEdict (ent) - 1].demo = false;
 	gci.WriteByte (svc_stufftext);
 	gci.WriteString ("stop\n");
-	gci.unicast (ent, QTRUE);
+	gci.unicast (ent, true);
 }
 
 
@@ -324,14 +324,14 @@ void demoON (edict_t *ent)
 
 	time (&sysclock);
 	today = localtime (&sysclock);
-	clients[numEdict (ent) - 1].demo = QTRUE;
+	clients[numEdict (ent) - 1].demo = true;
 	sprintf (demo_cmd, "stop; record %s-%.2d%.2d%.2d-%.2d%.2d\n", 
 		current_map, 
 		today->tm_mday, today->tm_mon + 1, today->tm_year % 100, 
 		today->tm_hour, today->tm_min);
 	gci.WriteByte (svc_stufftext);
 	gci.WriteString (demo_cmd);
-	gci.unicast (ent, QTRUE);
+	gci.unicast (ent, true);
 }
 
 
@@ -341,10 +341,10 @@ void ToggleLayouts (edict_t *ent)
 
 	clientID = numEdict(ent) - 1;
 
-	clients[clientID].help = QFALSE;
-	clients[clientID].score = QFALSE;
-	clients[clientID].inven = QFALSE;
-	clients[clientID].menu = QFALSE;
+	clients[clientID].help = false;
+	clients[clientID].score = false;
+	clients[clientID].inven = false;
+	clients[clientID].menu = false;
 	clients[clientID].layouts = !clients[clientID].layouts;
 
 	if (clients[clientID].layouts) 
@@ -353,7 +353,7 @@ void ToggleLayouts (edict_t *ent)
 		clients[clientID].layout[0] = '\0';
 	} 
 	else
-		clients[clientID].update_chase = QTRUE;
+		clients[clientID].update_chase = true;
 
 	if ((int) gc_flags->value & GCF_VERBOSE)
 		gci.cprintf (ent, PRINT_HIGH, "client layouts display is %s\n", 
@@ -368,10 +368,10 @@ void ToggleInven (edict_t *ent)
 
 	clientID = numEdict(ent) - 1;
 
-	clients[clientID].score = QFALSE;
-	clients[clientID].help = QFALSE;
-	clients[clientID].menu = QFALSE;
-	clients[clientID].layouts = QFALSE;
+	clients[clientID].score = false;
+	clients[clientID].help = false;
+	clients[clientID].menu = false;
+	clients[clientID].layouts = false;
 
 	clients[clientID].inven = !clients[clientID].inven;
 
@@ -389,13 +389,13 @@ void ToggleInven (edict_t *ent)
 		else 
 		{
 			gci.centerprintf (ent, "client HUD is in use\ntry again later");
-			clients[clientID].inven = QFALSE;
+			clients[clientID].inven = false;
 		}
 		wait_camera = NULL;
 		wait_inven = NULL;
 	}
 	if (!clients[clientID].inven)
-		clients[clientID].update_chase = QTRUE;
+		clients[clientID].update_chase = true;
 }
 
 
@@ -470,7 +470,7 @@ void Cmd_Camera_f (edict_t *ent)
 		} 
 		else if (Q_strcasecmp (mode, "on") == 0) 
 		{
-			SpectatorBegin (ent, "", QTRUE);
+			SpectatorBegin (ent, "", true);
 			return;
 		} 
 		else if (Q_strcasecmp (mode, "off") == 0) 
@@ -498,12 +498,12 @@ void Cmd_Camera_f (edict_t *ent)
 			if (clients[clientID].id) 
 			{
 				gci.cprintf (ent, PRINT_HIGH, "camera player id turned OFF\n");
-				clients[clientID].id = QFALSE;
+				clients[clientID].id = false;
 			}
 			else 
 			{
 				gci.cprintf (ent, PRINT_HIGH, "camera player id turned ON\n");
-				clients[clientID].id = QTRUE;
+				clients[clientID].id = true;
 			}
 			return;
 		} 
@@ -512,12 +512,12 @@ void Cmd_Camera_f (edict_t *ent)
 			if (clients[clientID].ticker) 
 			{
 				gci.cprintf (ent, PRINT_HIGH, "ticker tape turned OFF\n");
-				clients[clientID].ticker = QFALSE;
+				clients[clientID].ticker = false;
 			}
 			else 
 			{
 				gci.cprintf (ent, PRINT_HIGH, "ticker tape turned ON\n");
-				clients[clientID].ticker = QTRUE;
+				clients[clientID].ticker = true;
 				clients[clientID].ticker_frame = 0; // force update
 			}
 			return;
@@ -577,14 +577,14 @@ void Cmd_Camera_f (edict_t *ent)
 			if (clients[clientID].fixed) 
 			{
 				gci.cprintf (ent, PRINT_HIGH, "fixed cameras turned OFF\n");
-				clients[clientID].fixed = QFALSE;
+				clients[clientID].fixed = false;
 				if (gc_set_fov->value)
-					set_fov (ent, 90, QFALSE);
+					set_fov (ent, 90, false);
 			}
 			else 
 			{
 				gci.cprintf (ent, PRINT_HIGH, "fixed cameras turned ON\n");
-				clients[clientID].fixed = QTRUE;
+				clients[clientID].fixed = true;
 				clients[clientID].camera = NULL;
 				clients[clientID].fixed_switch_time = -1.0F;
 			}
@@ -693,7 +693,7 @@ void Cmd_Camera_f (edict_t *ent)
 				clients[clientID].camera =  NULL;
 				ticker_update_camera (ent, NULL);
 				if (gc_set_fov->value)
-					set_fov (ent, 90, QFALSE);
+					set_fov (ent, 90, false);
 			}
 			return;
 		}
@@ -723,7 +723,7 @@ void Cmd_Camera_f (edict_t *ent)
 		float fTemp;
 		if (Q_strcasecmp (gci.argv(1), "on") == 0) 
 		{
-			SpectatorBegin (ent, gci.argv(2), QTRUE);
+			SpectatorBegin (ent, gci.argv(2), true);
 			return;
 		}
 		else if (Q_strcasecmp (gci.argv(1), "off") == 0) 
@@ -763,7 +763,7 @@ void Cmd_Camera_f (edict_t *ent)
 			if (Q_strcasecmp(gci.argv(2), "auto") == 0) 
 			{
 				clients[clientID].chase_auto = !clients[clientID].chase_auto;
-				clients[clientID].update_chase = QTRUE;
+				clients[clientID].update_chase = true;
 				if (clients[clientID].chase_auto)
 					gci.cprintf (ent, PRINT_HIGH, "AUTO CHASE camera is ON\n");
 				else
@@ -818,11 +818,11 @@ void Cmd_Camera_f (edict_t *ent)
 						!clients[target].spectator)
 					{
 						clients[clientID].target = target;
-						clients[clientID].help = QFALSE;
-						clients[clientID].score = QFALSE;
-						clients[clientID].inven = QFALSE;
-						clients[clientID].layouts = QFALSE;
-						clients[clientID].update_chase = QTRUE;
+						clients[clientID].help = false;
+						clients[clientID].score = false;
+						clients[clientID].inven = false;
+						clients[clientID].layouts = false;
+						clients[clientID].update_chase = true;
 						clients[clientID].chase_distance = 0.0F;
 						clients[clientID].chase_height = 0.0F;
 						clients[clientID].chase_angle = 0.0F;
@@ -1013,10 +1013,10 @@ void Cmd_Help_f (edict_t *ent)
 
 	clientID = numEdict(ent) - 1;
 
-	clients[clientID].inven = QFALSE;
-	clients[clientID].score = QFALSE;
-	clients[clientID].menu = QFALSE;
-	clients[clientID].layouts = QFALSE;
+	clients[clientID].inven = false;
+	clients[clientID].score = false;
+	clients[clientID].menu = false;
+	clients[clientID].layouts = false;
 	clients[clientID].help = !clients[clientID].help;
 
 	if (clients[clientID].help) 
@@ -1032,13 +1032,13 @@ void Cmd_Help_f (edict_t *ent)
 		else 
 		{
 			gci.centerprintf (ent, "client HUD is in use\ntry again later");
-			clients[clientID].help = QFALSE;
+			clients[clientID].help = false;
 		}
 		wait_camera = NULL;
 		wait_help = NULL;
 	}
 	if (!clients[clientID].help)
-		clients[clientID].update_chase = QTRUE;
+		clients[clientID].update_chase = true;
 }
 
 
@@ -1048,10 +1048,10 @@ void Cmd_Score_f (edict_t *ent)
 
 	clientID = numEdict(ent) - 1;
 
-	clients[clientID].inven = QFALSE;
-	clients[clientID].help = QFALSE;
-	clients[clientID].menu = QFALSE;
-	clients[clientID].layouts = QFALSE;
+	clients[clientID].inven = false;
+	clients[clientID].help = false;
+	clients[clientID].menu = false;
+	clients[clientID].layouts = false;
 
 	clients[clientID].score = !clients[clientID].score;
 
@@ -1065,7 +1065,7 @@ void Cmd_Score_f (edict_t *ent)
 	{
 		if (clients[clientID].mode == CAMERA_CHASE) 
 		{	
-			clients[clientID].update_chase = QTRUE;
+			clients[clientID].update_chase = true;
 		}
 		else
 		{
@@ -1092,17 +1092,17 @@ void Cmd_Putaway_f (edict_t *ent)
 	{
 		gci.WriteByte (svc_stufftext);
 		gci.WriteString ("menu_main");
-		gci.unicast (ent, QTRUE);
+		gci.unicast (ent, true);
 	} 
 	else 
 	{
-		clients[clientID].inven = QFALSE;
-		clients[clientID].score = QFALSE;
-		clients[clientID].help = QFALSE;
-		clients[clientID].menu = QFALSE;
-		clients[clientID].layouts = QFALSE;
+		clients[clientID].inven = false;
+		clients[clientID].score = false;
+		clients[clientID].help = false;
+		clients[clientID].menu = false;
+		clients[clientID].layouts = false;
 		if (clients[clientID].spectator && clients[clientID].mode == CAMERA_CHASE)
-			clients[clientID].update_chase = QTRUE;
+			clients[clientID].update_chase = true;
 		else
 		{
 			ent->client->ps.stats[STAT_LAYOUTS] &= ~1;
@@ -1128,7 +1128,7 @@ void Cmd_NextClient_f (edict_t *ent)
 	switch (clients[clientID].mode) 
 	{
 	case CAMERA_FREE:
-		clients[clientID].reset_layouts = QTRUE;
+		clients[clientID].reset_layouts = true;
 		camera_free_wrapup (clientID);
 		clients[clientID].mode = CAMERA_CHASE;
 		camera_chase_setup (clientID);
@@ -1136,11 +1136,11 @@ void Cmd_NextClient_f (edict_t *ent)
 	case CAMERA_CHASE:
 		other = NextClient (clients[clientID].target);
 		clients[clientID].target = other;
-		clients[clientID].help = QFALSE;
-		clients[clientID].score = QFALSE;
-		clients[clientID].inven = QFALSE;
-		clients[clientID].layouts = QFALSE;
-		clients[clientID].update_chase = QTRUE;
+		clients[clientID].help = false;
+		clients[clientID].score = false;
+		clients[clientID].inven = false;
+		clients[clientID].layouts = false;
+		clients[clientID].update_chase = true;
 		clients[clientID].chase_distance = 0.0F;
 		clients[clientID].chase_height = 0.0F;
 		clients[clientID].chase_angle = 0.0F;
@@ -1152,7 +1152,7 @@ void Cmd_NextClient_f (edict_t *ent)
 		other = NextClient (clientID);
 		if (other != clientID) 
 		{
-			clients[clientID].reset_layouts = QTRUE;
+			clients[clientID].reset_layouts = true;
 			camera_action_wrapup (clientID);
 			clients[clientID].mode = CAMERA_CHASE;
 			camera_chase_setup (clientID);
@@ -1182,7 +1182,7 @@ void Cmd_PrevClient_f (edict_t *ent)
 	switch (clients[clientID].mode) 
 	{
 	case CAMERA_FREE:
-		clients[clientID].reset_layouts = QTRUE;
+		clients[clientID].reset_layouts = true;
 		camera_free_wrapup (clientID);
 		clients[clientID].mode = CAMERA_CHASE;
 		camera_chase_setup (clientID);
@@ -1190,11 +1190,11 @@ void Cmd_PrevClient_f (edict_t *ent)
 	case CAMERA_CHASE:
 		other = PrevClient (clients[clientID].target);
 		clients[clientID].target = other;
-		clients[clientID].help = QFALSE;
-		clients[clientID].score = QFALSE;
-		clients[clientID].inven = QFALSE;
-		clients[clientID].layouts = QFALSE;
-		clients[clientID].update_chase = QTRUE;
+		clients[clientID].help = false;
+		clients[clientID].score = false;
+		clients[clientID].inven = false;
+		clients[clientID].layouts = false;
+		clients[clientID].update_chase = true;
 		clients[clientID].chase_distance = 0.0F;
 		clients[clientID].chase_height = 0.0F;
 		clients[clientID].chase_angle = 0.0F;
@@ -1206,7 +1206,7 @@ void Cmd_PrevClient_f (edict_t *ent)
 		other = PrevClient (clientID);
 		if (other != clientID) 
 		{
-			clients[clientID].reset_layouts = QTRUE;
+			clients[clientID].reset_layouts = true;
 			camera_action_wrapup (clientID);
 			clients[clientID].mode = CAMERA_CHASE;
 			camera_chase_setup (clientID);
@@ -1223,7 +1223,7 @@ void Cmd_PrevClient_f (edict_t *ent)
 void Cmd_NextItem_f (edict_t *ent)
 {
 	int next;
-	qboolean found = QFALSE;
+	qboolean found = false;
 	int clientID;
 
 	clientID = numEdict(ent) - 1;
@@ -1242,7 +1242,7 @@ void Cmd_NextItem_f (edict_t *ent)
 void Cmd_PrevItem_f (edict_t *ent)
 {
 	int prev;
-	qboolean found = QFALSE;
+	qboolean found = false;
 	int clientID;
 
 	clientID = numEdict(ent) - 1;
@@ -1360,14 +1360,14 @@ void Cmd_Say_f (edict_t *ent)
 		return;
 	}
 
-	say (ent, QTRUE);
+	say (ent, true);
 }
 
 void Cmd_SayTeam_f (edict_t *ent)
 {
 	if (gci.argc () < 2)
 		return;
-	say (ent, QFALSE);
+	say (ent, false);
 }
 
 
@@ -1383,7 +1383,7 @@ void Cmd_ActionCam_f (edict_t *ent)
 	switch (oldmode) 
 	{
 	case CAMERA_FREE:
-		clients[clientID].reset_layouts = QFALSE;
+		clients[clientID].reset_layouts = false;
 		camera_free_wrapup (clientID);
 		break;
 	case CAMERA_CHASE:
@@ -1436,7 +1436,7 @@ void Cmd_FreeCam_f (edict_t *ent)
 		camera_chase_wrapup (clientID);
 		break;
 	case CAMERA_ACTION:
-		clients[clientID].reset_layouts = QFALSE;
+		clients[clientID].reset_layouts = false;
 		camera_action_wrapup (clientID);
 		break;
 	}
@@ -1465,7 +1465,7 @@ void ClientCommand (edict_t *ent)
 	int clientID;
 	char	*cmd;
 
-	camera_command_flag = QFALSE;
+	camera_command_flag = false;
 
 	if (!ent->client)
 		return;		// not fully in game yet
@@ -1579,7 +1579,7 @@ void ClientCommand (edict_t *ent)
 
 void ServerCommand (void)
 {
-	camera_command_flag = QFALSE;
+	camera_command_flag = false;
 	ge.ServerCommand();
 }
 
@@ -1593,7 +1593,7 @@ void GameCommand (edict_t *ent, char *command)
 	if (command == NULL)
 		return;
 
-	camera_command_flag = QTRUE;
+	camera_command_flag = true;
 
 	command_argc = 0;
 	command_temp = command;
@@ -1617,7 +1617,7 @@ void GameCommand (edict_t *ent, char *command)
 	} 
 	else 
 	{
-		camera_command_flag = QFALSE;
+		camera_command_flag = false;
 		return;
 	}
 	strncpy (command_argv[0], com_token, MAX_TOKEN_CHARS);

@@ -79,24 +79,24 @@ ticker_t *ticker_current = NULL;	// current ticker script function
 char *ticker_default[] =
 {
 	"Do",
-		"Appear center=QTRUE text=\\!GameCam\\! v" GAMECAMVERNUM,
+		"Appear center=true text=\\!GameCam\\! v" GAMECAMVERNUM,
 		"Sleep delay=10",
-		"ScrollLeft center=QTRUE text=\\x90\\x80\\x91 1998-99, Avi \\\"\\!Zung!\\!\\\" Rozen",
+		"ScrollLeft center=true text=\\x90\\x80\\x91 1998-99, Avi \\\"\\!Zung!\\!\\\" Rozen",
 		"Sleep delay=10",
-		"ScrollRight center=QTRUE text=http://www.telefragged.com/\\!zungbang\\!",
+		"ScrollRight center=true text=http://www.telefragged.com/\\!zungbang\\!",
 		"Do",
 			"Sleep delay=3",
-			"Appear center=QTRUE text=http://www.telefragged.com/zungbang",
+			"Appear center=true text=http://www.telefragged.com/zungbang",
 			"Sleep delay=3",
-			"Appear center=QTRUE text=http://www.telefragged.com/\\!zungbang\\!",
+			"Appear center=true text=http://www.telefragged.com/\\!zungbang\\!",
 		"Repeat times=3",
 		"Sleep delay=10",
-		"ScrollLeft center=QTRUE text=\\!TOP SCORES\\! . . .",
+		"ScrollLeft center=true text=\\!TOP SCORES\\! . . .",
 		"ScrollLeft endspace=39 text=\\{sb}",
 		"Sleep delay=10",
-		"Appear center=QTRUE text=type '\\!camera\\!' to see the menu",
+		"Appear center=true text=type '\\!camera\\!' to see the menu",
 		"Sleep delay=10",
-		"ScrollRight center=QTRUE text=\\!GameCam\\! v" GAMECAMVERNUM,
+		"ScrollRight center=true text=\\!GameCam\\! v" GAMECAMVERNUM,
 	"Repeat times=-1",
 	""
 };
@@ -125,7 +125,7 @@ void ticker_clear (edict_t *ent)
 		gci.WriteByte (svc_configstring);
 		gci.WriteShort (CS_TICKER);
 		gci.WriteString ("");
-		gci.unicast (ent, QTRUE);
+		gci.unicast (ent, true);
 	}
 	else
 	{
@@ -135,7 +135,7 @@ void ticker_clear (edict_t *ent)
 	gci.WriteByte (svc_configstring);
 	gci.WriteShort (CS_STATUSBAR);
 	gci.WriteString ("");
-	gci.unicast (ent, QTRUE);
+	gci.unicast (ent, true);
 }
 
 
@@ -152,12 +152,12 @@ void ticker_setup (edict_t *ent)
 		gci.WriteByte (svc_configstring);
 		gci.WriteShort (CS_STATUSBAR + i);
 		gci.WriteString (&camera_statusbar[j]);
-		gci.unicast (ent, QTRUE);
+		gci.unicast (ent, true);
 	}
 	gci.WriteByte (svc_configstring);
 	gci.WriteShort (CS_STATUSBAR + i);
 	gci.WriteString ("");
-	gci.unicast (ent, QTRUE);
+	gci.unicast (ent, true);
 }
 
 
@@ -171,35 +171,35 @@ void ticker_wrapup (edict_t *ent)
 	gci.WriteByte (svc_configstring);
 	gci.WriteShort (CS_TICKER);
 	gci.WriteString (ConfigStrings[CS_TICKER]);
-	gci.unicast (ent, QTRUE);
+	gci.unicast (ent, true);
 
 	gci.WriteByte (svc_configstring);
 	gci.WriteShort (CS_CAM_LOCATION);
 	gci.WriteString (ConfigStrings[CS_CAM_LOCATION]);
-	gci.unicast (ent, QTRUE);
+	gci.unicast (ent, true);
 
 	for (i = CS_STATUSBAR; i < CS_AIRACCEL; i++) 
 	{
 		gci.WriteByte (svc_configstring);
 		gci.WriteShort (i);
 		gci.WriteString (ConfigStrings[i]);
-		gci.unicast (ent, QTRUE);
+		gci.unicast (ent, true);
 	}
 }
 
 
 int ticker_update (void)
 {
-	qboolean done = QFALSE;
+	qboolean done = false;
 	int ticker_flags = 0;
 	ticker_t *ticker_next, *ticker_old;
-	qboolean ticker_file = QFALSE;
+	qboolean ticker_file = false;
 
 	while (ticker_current && !done)
 	{
 		char *ticker_temp;
 
-		done = QTRUE; // modified by do/repeat
+		done = true; // modified by do/repeat
 		ticker_next = ticker_current->next;
 		switch (ticker_current->func)
 		{
@@ -385,7 +385,7 @@ int ticker_update (void)
 				ticker_next = ticker_current;
 			break;
 		case TICKER_SCRIPT_DO:
-			done = QFALSE; // continue with script
+			done = false; // continue with script
 			break;
 		case TICKER_SCRIPT_REPEAT:
 			ticker_next = ticker_current->loop;
@@ -398,7 +398,7 @@ int ticker_update (void)
 					ticker_next = ticker_current->next;
 				}
 			}
-			done = QFALSE; // continue with script
+			done = false; // continue with script
 			break;
 		case TICKER_SCRIPT_RELOAD:
 			// save old ticker (in case we can't load cript)
@@ -424,7 +424,7 @@ int ticker_update (void)
 				gci.dprintf ("resuming old script\n");
 				ticker = ticker_old;
 			}
-			done = QFALSE; // continue with script
+			done = false; // continue with script
 			break;
 		//case TICKER_SCRIPT_CHAIN:
 		//case TICKER_SCRIPT_RANDOM:
@@ -458,7 +458,7 @@ void ticker_frame (edict_t *ent)
 			gci.WriteByte (svc_configstring);
 			gci.WriteShort (CS_TICKER);
 			gci.WriteString (ticker_text);
-			gci.unicast (ent, QFALSE);
+			gci.unicast (ent, false);
 		}
 		if (ticker_offset || clients[clientID].ticker_frame == 0)
 			ent->client->ps.stats[STAT_TICKER_OFFSET] = 1; 
@@ -475,7 +475,7 @@ void ticker_frame (edict_t *ent)
 
 
 // find key 'sub' in 'line' and return its value
-// returns QFALSE upon syntax error
+// returns false upon syntax error
 qboolean ticker_parse_getparam (char *line, char *sub, char **value)
 {
 	char *i;
@@ -490,12 +490,12 @@ qboolean ticker_parse_getparam (char *line, char *sub, char **value)
 	if (j == NULL || i <= j)  // if the first occurance of "sub" is before
 	{					     // the "text=" (ie not in the message)
 		if (i == NULL)
-			return QTRUE;
+			return true;
 		else
 		{
 			for (i += strlen (sub); *i && isspace (*i); i++); // skip spaces
 			if (*i == '\0' || *i != '=')	 // signal error if can't find '='
-				return QFALSE;
+				return false;
 			else
 			{
 				i++;	// one spot after the "="
@@ -511,19 +511,19 @@ qboolean ticker_parse_getparam (char *line, char *sub, char **value)
 				{
 					for (; *i && isspace (*i); i++); // skip spaces
 					if (*i == '\0')		// signal error if no value found
-						return QFALSE;
+						return false;
 					strcpy (tmp, i); 
 					// trim trailing spaces
 					for (j = tmp; *j && !isspace (*j); j++);
 					*j = '\0';
 				}
 				*value = tmp;
-				return QTRUE;
+				return true;
 			}
 		}
 	}
 	else
-		return QTRUE;
+		return true;
 
 }
 
@@ -536,7 +536,7 @@ qboolean ticker_parse_script (char *line)
 	// ignore blank lines and remarks (lines that start with "//")
 	for (; *line && isspace (*line); line++); // skip spaces
 	if (strlen (line) == 0 || strncmp (line, "//", 2) == 0)
-		return QTRUE;
+		return true;
 
 	// create new ticker function
 	if (ticker == NULL)
@@ -568,7 +568,7 @@ qboolean ticker_parse_script (char *line)
 	ticker_current->place_target = 0;
 	ticker_current->times = -1;
 	ticker_current->remaining = 0;
-	ticker_current->centered = QFALSE;
+	ticker_current->centered = false;
 	ticker_current->text[0] = '\0';
 	strcpy (ticker_current->store, "text not specified");
 //	ticker_current->script[0] = '\0';
@@ -582,23 +582,23 @@ qboolean ticker_parse_script (char *line)
 		ticker_current->delay = ticker_current->counter = atoi (tmp);
 	}
 	else
-		return QFALSE;
+		return false;
 	if (ticker_parse_getparam (line, "clear", &tmp))
 	{
-		if (strcmp (tmp, "QTRUE") == 0)
+		if (strcmp (tmp, "true") == 0)
 		{
-			ticker_current->centered = QTRUE;
+			ticker_current->centered = true;
 			ticker_current->store[0] = '\0';
 		}
 		else
 		{
 			if (ticker_parse_getparam (line, "center", &tmp))
 			{
-				if (strcmp (tmp, "QTRUE") == 0)
-					ticker_current->centered = QTRUE;
+				if (strcmp (tmp, "true") == 0)
+					ticker_current->centered = true;
 				else
 				{
-					ticker_current->centered = QFALSE;
+					ticker_current->centered = false;
 					if (ticker_parse_getparam (line, "startspace", &tmp))
 					{
 						ticker_current->startspace = atoi (tmp);
@@ -608,7 +608,7 @@ qboolean ticker_parse_script (char *line)
 							ticker_current->startspace = TICKER_MAX_CHARS;
 					}
 					else
-						return QFALSE;
+						return false;
 					if (ticker_parse_getparam (line, "endspace", &tmp))
 					{
 						ticker_current->endspace = atoi (tmp);
@@ -618,30 +618,30 @@ qboolean ticker_parse_script (char *line)
 							ticker_current->endspace = TICKER_MAX_CHARS;
 					}
 					else
-						return QFALSE;
+						return false;
 				}
 			}
 			else
-				return QFALSE;
+				return false;
 			if (ticker_parse_getparam (line, "text", &tmp))
 				strcpy (ticker_current->store, tmp);
 			else
-				return QFALSE;
+				return false;
 		}
 	}
 	else
-		return QFALSE;
+		return false;
 	if (ticker_parse_getparam (line, "times", &tmp))
 	{
 		ticker_current->times = atoi (tmp);
 		ticker_current->remaining = ticker_current->times;
 	}
 	else
-		return QFALSE;
+		return false;
 //	if (ticker_parse_getparam (line, "script", &tmp))
 //		strcpy (ticker_current->script, tmp);	// for chaining
 //	else
-//		return QFALSE;
+//		return false;
 
 	// set the function number
 	// isolate function name
@@ -677,7 +677,7 @@ qboolean ticker_parse_script (char *line)
 		ticker_dos--;
 		ticker_current->func = TICKER_SCRIPT_REPEAT;
 		if (ticker_dos < 0) // too many repeat statements
-			return QFALSE;
+			return false;
 	}
 	else if (strcmp (line, "Reload") == 0)
 		ticker_current->func = TICKER_SCRIPT_RELOAD;
@@ -693,8 +693,8 @@ qboolean ticker_script (char *ticker_filename)
 	char line[MAX_STRING_CHARS];
 	FILE *rfp = NULL;
 	char ticker_path[MAX_OSPATH];
-	qboolean ticker_ok = QTRUE;
-	qboolean done = QFALSE;
+	qboolean ticker_ok = true;
+	qboolean done = false;
 
 	ticker_shutdown (); 
 
@@ -709,7 +709,7 @@ qboolean ticker_script (char *ticker_filename)
 		if (rfp == NULL)
 		{
 			gci.dprintf ("failed\nticker_script: can't open file\n");
-			return QFALSE;
+			return false;
 		}
 	}
 	else
@@ -744,7 +744,7 @@ qboolean ticker_script (char *ticker_filename)
 
 void ticker_init (void)
 {
-	qboolean ticker_file = QFALSE;
+	qboolean ticker_file = false;
 
 	ticker_text[0] = '\0';
 	ticker_offset = 0;
@@ -802,7 +802,7 @@ void ticker_update_camera (edict_t *ent, camera_t *camera)
 	gci.WriteByte (svc_configstring);
 	gci.WriteShort (CS_CAM_LOCATION);
 	gci.WriteString (camera_location);
-	gci.unicast (ent, QTRUE);
+	gci.unicast (ent, true);
 }
 
 
@@ -817,8 +817,8 @@ void ticker_remove_statusbar (edict_t *ent)
 		gci.WriteByte (svc_configstring);
 		gci.WriteShort (CS_STATUSBAR);
 		gci.WriteString ("");
-		gci.unicast (ent, QTRUE);
-		clients[clientID].statusbar_removed = QTRUE;
+		gci.unicast (ent, true);
+		clients[clientID].statusbar_removed = true;
 	}
 }
 
@@ -834,9 +834,9 @@ void ticker_restore_statusbar (edict_t *ent)
 		gci.WriteByte (svc_configstring);
 		gci.WriteShort (CS_STATUSBAR);
 		gci.WriteString (camera_statusbar);
-		gci.unicast (ent, QTRUE);
+		gci.unicast (ent, true);
 		ticker_update_camera (ent, clients[clientID].camera);
-		clients[clientID].statusbar_removed = QFALSE;
+		clients[clientID].statusbar_removed = false;
 	}
 }
 

@@ -80,7 +80,7 @@ edict_t *PriorityTarget(edict_t *target, qboolean *override)
 				continue;
 			current = group;
 			potential = Edict(i + 1);
-			match = QFALSE;
+			match = false;
 			// match potential target against rules
 			while (!match && current && current->priority == priority)
 			{
@@ -91,7 +91,7 @@ edict_t *PriorityTarget(edict_t *target, qboolean *override)
 					if (skin)
 						match = (strcmp(skin, current->path) == 0);
 					else
-						match = QFALSE;
+						match = false;
 					break;
 
 				case CAMERA_TARGET_SHELL:
@@ -147,9 +147,9 @@ MATCH_TARGET:
 		priority++;
 	}
 	if (favorite)
-		*override = QTRUE;
+		*override = true;
 	else
-		*override = QFALSE;
+		*override = false;
 	return (favorite)? favorite:target;
 }
 
@@ -174,7 +174,7 @@ edict_t *PlayerToFollow(int cameraID)
 			pViewer->client->ps.pmove.pm_type != PM_SPECTATOR &&
 			pViewer->client->ps.pmove.pm_type != PM_FREEZE)
 		{
-			clients[cameraID].override = QTRUE;
+			clients[cameraID].override = true;
 			return pViewer;
 		}
 		else
@@ -184,7 +184,7 @@ edict_t *PlayerToFollow(int cameraID)
 		}
 	}
 
-	clients[cameraID].override = QFALSE;
+	clients[cameraID].override = false;
 
 	for (i = 0; i < maxclients->value; i++)
 	{
@@ -192,7 +192,7 @@ edict_t *PlayerToFollow(int cameraID)
 
 		// Don't switch to dead people
 		pViewer = Edict(i + 1);
-		clients[i].valid_target = QFALSE;
+		clients[i].valid_target = false;
 		if (((clients[i].inuse &&
 			clients[i].begin &&
 			!clients[i].spectator) ||
@@ -202,7 +202,7 @@ edict_t *PlayerToFollow(int cameraID)
 		{
 			iPlayers = NumPlayersVisible(pViewer);
 			clients[i].num_visible = iPlayers;
-			clients[i].valid_target = QTRUE;
+			clients[i].valid_target = true;
 			if (iPlayers > iBestCount)
 			{
 				iBestCount = iPlayers;
@@ -336,12 +336,12 @@ void RepositionAtTarget (edict_t *ent, vec3_t vOffsetPosition)
 	vec3_t vCamPos;
 	trace_t trace;
 	camera_t *camera;
-	qboolean snapto = QFALSE; // snapto towards target when jumping to new position
+	qboolean snapto = false; // snapto towards target when jumping to new position
 
 	clientID = numEdict(ent) - 1;
 
 	// select a fixed camera if it exists and can see target
-	clients[clientID].bWatchingTheWall = QFALSE;
+	clients[clientID].bWatchingTheWall = false;
 	if (clients[clientID].fixed && cameras)
 	{
 		camera = camera_fixed_find (clients[clientID].pTarget);
@@ -355,7 +355,7 @@ void RepositionAtTarget (edict_t *ent, vec3_t vOffsetPosition)
 				clients[clientID].fixed_switch_time = leveltime + CAMERA_FIXED_SWITCH_TIME; 
 			}
 			else
-				clients[clientID].bWatchingTheWall = QTRUE;
+				clients[clientID].bWatchingTheWall = true;
 		}
 		// use fixed camera?
 		if (clients[clientID].camera)
@@ -367,7 +367,7 @@ void RepositionAtTarget (edict_t *ent, vec3_t vOffsetPosition)
 	}
 
 	if (gc_set_fov->value)
-		set_fov (ent, 90, QFALSE);
+		set_fov (ent, 90, false);
 
 	// clear camera location display
 	if (!clients[clientID].score && !intermission)
@@ -415,7 +415,7 @@ void RepositionAtTarget (edict_t *ent, vec3_t vOffsetPosition)
 		VectorMA(trace.endpos, -8, vDiff, trace.endpos);
 		if (trace.plane.normal[2] > 0.8)
 			trace.endpos[2] += 4;
-		snapto = QTRUE;
+		snapto = true;
 	}
 
 	if (fabsf(trace.endpos[0]-ent->s.origin[0]) > clients[clientID].fXYLag)
@@ -456,7 +456,7 @@ void RepositionAtTarget (edict_t *ent, vec3_t vOffsetPosition)
 
 		VectorCopy (trace.endpos, ent->s.origin);
 
-		snapto = QTRUE;
+		snapto = true;
 	}
 
 	if (snapto)
@@ -635,7 +635,7 @@ void CameraNormalThink(edict_t *ent, usercmd_t *ucmd)
 	// only watch the dead if it's the one we followed
 	if (!clients[clientID].bWatchingTheDead && clients[clientID].pTarget && clients[numEdict(clients[clientID].pTarget) - 1].last_pmtype == PM_DEAD)
 	{
-		clients[clientID].bWatchingTheDead = QTRUE;
+		clients[clientID].bWatchingTheDead = true;
 		//clients[clientID].pTarget = pDeadPlayer;
 		clients[clientID].last_move_time = leveltime + CAMERA_DEAD_SWITCH_TIME;
 		PointCamAtTarget(ent);
@@ -644,7 +644,7 @@ void CameraNormalThink(edict_t *ent, usercmd_t *ucmd)
 	{
 		if (clients[clientID].last_move_time < leveltime || inSolid (ent))
 		{
-			clients[clientID].bWatchingTheDead = QFALSE;
+			clients[clientID].bWatchingTheDead = false;
 		}
 		else 
 		{
@@ -672,7 +672,7 @@ void CameraNormalThink(edict_t *ent, usercmd_t *ucmd)
 				RepositionAtTarget(ent, vCameraOffset);
 				PointCamAtTarget(ent);
 			}
-			else if ((pClosestTarget = ClosestVisible(ent, MAX_VISIBLE_RANGE, QFALSE)) != NULL)
+			else if ((pClosestTarget = ClosestVisible(ent, MAX_VISIBLE_RANGE, false)) != NULL)
 			{
 				SwitchToNewTarget (clientID, pClosestTarget);
 				RepositionAtTarget(ent, vCameraOffset);
@@ -803,11 +803,11 @@ void camera_action_setup (int clientID)
 	ent->s.event = 0;
 	// reset fov
 	if (gc_set_fov->value)
-		set_fov (ent, 90, QFALSE);
+		set_fov (ent, 90, false);
 
 	//clients[clientID].iMode = CAM_NORMAL_MODE;
-	clients[clientID].bWatchingTheDead = QFALSE;
-	clients[clientID].bWatchingTheWall = QFALSE;
+	clients[clientID].bWatchingTheDead = false;
+	clients[clientID].bWatchingTheWall = false;
 	clients[clientID].fXYLag = DAMP_VALUE_XY; 
 	clients[clientID].fZLag = DAMP_VALUE_Z;
 	clients[clientID].fAngleLag = DAMP_ANGLE_Y; 
@@ -835,7 +835,7 @@ void camera_action_setup (int clientID)
 	}
 
 	if (priority_list == NULL) 
-		clients[clientID].no_priority = QTRUE;
+		clients[clientID].no_priority = true;
 }
 
 
@@ -849,12 +849,12 @@ void camera_action_wrapup (int clientID)
 	if (clients[clientID].reset_layouts) 
 		ticker_wrapup (ent);
 
-	clients[clientID].inven = QFALSE;
-	clients[clientID].score = QFALSE;
-	clients[clientID].help = QFALSE;
-	clients[clientID].menu = QFALSE;
-	clients[clientID].layouts = QFALSE;
-	clients[clientID].statusbar_removed = QFALSE;
+	clients[clientID].inven = false;
+	clients[clientID].score = false;
+	clients[clientID].help = false;
+	clients[clientID].menu = false;
+	clients[clientID].layouts = false;
+	clients[clientID].statusbar_removed = false;
 
 	clients[clientID].oldbuttons = 0;
 
@@ -870,14 +870,14 @@ void camera_action_begin (int clientID)
 
 	ticker_clear (ent);
 
-	clients[clientID].inven = QFALSE;
-	clients[clientID].score = QFALSE;
-	clients[clientID].help = QFALSE;
-	clients[clientID].menu = QFALSE;
-	clients[clientID].layouts = QFALSE;
-	clients[clientID].statusbar_removed = QFALSE;
-	clients[clientID].bWatchingTheDead = QFALSE;
-	clients[clientID].bWatchingTheWall = QFALSE;
+	clients[clientID].inven = false;
+	clients[clientID].score = false;
+	clients[clientID].help = false;
+	clients[clientID].menu = false;
+	clients[clientID].layouts = false;
+	clients[clientID].statusbar_removed = false;
+	clients[clientID].bWatchingTheDead = false;
+	clients[clientID].bWatchingTheWall = false;
 	clients[clientID].pTarget = NULL;
 	clients[clientID].camera = NULL;
 	clients[clientID].last_switch_time = 0;
@@ -890,7 +890,7 @@ void camera_action_begin (int clientID)
 
 	// reset fov
 	if (gc_set_fov->value)
-		set_fov (ent, 90, QFALSE);
+		set_fov (ent, 90, false);
 }
 
 
@@ -936,7 +936,7 @@ void camera_action_frame (int clientID)
 	{
 		ent->client->ps.stats[STAT_ID_VIEW] = 0;
 		if (clients[clientID].id)
-			SetIDView(ent, QFALSE); // QFALSE means that we id bots too
+			SetIDView(ent, false); // false means that we id bots too
 	}
 }
 
@@ -963,7 +963,7 @@ void camera_action_think (int clientID, usercmd_t *cmd)
 			!(clients[clientID].oldbuttons & BUTTON_ATTACK))
 		{
 			int target, next;
-			qboolean found = QFALSE;
+			qboolean found = false;
 			edict_t *pTarget = NULL;
 
 			target = numEdict (clients[clientID].pTarget) - 1;
@@ -1028,7 +1028,7 @@ qboolean ParsePriorityList (void)
 	unsigned int i, j, linenum = 0;
 	int	priority = 0;
 	char line[MAX_STRING_CHARS], path[MAX_OSPATH];
-	qboolean prev_blank = QTRUE;
+	qboolean prev_blank = true;
 	priority_list_t current;
 	priority_list_t *last = NULL;
 
@@ -1039,7 +1039,7 @@ qboolean ParsePriorityList (void)
 
 	rfp = fopen (path, "rt");
 	if (rfp == NULL)
-		return QFALSE;
+		return false;
 	gci.dprintf ("reading \"%s\" ... ", path);
 	while (fgets (line, MAX_STRING_CHARS, rfp) != NULL)
 	{
@@ -1052,7 +1052,7 @@ qboolean ParsePriorityList (void)
 			if (!prev_blank)
 				priority++;
 			if (priority != 0)
-				prev_blank = QTRUE;
+				prev_blank = true;
 			continue;
 		}
 		current.priority = priority;
@@ -1062,7 +1062,7 @@ qboolean ParsePriorityList (void)
 		// remark?
 		if (!strncmp (&line[i], "//", 2))
 			continue;
-		prev_blank = QFALSE;
+		prev_blank = false;
 		// valid type?
 		if (!Q_strncasecmp (&line[i], "model2", 6)) 
 		{
@@ -1149,12 +1149,12 @@ qboolean ParsePriorityList (void)
 
 	fclose (rfp);
 	gci.dprintf ("ok\n");
-	return QTRUE;
+	return true;
 
 ERR_BADTARGET:
 	fclose (rfp);
 	FreePriorityList();
 	gci.dprintf ("failed\n");
 	gci.dprintf ("ParsePriorityList: bad target in gamecam.ini (line %d)\n", linenum);
-	return QFALSE;
+	return false;
 }

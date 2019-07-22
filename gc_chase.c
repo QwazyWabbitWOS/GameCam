@@ -24,7 +24,7 @@ void camera_chase_setup (int clientID)
 	else 
 	{
 		clients[clientID].target = other;
-		clients[clientID].update_chase = QTRUE;
+		clients[clientID].update_chase = true;
 		VectorClear(ent->client->ps.viewoffset);
 		ent->client->ps.gunindex = 0;
 		ent->client->ps.gunframe = 0;
@@ -35,7 +35,7 @@ void camera_chase_setup (int clientID)
 		clients[clientID].chase_pitch = 0.0F;
 		// reset fov
 		if (gc_set_fov->value)
-			set_fov (ent, 90, QFALSE);
+			set_fov (ent, 90, false);
 	}
 }
 
@@ -43,12 +43,12 @@ void camera_chase_setup (int clientID)
 void camera_chase_wrapup (int clientID)
 {
 	clients[clientID].target = -1;
-	clients[clientID].inven = QFALSE;
-	clients[clientID].score = QFALSE;
-	clients[clientID].help = QFALSE;
-	clients[clientID].menu = QFALSE;
-	clients[clientID].layouts = QFALSE;
-	clients[clientID].statusbar_removed = QFALSE;
+	clients[clientID].inven = false;
+	clients[clientID].score = false;
+	clients[clientID].help = false;
+	clients[clientID].menu = false;
+	clients[clientID].layouts = false;
+	clients[clientID].statusbar_removed = false;
 	(Edict(clientID + 1))->client->ps.stats[STAT_LAYOUTS] = 0;
 }
 
@@ -59,12 +59,12 @@ void camera_chase_begin (int clientID)
 
 	ent = Edict(clientID + 1);
 
-	clients[clientID].inven = QFALSE;
-	clients[clientID].score = QFALSE;
-	clients[clientID].help = QFALSE;
-	clients[clientID].menu = QFALSE;
-	clients[clientID].layouts = QFALSE;
-	clients[clientID].statusbar_removed = QFALSE;
+	clients[clientID].inven = false;
+	clients[clientID].score = false;
+	clients[clientID].help = false;
+	clients[clientID].menu = false;
+	clients[clientID].layouts = false;
+	clients[clientID].statusbar_removed = false;
 	ent->client->ps.stats[STAT_LAYOUTS] = 0;
 	clients[clientID].chase_distance = 0.0F;
 	clients[clientID].chase_height = 0.0F;
@@ -73,7 +73,7 @@ void camera_chase_begin (int clientID)
 	clients[clientID].chase_pitch = 0.0F;
 	// reset fov
 	if (gc_set_fov->value)
-		set_fov (ent, 90, QFALSE);
+		set_fov (ent, 90, false);
 }
 
 
@@ -124,7 +124,7 @@ void camera_chase_frame (int clientID)
 			gci.WriteByte (svc_inventory);
 			for (i = 0; i < MAX_ITEMS; i++)
 				gci.WriteShort (clients[clientID].items[i]);
-			gci.unicast(ent, QTRUE);
+			gci.unicast(ent, true);
 		}
 		if (strcmp(clients[clientID].layout, clients[clients[clientID].target].layout)) 
 		{
@@ -134,7 +134,7 @@ void camera_chase_frame (int clientID)
 				// prevent overflow
 				gci.WriteByte (svc_layout);
 				gci.WriteString (clients[clientID].layout);
-				gci.unicast(ent, QTRUE);
+				gci.unicast(ent, true);
 				clients[clientID].last_score = framenum;
 			}
 		}
@@ -148,7 +148,7 @@ void camera_chase_frame (int clientID)
 
 		clients[clientID].creep_target = camera_creep_target (clientID);
 		if (old_target != clients[clientID].creep_target)
-			clients[clientID].update_chase = QTRUE;
+			clients[clientID].update_chase = true;
 		camera_creep_angle (clientID);
 		clients[clientID].chase_distance = 0;
 		clients[clientID].chase_height = 0;
@@ -286,8 +286,8 @@ void camera_chase_frame (int clientID)
 			sprintf(s, "xv 0 yb -68 string2 \"Chasing  %s\"", target1st);
 		gci.WriteByte (svc_layout);
 		gci.WriteString (s);
-		gci.unicast(ent, QFALSE);
-		clients[clientID].update_chase = QFALSE;
+		gci.unicast(ent, false);
+		clients[clientID].update_chase = false;
 	}
 
 	SV_CalcBlend (ent);
@@ -341,7 +341,7 @@ void camera_chase_think (int clientID, usercmd_t *cmd)
 			pm.s.origin[i] = (short) ent->s.origin[i]*8;
 			pm.s.velocity[i] = 0;
 		}
-		pm.snapinitial = QTRUE;
+		pm.snapinitial = true;
 		pm.cmd = *cmd;
 		pm.cmd.upmove = 0;
 		pm.cmd.sidemove = 0;

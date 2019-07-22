@@ -38,7 +38,7 @@ qboolean camera_fixed_read_camera (FILE *camfile, char *name, vec3_t origin, vec
 	VectorClear (angles);
 	*fov = 0.0F;
 
-	done = QFALSE;
+	done = false;
 	while (!done && fgets (line, MAX_STRING_CHARS, camfile))
 	{
 		if (blank_or_remark (line))
@@ -46,13 +46,13 @@ qboolean camera_fixed_read_camera (FILE *camfile, char *name, vec3_t origin, vec
 		if (!trimcmp (line, "{"))
 		{
 			gci.dprintf ("camera_fixed_read_camera: found \"%s\" when expecting \"{\"\n", line);
-			return QFALSE;
+			return false;
 		}
-		done = QTRUE;
+		done = true;
 	}
 	if (!done)
-		return QFALSE;
-	done = QFALSE;
+		return false;
+	done = false;
 	while (!done && fgets (line, MAX_STRING_CHARS, camfile))
 	{
 		done = trimcmp (line, "}");
@@ -82,15 +82,15 @@ qboolean camera_fixed_read_camera (FILE *camfile, char *name, vec3_t origin, vec
 			if (sscanf (line, " \"name\" \"%[^\"]\" ", name) == 1)
 				continue;
 			gci.dprintf ("camera_fixed_read_camera: syntax error - \"%s\"", line);
-			return QFALSE;
+			return false;
 		}
 	}
 	if (!done)
 	{
 		gci.dprintf ("camera_fixed_read_camera: unexpected EOF\n");
-		return QFALSE;
+		return false;
 	}
-	return QTRUE;
+	return true;
 }
 
 
@@ -358,7 +358,7 @@ void camera_fixed_select (camera_t *camera, edict_t *ent, edict_t *target)
 	VectorCopy (camera->origin, ent->s.origin);
 
 	if (gc_set_fov->value)
-		set_fov (ent, 90, QFALSE);
+		set_fov (ent, 90, false);
 
 	if (target)
 	{
