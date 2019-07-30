@@ -79,6 +79,7 @@ qboolean ClientConnect (edict_t *ent, char *userinfo)
 		clients[clientID].target = -1;
 		clients[clientID].welcome = false;
 		clients[clientID].begin = false;
+		strcpy(clients[clientID].ip, Info_ValueForKey(userinfo, "ip"));
 		strcpy (clients[clientID].userinfo, userinfo);
 
 	}

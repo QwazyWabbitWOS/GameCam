@@ -741,6 +741,7 @@ typedef struct clients_s
 	struct edict_s	*groundentity;
 	int			watertype;
 	int			waterlevel;
+	char		ip[24];
 } clients_t;
 
 // edict access macros

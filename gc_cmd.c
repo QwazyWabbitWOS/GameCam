@@ -282,6 +282,7 @@ void ReturnToGame (edict_t *ent)
 	if (gc_set_fov->value)
 		set_fov (ent, 90, false);
 	// re-connect client to game
+	Info_SetValueForKey(clients[clientID].userinfo,"ip", clients[clientID].ip);
 	success = ge.ClientConnect (ent, clients[clientID].userinfo);
 	if (success) 
 	{
