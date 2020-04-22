@@ -1143,7 +1143,6 @@ qboolean ParsePriorityList (void)
 			last = last->next;
 		}
 		// save current entry
-		assert(last);
 		memcpy (last, &current, sizeof(priority_list_t));
 	}
 

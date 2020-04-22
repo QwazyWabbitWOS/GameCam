@@ -132,24 +132,26 @@ void camera_fixed_load (char *mapname)
 	{
 		cam_count++;
 		camera = gci.TagMalloc (sizeof (camera_t), TAG_GAME);
-		assert(camera); // silence warnings
-		strcpy(camera->name, name);
-		VectorCopy (origin, camera->origin);
-		VectorCopy (angles, camera->angles);
-		camera->fov = fov;
-		if (cameras)
+		if (camera)
 		{
-			camera->next = cameras;
-			camera->prev = current_camera;
-			current_camera->next = camera;
-			current_camera = camera;
-		}
-		else
-		{
-			cameras = camera;
-			cameras->next = cameras;
-			cameras->prev = cameras;
-			current_camera = cameras;
+			strcpy(camera->name, name);
+			VectorCopy(origin, camera->origin);
+			VectorCopy(angles, camera->angles);
+			camera->fov = fov;
+			if (cameras)
+			{
+				camera->next = cameras;
+				camera->prev = current_camera;
+				current_camera->next = camera;
+				current_camera = camera;
+			}
+			else
+			{
+				cameras = camera;
+				cameras->next = cameras;
+				cameras->prev = cameras;
+				current_camera = cameras;
+			}
 		}
 	}
 	if (cameras)

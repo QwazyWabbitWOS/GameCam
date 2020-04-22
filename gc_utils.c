@@ -594,8 +594,7 @@ qboolean sameTeam (edict_t *player1, edict_t *player2)
 	client2 = numEdict (player2) - 1;
 	skin1 = strstr (ConfigStrings[CS_PLAYERSKINS + client1], "\\") + 1;
 	skin2 = strstr (ConfigStrings[CS_PLAYERSKINS + client2], "\\") + 1;
-	assert(skin1);
-	assert(skin2);
+
 	if ((((int) dmflags->value) & DF_SKINTEAMS) ||
 		((((int) gc_flags->value) & GCF_TEAMS) && strcmp (gc_teams->string, "skin") == 0) ||
 		(!(((int) gc_flags->value) & GCF_TEAMS) && ctf_game))

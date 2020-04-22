@@ -24,7 +24,7 @@
 	#include <dlfcn.h>
 #endif
 
-#include <assert.h>
+#include <assert.h>	// keep this here for debugging. r1q2 DebugBreak sux.
 #include <math.h>
 #include <stdio.h>
 #include <stdarg.h>
