@@ -241,7 +241,7 @@ game_export_t *GetGameAPI (game_import_t *gimport)
 	sv_gravity	= gci.cvar ("sv_gravity", "800", 0);
 	timelimit	= gci.cvar ("timelimit", "0", CVAR_SERVERINFO);
 	dmflags		= gci.cvar ("dmflags", "0", CVAR_SERVERINFO);
-	maxspectators = gci.cvar ("maxspectators", "4", CVAR_SERVERINFO);
+	maxspectators = gci.cvar ("maxspectators", "12", CVAR_SERVERINFO);
 	deathmatch	= gci.cvar ("deathmatch", "0", CVAR_LATCH);
 	spectator_password = gci.cvar ("spectator_password", "", CVAR_USERINFO);
 	needpass	= gci.cvar ("needpass", "0", CVAR_SERVERINFO);

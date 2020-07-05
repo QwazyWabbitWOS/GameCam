@@ -81,7 +81,7 @@ void UpdateScore (int clientID)
 void SpectatorBegin (edict_t *ent, char *password, qboolean validate)
 {
 	int clientID;
-	char s_cam_count[5];
+	char s_cam_count[32];
 
 	clientID = numEdict(ent) - 1;
 
@@ -269,7 +269,7 @@ void CameraOff (edict_t *ent)
 void ReturnToGame (edict_t *ent)
 {
 	int clientID;
-	char s_cam_count[5];
+	char s_cam_count[32];
 	qboolean success;
 
 	clientID = numEdict(ent) - 1;
@@ -1612,7 +1612,7 @@ void GameCommand (edict_t *ent, char *command)
 			command_temp++;
 		}
 		if (command_temp)
-			strncpy (command_args, command_temp, MAX_STRING_CHARS);
+			strncpy (command_args, command_temp, MAX_STRING_CHARS - 1);
 		else
 			command_args[0] = '\0';
 	} 

@@ -90,7 +90,7 @@ qboolean ClientConnect (edict_t *ent, char *userinfo)
 void InstantSpectator (edict_t *ent)
 {
 	int clientID;
-	char s_cam_count[5];
+	char s_cam_count[32];
 
 	clientID = numEdict (ent) - 1;
 
@@ -185,7 +185,7 @@ void ClientBegin (edict_t *ent)
 void ClientDisconnect (edict_t *ent)
 {
 	int clientID;
-	char s_cam_count[5];
+	char s_cam_count[32];
 
 	clientID = numEdict(ent) - 1;
 	clients[clientID].inuse = false;
