@@ -383,7 +383,7 @@ char *scoreBoard (char *text)
 		qsort (hiscores, j, sizeof(int), sortScores);
 		for (i = 0; i < ((gc_maxscores->value)? MIN(j, gc_maxscores->value):j); i++)
 		{
-			char currentScore[MAX_INFO_VALUE];
+			char currentScore[MAX_INFO_STRING];
 			char currentName[MAX_INFO_VALUE];
 
 			strcpy (currentName, ConfigStrings[CS_PLAYERSKINS + hiscores[i]]);
