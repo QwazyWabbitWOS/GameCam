@@ -25,8 +25,8 @@ LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 1,0,4,1
- PRODUCTVERSION 1,0,4,1
+ FILEVERSION 1,0,5,0
+ PRODUCTVERSION 1,0,5,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -42,13 +42,13 @@ BEGIN
         BLOCK "040904b0"
         BEGIN
             VALUE "CompanyName", " "
-            VALUE "FileDescription", "gamex86"
-            VALUE "FileVersion", "1, 0, 4, 1"
+            VALUE "FileDescription", "GameCam 1.0.5"
+            VALUE "FileVersion", "1.0.5.0"
             VALUE "InternalName", "gamex86"
-            VALUE "LegalCopyright", "Copyright © 2004"
+            VALUE "LegalCopyright", "Copyright © 2004 - 2020"
             VALUE "OriginalFilename", "gamex86.dll"
-            VALUE "ProductName", "  gamex86"
-            VALUE "ProductVersion", "1, 0, 4, 1"
+            VALUE "ProductName", "GameCam"
+            VALUE "ProductVersion", "1.0.5.0"
         END
     END
     BLOCK "VarFileInfo"

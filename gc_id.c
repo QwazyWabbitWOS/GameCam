@@ -6,7 +6,7 @@
 
 #include "gamecam.h"
 
-char	bigbuffer[0x10000];
+static char	bigbuffer[0x1000];
 
 void Com_sprintf (char *dest, int size, char *fmt, ...)
 {
@@ -41,7 +41,7 @@ key and returns the associated value, or an empty string.
 */
 char *Info_ValueForKey (char *s, char *key)
 {
-	char	pkey[512];
+	char	pkey[512] = { 0 };
 	static	char value[2][512];	// use two buffers so compares
 	// work without stomping on each other
 	static	int	valueindex;
@@ -84,13 +84,13 @@ char *Info_ValueForKey (char *s, char *key)
 void Info_RemoveKey (char *s, char *key)
 {
 	char	*start;
-	char	pkey[512];
-	char	value[512];
+	char	pkey[512] = { 0 };
+	char	value[512] = { 0 };
 	char	*o;
 
 	if (strstr (key, "\\"))
 	{
-		//		Com_Printf ("Can't use a key with a \\\n");
+		//Com_Printf ("Can't use a key with a \\\n");
 		return;
 	}
 
@@ -285,7 +285,7 @@ skipwhite:
 
 	if (len == MAX_TOKEN_CHARS)
 	{
-		//		Com_Printf ("Token exceeded %i chars, discarded.\n", MAX_TOKEN_CHARS);
+		//Com_Printf ("Token exceeded %i chars, discarded.\n", MAX_TOKEN_CHARS);
 		len = 0;
 	}
 	com_token[len] = 0;
@@ -343,7 +343,7 @@ COM_FileExtension
 */
 char *COM_FileExtension (char *in)
 {
-	static char exten[8];
+	static char exten[8] = { 0 };
 	int		i;
 
 	while (*in && *in != '.')
@@ -449,7 +449,7 @@ void SV_AddBlend (float r, float g, float b, float a, float *v_blend)
 void SV_CalcBlend (edict_t *ent)
 {
 	int		contents;
-	vec3_t	vieworg;
+	vec3_t	vieworg = { 0 };
 
 	ent->client->ps.blend[0] = ent->client->ps.blend[1] = 
 		ent->client->ps.blend[2] = ent->client->ps.blend[3] = 0;
@@ -681,7 +681,7 @@ static qboolean loc_CanSee (edict_t *targ, edict_t *inflictor)
 	trace_t	trace;
 	vec3_t	targpoints[8];
 	int i;
-	vec3_t viewpoint;
+	vec3_t viewpoint = { 0 };
 	int inflictorID;
 
 	// assume targ and inflictor are clients!
@@ -705,7 +705,7 @@ static qboolean loc_CanSee (edict_t *targ, edict_t *inflictor)
 
 void SetIDView(edict_t *ent, qboolean exclude_bots)
 {
-	vec3_t	forward, dir;
+	vec3_t	forward, dir = { 0 };
 	trace_t	tr;
 	edict_t	*who;
 	float	bd = 0, d;

@@ -1,8 +1,9 @@
+.vs/
 .svn/
 .BackupManager/
 Debug/
 Release/
 ipch/
+*.o
 *.so
 *.sdf
-

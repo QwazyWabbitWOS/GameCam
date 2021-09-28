@@ -744,10 +744,15 @@ typedef struct clients_s
 	char		ip[24];
 } clients_t;
 
+//#define q_offsetof(t, m)    ((size_t)&((t *)0)->m)
+//#define FOFS(x)     q_offsetof(edict_t, x)
+
 // edict access macros
-#define Edict(i)		((edict_t *) (((byte *) gce->edicts) + (gce->edict_size * (i))))
+#define Edict(i)		((edict_t *) (((byte *) gce->edicts) + (gce->edict_size * (size_t)(i))))
 #define numEdict(ent)	((((byte *) (ent)) - ((byte *) gce->edicts)) / gce->edict_size)
 #define	FOFS(x)			(int)&(((edict_t *)0)->x)
+
+extern	edict_t* g_edicts;
 
 // spectator macros
 #define isSpectator(clientID)	(clients[clientID].spectator)

@@ -924,7 +924,7 @@ void Cmd_Players_f (edict_t *ent)
 {
 	int		i;
 	char	psmall[64];
-	char	plarge[1024];
+	char	plarge[1024] = { 0 };
 	char	*tail;
 	edict_t *current;
 
@@ -1323,9 +1323,8 @@ void say (edict_t *ent, qboolean everyone)
 		}
 		i = clients[clientID].flood_whenhead - ((int) flood_msgs->value) + 1;
 		if (i < 0)
-			i = (sizeof(clients[clientID].flood_when)/sizeof(clients[clientID].flood_when[0])) + i;
-		if (clients[clientID].flood_when[i] && 
-			leveltime - clients[clientID].flood_when[i] < flood_persecond->value) 
+			i = ((int)sizeof(clients[clientID].flood_when)/(int)sizeof(clients[clientID].flood_when[0])) + i;
+		if (clients[clientID].flood_when[i] && leveltime - clients[clientID].flood_when[i] < flood_persecond->value) 
 		{
 			clients[clientID].flood_locktill = leveltime + flood_waitdelay->value;
 			gci.cprintf(ent, PRINT_CHAT, "Flood protection:  You can't talk for %d seconds.\n",
@@ -1333,7 +1332,7 @@ void say (edict_t *ent, qboolean everyone)
 			return;
 		}
 		clients[clientID].flood_whenhead = (clients[clientID].flood_whenhead + 1) %
-			(sizeof(clients[clientID].flood_when)/sizeof(clients[clientID].flood_when[0]));
+			((int)sizeof(clients[clientID].flood_when)/(int)sizeof(clients[clientID].flood_when[0]));
 		clients[clientID].flood_when[clients[clientID].flood_whenhead] = leveltime;
 	}
 

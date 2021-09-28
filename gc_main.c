@@ -20,7 +20,7 @@
   #if defined Q2ADMIN
     #define GAME_MODULE    "q2admin.dll" // cascade to q2admin
   #else
-    #define GAME_MODULE    "gamex86.real.dll" // cascade to q2admin
+    #define GAME_MODULE    "gamex86.real.dll" // cascade as if GameCam was q2admin
   #endif
 #endif
 #define PROXY_MODULE    "gamex86.dll"	// the name loaded if cvar nextproxy is blank
@@ -207,8 +207,8 @@ typedef game_export_t *(*GetGameAPI_t) (game_import_t *);
 
 game_export_t *GetGameAPI (game_import_t *gimport)
 {
-	char CurrentProxy[MAX_OSPATH];
-	char NextProxy[MAX_OSPATH];
+	char CurrentProxy[MAX_OSPATH] = { 0 };
+	char NextProxy[MAX_OSPATH] = { 0 };
 	char *LoopProxy;
 	char *colon;
 	int nextcolon;
@@ -273,7 +273,7 @@ game_export_t *GetGameAPI (game_import_t *gimport)
 				// weird stuff: win95 considers "folder  " and "folder" to be the same
 				// while "  folder" and "folder" are different (should be different in
 				// both cases!)
-				nextcolon=strlen(CurrentProxy);
+				nextcolon=(int)strlen(CurrentProxy);
 				while (LoopProxy[nextcolon] && isspace(LoopProxy[nextcolon]))
 					nextcolon++;
 				if ((LoopProxy[nextcolon]==':' ||
@@ -309,6 +309,11 @@ game_export_t *GetGameAPI (game_import_t *gimport)
 #ifdef _WIN32
 	GetGameAPI_f = (GetGameAPI_t) GetProcAddress (hGameDLL, "GetGameAPI");
 #else
+	/* Note: enabling pedantic on gcc will warn about ISO C forbidding 
+	 * converting object pointer to function pointer type but it is actually
+	 * not "forbidden". For this reason  we don't enable pedantic in the Makefile.
+	 * This warning may or may not appear, depending on your gcc version.
+	*/
 	GetGameAPI_f = (GetGameAPI_t) dlsym (hGameDLL, "GetGameAPI");
 #endif
 

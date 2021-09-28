@@ -208,7 +208,7 @@ int ticker_update (void)
 			ticker_temp = motd (ticker_current->store);
 			if (ticker_current->centered && ticker_temp[0])
 			{
-				int text_len = strlen (ticker_temp);
+				int text_len = (int)strlen (ticker_temp);
 
 				ticker_offset = (text_len % 2)? 0:4;
 				strncpy (&ticker_text[(TICKER_MAX_CHARS - text_len) / 2], ticker_temp, TICKER_MAX_CHARS);
@@ -258,8 +258,8 @@ int ticker_update (void)
 				if (ticker_temp[0])
 				{
 					int spaces = 0;
-					int text_len = strlen (ticker_current->text);
-					int temp_len = strlen (ticker_temp);
+					int text_len = (int)strlen (ticker_current->text);
+					int temp_len = (int)strlen (ticker_temp);
 
 					// new text
 					if (ticker_current->centered && temp_len < TICKER_MAX_CHARS)
@@ -281,7 +281,7 @@ int ticker_update (void)
 					{
 						spaces = ticker_current->startspace * 2;
 						ticker_current->offset = 0;
-						ticker_current->place_target = text_len + ticker_current->startspace + ticker_current->endspace + strlen (ticker_temp) - TICKER_MAX_CHARS;
+						ticker_current->place_target = text_len + ticker_current->startspace + ticker_current->endspace + (int)strlen (ticker_temp) - TICKER_MAX_CHARS;
 					}
 					strncat (ticker_current->text, ticker_spaces, spaces / 2);
 					ticker_current->text[text_len + spaces / 2] = '\0';
@@ -293,7 +293,7 @@ int ticker_update (void)
 				{
 					// ticker is to be blanked
 					strcat (ticker_current->text, ticker_spaces);
-					ticker_current->place_target = strlen (ticker_current->text) - TICKER_MAX_CHARS;
+					ticker_current->place_target = (int)strlen (ticker_current->text) - TICKER_MAX_CHARS;
 					ticker_current->offset = 0;
 				}
 			}
@@ -322,12 +322,12 @@ int ticker_update (void)
 				int space_len;
 
 				space_len = ticker_offset / 8;
-				tail_len = space_len + strlen (ticker_text);
+				tail_len = space_len + (int)strlen (ticker_text);
 				ticker_offset = ticker_offset % 8;
 				ticker_temp = motd (ticker_current->store);
 				if (ticker_current->centered && strlen (ticker_temp) <= TICKER_MAX_CHARS)
 				{
-					int temp_len = strlen (ticker_temp);
+					int temp_len = (int)strlen (ticker_temp);
 					int startspace = (TICKER_MAX_CHARS - temp_len) / 2;
 
 					ticker_current->offset = ((TICKER_MAX_CHARS - temp_len) % 2)? 4:0;
@@ -344,7 +344,7 @@ int ticker_update (void)
 				}
 				strcat (ticker_current->text, &ticker_spaces[TICKER_MAX_CHARS - space_len]);
 				strcat (ticker_current->text, ticker_text);
-				ticker_current->place = strlen (ticker_current->text) - tail_len;
+				ticker_current->place = (int)strlen (ticker_current->text) - tail_len;
 			}
 			if (ticker_offset % 8)
 			{
@@ -786,7 +786,7 @@ void ticker_update_camera (edict_t *ent, camera_t *camera)
 	}
 
 	// generate camera name
-	offset_hi = strlen (camera->name);
+	offset_hi = (int)strlen (camera->name);
 	if (offset_hi > 32)
 		offset_hi = 32;
 	offset_lo = offset_hi % 2;

@@ -47,7 +47,7 @@ void AddToBuffer(int type, void *buffer)
 		CreateBufferEntry(type,buffer,sizeof(float));
 		break;
 	case WRITE_BUF_STRING:
-		CreateBufferEntry(type,buffer,strlen((char *) buffer)+1);
+		CreateBufferEntry(type,buffer, (int)strlen((char *) buffer)+1);
 		break;
 	case WRITE_BUF_POSITION:
 		CreateBufferEntry(type,buffer,sizeof(vec3_t));
@@ -106,7 +106,7 @@ void WriteBuffer(void)
 			break;
 		case WRITE_BUF_STRING:
 			gci.WriteString((char *) &(write_buffer.data[bufpos]));
-			bufpos += strlen((char *) &(write_buffer.data[bufpos])) + 1;
+			bufpos += (int)strlen((char *) &(write_buffer.data[bufpos])) + 1;
 			break;
 		case WRITE_BUF_STRING | WRITE_BUF_NULL:
 			gci.WriteString(NULL);

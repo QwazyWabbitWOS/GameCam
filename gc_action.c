@@ -193,12 +193,9 @@ edict_t *PlayerToFollow(int cameraID)
 		// Don't switch to dead people
 		pViewer = Edict(i + 1);
 		clients[i].valid_target = false;
-		if (((clients[i].inuse &&
-			clients[i].begin &&
-			!clients[i].spectator) ||
-			(pViewer->inuse &&
-			pViewer->s.modelindex != 0)) &&
-			pViewer->client->ps.pmove.pm_type == PM_NORMAL)
+		if (((clients[i].inuse && clients[i].begin && !clients[i].spectator) ||
+			(pViewer->inuse && pViewer->s.modelindex != 0)) && 
+			pViewer->client && pViewer->client->ps.pmove.pm_type == PM_NORMAL)
 		{
 			iPlayers = NumPlayersVisible(pViewer);
 			clients[i].num_visible = iPlayers;
@@ -227,7 +224,7 @@ edict_t *PlayerToFollow(int cameraID)
 void PointCamAtOrigin(edict_t *ent, vec3_t vLocation)
 {
 	int i, clientID;
-	vec3_t vDiff, vAngles;
+	vec3_t vDiff = { 0 }, vAngles;
 
 	clientID = numEdict(ent) - 1;
 
@@ -244,7 +241,7 @@ void PointCamAtOrigin(edict_t *ent, vec3_t vLocation)
 void PointCamAtTarget(edict_t *ent)
 {
 	int i, clientID;
-	vec3_t vDiff, vAngles;
+	vec3_t vDiff = { 0 }, vAngles;
 	float fDifference;
 
 	clientID = numEdict(ent) - 1;
@@ -299,7 +296,7 @@ void PointCamAtTarget(edict_t *ent)
 qboolean inSolid (edict_t *ent)
 {
 	int		contents;
-	vec3_t	vieworg;
+	vec3_t	vieworg = { 0 };
 
 	VectorAdd (ent->s.origin, ent->client->ps.viewoffset, vieworg);
 	contents = gci.pointcontents (vieworg);
@@ -332,7 +329,7 @@ void FindCamPos (int clientID, float angle, vec3_t vOffsetPosition, vec3_t vCamP
 void RepositionAtTarget (edict_t *ent, vec3_t vOffsetPosition)
 {
 	int i, clientID;
-	vec3_t vDiff;
+	vec3_t vDiff = { 0 };
 	vec3_t vCamPos;
 	trace_t trace;
 	camera_t *camera;
@@ -477,7 +474,7 @@ void RepositionAtTarget (edict_t *ent, vec3_t vOffsetPosition)
 void RepositionAtOrigin(edict_t *ent, vec3_t vOffsetPosition)
 {
 	int i, clientID;
-	vec3_t vCamPos;
+	vec3_t vCamPos = { 0 };
 	trace_t trace;
 
 	clientID = numEdict(ent) - 1;
@@ -494,7 +491,7 @@ void RepositionAtOrigin(edict_t *ent, vec3_t vOffsetPosition)
 
 	if (trace.fraction < 1)
 	{
-		vec3_t vDiff;
+		vec3_t vDiff = { 0 };
 
 		VectorSubtract(trace.endpos, vOffsetPosition, vDiff);
 		VectorNormalize(vDiff);
@@ -557,7 +554,7 @@ void RepositionAtOrigin(edict_t *ent, vec3_t vOffsetPosition)
 
 	if (trace.fraction < 1)
 	{
-		vec3_t vDiff;
+		vec3_t vDiff = { 0 };
 
 		VectorSubtract(trace.endpos, vOffsetPosition, vDiff);
 		VectorNormalize(vDiff);
@@ -582,7 +579,7 @@ void RepositionAtOrigin(edict_t *ent, vec3_t vOffsetPosition)
 void CameraFollowThink(edict_t *ent, usercmd_t *ucmd)
 {
 	int clientID;
-	vec3_t vCameraOffset;
+	vec3_t vCameraOffset = { 0 };
 
 	clientID = numEdict(ent) - 1;
 
@@ -623,7 +620,7 @@ void SwitchToNewTarget (int clientID, edict_t *pNewTarget)
 void CameraNormalThink(edict_t *ent, usercmd_t *ucmd)
 {
 	int clientID;
-	vec3_t vCameraOffset;
+	vec3_t vCameraOffset = { 0 };
 	int iNumVis;
 	edict_t *pNewTarget;
 
@@ -723,7 +720,7 @@ void CameraNormalThink(edict_t *ent, usercmd_t *ucmd)
 			if (!clients[clientID].camera) // reposition camera if too close or too far
 			{
 				float distance;
-				vec3_t vDiff;
+				vec3_t vDiff = { 0 };
 
 				VectorSubtract (ent->s.origin, clients[clientID].pTarget->s.origin, vDiff);
 				distance = VectorLength (vDiff);
@@ -743,8 +740,9 @@ void CameraNormalThink(edict_t *ent, usercmd_t *ucmd)
 void CameraStaticThink(edict_t *ent, usercmd_t *ucmd)
 {
 	int i, clientID;
-	trace_t trace;
-	vec3_t vEndFloor, vEndCeiling;
+	trace_t	trace;
+	vec3_t	vEndFloor = { 0 };
+	vec3_t	vEndCeiling = { 0 };
 
 	clientID = numEdict(ent) - 1;
 
@@ -1029,7 +1027,7 @@ qboolean ParsePriorityList (void)
 	int	priority = 0;
 	char line[MAX_STRING_CHARS], path[MAX_OSPATH];
 	qboolean prev_blank = true;
-	priority_list_t current;
+	priority_list_t current = { 0 };
 	priority_list_t *last = NULL;
 
 	if (strlen (game->string))
@@ -1103,7 +1101,7 @@ qboolean ParsePriorityList (void)
 		if (i == strlen(line) || !line[i]) 
 			goto ERR_BADTARGET;
 		// valid value?
-		for (j = 0; i+j < strlen(line) && line[i+j] > ' ' && !(line[i+j]=='/' && line[i+j-1]=='/'); j++); 
+		for (j = 0; i+j < (int)strlen(line) && line[i+j] > ' ' && !(line[i+j]=='/' && line[i+j-1]=='/'); j++); 
 		if (line[i+j] == '/')
 			j--;
 		if (j >= MAX_QPATH)
@@ -1135,15 +1133,16 @@ qboolean ParsePriorityList (void)
 			goto ERR_BADTARGET;
 		// allocate memory for current entry
 		if (priority_list == NULL)
-			last = priority_list = gci.TagMalloc (sizeof(priority_list_t), TAG_GAME);
+			last = priority_list = gci.TagMalloc ((int)sizeof(priority_list_t), TAG_GAME);
 		else 
 		{
 			last = priority_list;
-			last->next = gci.TagMalloc(sizeof(priority_list_t), TAG_GAME);
+			last->next = gci.TagMalloc((int)sizeof(priority_list_t), TAG_GAME);
 			last = last->next;
 		}
 		// save current entry
-		memcpy (last, &current, sizeof(priority_list_t));
+		if(last) // silence compiler, last can never be null
+			memcpy (last, &current, sizeof(priority_list_t));
 	}
 
 	fclose (rfp);

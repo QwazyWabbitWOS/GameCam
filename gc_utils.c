@@ -106,7 +106,7 @@ int ClosestClient(int clientID)
 	short stat_id_view;
 	float range, min_range = -1.0F;
 	edict_t *ent, *target;
-	vec3_t diff;
+	vec3_t diff = { 0 };
 	qboolean chase_observers = ((((int) gc_flags->value) & GCF_CHASE_OBSERVERS) != 0);
 
 	ent = Edict(clientID + 1);
@@ -153,7 +153,7 @@ int ClosestClient(int clientID)
 
 qboolean IsVisible(edict_t *pPlayer1, edict_t *pPlayer2, float maxrange)
 {
-	vec3_t vLength;
+	vec3_t vLength = { 0 };
 	float distance;
 	trace_t trace;
 
@@ -175,7 +175,7 @@ edict_t *ClosestVisible(edict_t *ent, float maxrange, qboolean pvs)
 	int i;
 	edict_t *pTarget;
 	edict_t *pBest = NULL;
-	vec3_t vDistance;
+	vec3_t vDistance = { 0 };
 	float fCurrent, fClosest = -1.0F;
 
 	for (i = 0; i < maxclients->value; i++)
@@ -360,7 +360,7 @@ int sortScores (const void *a, const void *b)
 char *scoreBoard (char *text)
 {
 	int i, j;
-	int hiscores[MAX_CLIENTS];
+	int hiscores[MAX_CLIENTS] = { 0 };
 	edict_t *current;
 
 	for (i = 0, j = 0; i < maxclients->value; i++)
@@ -402,16 +402,16 @@ char *scoreBoard (char *text)
 }
 
 
-char *motd (char *motdstr)
+char* motd(char* motdstr)
 {
 	int i = 0;
 	qboolean highlight = false;
-	static char motdprint[MAX_STRING_CHARS];
+	static char motdprint[MAX_STRING_CHARS] = { 0 };
 
 	motdprint[0] = '\0';
 	while (i < MAX_STRING_CHARS && *motdstr)
 	{
-		motdprint[i] = *motdstr | ((highlight)? 0x80:0x00);
+		motdprint[i] = highlight ? *motdstr | 0x80 : *motdstr | 0x00;
 		if (*motdstr == '\\')
 		{
 			if (*(motdstr + 1) == 'n')
@@ -427,35 +427,35 @@ char *motd (char *motdstr)
 			}
 			else if (*(motdstr + 1) == '\"')
 			{
-				motdprint[i] = '\"' | ((highlight)? 0x80:0x00);
+				motdprint[i] = '\"' | ((highlight) ? 0x80 : 0x00);
 				motdstr++;
 			}
 			else if (*(motdstr + 1) == '\\')
 				motdstr++;
 			else if (*(motdstr + 1) == 'x')
 			{
-				motdstr += getHex (motdstr + 2, &motdprint[i]);
+				motdstr += getHex(motdstr + 2, &motdprint[i]);
 				motdstr++;
 			}
 			else if (*(motdstr + 1) >= '0' && *(motdstr + 1) <= '7')
-				motdstr += getOct (motdstr + 1, &motdprint[i]);
+				motdstr += getOct(motdstr + 1, &motdprint[i]);
 			else if (*(motdstr + 1) == '{')
 			{
 				int j = 0;
-				cvar_t *temp_cvar;
-				char esc_code[MAX_STRING_CHARS];
-				char temp_motd[MAX_STRING_CHARS];
+				cvar_t* temp_cvar;
+				char esc_code[MAX_STRING_CHARS] = { 0 };
+				char temp_motd[MAX_STRING_CHARS] = { 0 };
 
-				struct tm *today;
+				struct tm* today;
 				time_t sysclock;
 
-				time (&sysclock);
-				today = localtime (&sysclock);
+				time(&sysclock);
+				today = localtime(&sysclock);
 
 				temp_motd[0] = '\0';
 				esc_code[0] = '\0';
 				motdstr++;
-				while (*(motdstr++) && *motdstr !='}')
+				while (*(motdstr++) && *motdstr != '}')
 					esc_code[j++] = *motdstr;
 				if (*(motdstr) == '\0') // string too short
 					motdstr--;
@@ -467,47 +467,47 @@ char *motd (char *motdstr)
 						esc_code[j - 1] = '\0';
 						if (esc_code[1])
 						{
-							temp_cvar = gci.cvar (&esc_code[1], "", 0);
-							strcpy (temp_motd, temp_cvar->string);
+							temp_cvar = gci.cvar(&esc_code[1], "", 0);
+							strcpy(temp_motd, temp_cvar->string);
 						}
 					}
-					else if (strcmp (esc_code, "sb") == 0)
-						scoreBoard (temp_motd);
-					else if (strcmp (esc_code, "tt") == 0)
-						sprintf (temp_motd, "%d:%.2d %s", today->tm_hour % 12 + ((today->tm_hour == 12)? 12:0), today->tm_min, (today->tm_hour >= 12)? "pm":"am");
-					else if (strcmp (esc_code, "hh") == 0)
-						sprintf (temp_motd, "%d", today->tm_hour % 12 + ((today->tm_hour == 12)? 12:0));
-					else if (strcmp (esc_code, "HH") == 0)
-						sprintf (temp_motd, "%d", today->tm_hour);
-					else if (strcmp (esc_code, "hm") == 0)
-						sprintf (temp_motd, "%.2d", today->tm_min);
-					else if (strcmp (esc_code, "ss") == 0)
-						sprintf (temp_motd, "%.2d", today->tm_sec);
-					else if (strcmp (esc_code, "am") == 0)
-						sprintf (temp_motd, "%s", (today->tm_hour >= 12)? "pm":"am");
-					else if (strcmp (esc_code, "AM") == 0)
-						sprintf (temp_motd, "%s", (today->tm_hour >= 12)? "PM":"AM");
-					else if (strcmp (esc_code, "dd") == 0)
-						strcpy (temp_motd, dayNameShort[today->tm_wday]);
-					else if (strcmp (esc_code, "DD") == 0)
-						strcpy (temp_motd, dayName[today->tm_wday]);
-					else if (strcmp (esc_code, "dn") == 0)
-						sprintf (temp_motd, "%d", today->tm_mday);
-					else if (strcmp (esc_code, "mm") == 0)
-						strcpy (temp_motd, monthNameShort[today->tm_mon]);
-					else if (strcmp (esc_code, "MM") == 0)
-						strcpy (temp_motd, monthName[today->tm_mon]);
-					else if (strcmp (esc_code, "mn") == 0)
-						sprintf (temp_motd, "%d", today->tm_mon + 1);
-					else if (strcmp (esc_code, "yy") == 0)
-						sprintf (temp_motd, "%d", today->tm_year % 100);
-					else if (strcmp (esc_code, "YY") == 0)
-						sprintf (temp_motd, "%d", 1900 + today->tm_year);
+					else if (strcmp(esc_code, "sb") == 0)
+						scoreBoard(temp_motd);
+					else if (strcmp(esc_code, "tt") == 0)
+						sprintf(temp_motd, "%d:%.2d %s", today->tm_hour % 12 + ((today->tm_hour == 12) ? 12 : 0), today->tm_min, (today->tm_hour >= 12) ? "pm" : "am");
+					else if (strcmp(esc_code, "hh") == 0)
+						sprintf(temp_motd, "%d", today->tm_hour % 12 + ((today->tm_hour == 12) ? 12 : 0));
+					else if (strcmp(esc_code, "HH") == 0)
+						sprintf(temp_motd, "%d", today->tm_hour);
+					else if (strcmp(esc_code, "hm") == 0)
+						sprintf(temp_motd, "%.2d", today->tm_min);
+					else if (strcmp(esc_code, "ss") == 0)
+						sprintf(temp_motd, "%.2d", today->tm_sec);
+					else if (strcmp(esc_code, "am") == 0)
+						sprintf(temp_motd, "%s", (today->tm_hour >= 12) ? "pm" : "am");
+					else if (strcmp(esc_code, "AM") == 0)
+						sprintf(temp_motd, "%s", (today->tm_hour >= 12) ? "PM" : "AM");
+					else if (strcmp(esc_code, "dd") == 0)
+						strcpy(temp_motd, dayNameShort[today->tm_wday]);
+					else if (strcmp(esc_code, "DD") == 0)
+						strcpy(temp_motd, dayName[today->tm_wday]);
+					else if (strcmp(esc_code, "dn") == 0)
+						sprintf(temp_motd, "%d", today->tm_mday);
+					else if (strcmp(esc_code, "mm") == 0)
+						strcpy(temp_motd, monthNameShort[today->tm_mon]);
+					else if (strcmp(esc_code, "MM") == 0)
+						strcpy(temp_motd, monthName[today->tm_mon]);
+					else if (strcmp(esc_code, "mn") == 0)
+						sprintf(temp_motd, "%d", today->tm_mon + 1);
+					else if (strcmp(esc_code, "yy") == 0)
+						sprintf(temp_motd, "%d", today->tm_year % 100);
+					else if (strcmp(esc_code, "YY") == 0)
+						sprintf(temp_motd, "%d", 1900 + today->tm_year);
 					if (highlight)
-						highlightText (temp_motd);
+						highlightText(temp_motd);
 					temp_motd[MAX_STRING_CHARS - i - 1] = '\0'; // clip
-					strcpy (&motdprint[i], temp_motd);
-					i = strlen (motdprint) - 1;
+					strcpy(&motdprint[i], temp_motd);
+					i = (int)strlen(motdprint) - 1;
 				}
 			}
 		}
@@ -594,6 +594,9 @@ qboolean sameTeam (edict_t *player1, edict_t *player2)
 	client2 = numEdict (player2) - 1;
 	skin1 = strstr (ConfigStrings[CS_PLAYERSKINS + client1], "\\") + 1;
 	skin2 = strstr (ConfigStrings[CS_PLAYERSKINS + client2], "\\") + 1;
+
+	if (!skin1 || !skin2) //QW this is here to silence the compiler
+		return false;
 
 	if ((((int) dmflags->value) & DF_SKINTEAMS) ||
 		((((int) gc_flags->value) & GCF_TEAMS) && strcmp (gc_teams->string, "skin") == 0) ||
