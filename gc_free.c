@@ -6,12 +6,12 @@
 
 #include "gamecam.h"
 
-void camera_free_setup (int clientID)
+void camera_free_setup(int clientID)
 {
-	edict_t *ent;
+	edict_t* ent;
 
 	// clear all effects and layouts
-	ent = Edict(clientID+1);
+	ent = Edict(clientID + 1);
 	ent->client->ps.gunindex = 0;
 	VectorClear(ent->client->ps.kick_angles);
 	//memset(ent->client->ps.stats, 0, MAX_STATS * sizeof(short));
@@ -21,20 +21,20 @@ void camera_free_setup (int clientID)
 	ent->s.event = 0;
 	// reset fov
 	if (gc_set_fov->value)
-		set_fov (ent, 90, false);
+		set_fov(ent, 90, false);
 
-	ticker_clear (ent);
+	ticker_clear(ent);
 }
 
-void camera_free_wrapup (int clientID)
+void camera_free_wrapup(int clientID)
 {
-	edict_t *ent;
+	edict_t* ent;
 
 	ent = Edict(clientID + 1);
 
 	// restore status bar & remove layouts
-	if (clients[clientID].reset_layouts) 
-		ticker_wrapup (ent);
+	if (clients[clientID].reset_layouts)
+		ticker_wrapup(ent);
 
 	clients[clientID].inven = false;
 	clients[clientID].score = false;
@@ -47,17 +47,17 @@ void camera_free_wrapup (int clientID)
 }
 
 
-void camera_free_begin (int clientID)
+void camera_free_begin(int clientID)
 {
-	edict_t *ent;
+	edict_t* ent;
 
 	ent = Edict(clientID + 1);
 
 	// reset fov
 	if (gc_set_fov->value)
-		set_fov (ent, 90, false);
+		set_fov(ent, 90, false);
 
-	ticker_clear (ent);
+	ticker_clear(ent);
 
 	clients[clientID].inven = false;
 	clients[clientID].score = false;
@@ -68,23 +68,23 @@ void camera_free_begin (int clientID)
 }
 
 
-void camera_free_add_target (int other)
+void camera_free_add_target(int other)
 {
 }
 
 
-void camera_free_remove_target (int other)
+void camera_free_remove_target(int other)
 {
 }
 
 
-void camera_free_frame (int clientID)
+void camera_free_frame(int clientID)
 {
-	edict_t *ent;
+	edict_t* ent;
 
 	ent = Edict(clientID + 1);
 	// update viewing effects (water, lava, slime)
-	SV_CalcBlend (ent);
+	SV_CalcBlend(ent);
 	// update client id view
 	if (!clients[clientID].score && !intermission)
 	{
@@ -95,10 +95,10 @@ void camera_free_frame (int clientID)
 }
 
 
-void camera_free_think (int clientID, usercmd_t *cmd)
+void camera_free_think(int clientID, usercmd_t* cmd)
 {
-	edict_t *ent;
-	gclient_t	*client;
+	edict_t* ent;
+	gclient_t* client;
 	int i;
 	pmove_t	pm;
 
@@ -113,15 +113,15 @@ void camera_free_think (int clientID, usercmd_t *cmd)
 	client->ps.pmove.pm_type = PM_SPECTATOR;
 
 	// set up for pmove
-	memset (&pm, 0, sizeof(pm));
+	memset(&pm, 0, sizeof(pm));
 
-	client->ps.pmove.gravity = (short) sv_gravity->value;
+	client->ps.pmove.gravity = (short)sv_gravity->value;
 	pm.s = client->ps.pmove;
 
-	for (i=0 ; i<3 ; i++)
+	for (i = 0; i < 3; i++)
 	{
-		pm.s.origin[i] = (short) ent->s.origin[i]*8;
-		pm.s.velocity[i] = (short) clients[clientID].velocity[i]*8;
+		pm.s.origin[i] = (short)ent->s.origin[i] * 8;
+		pm.s.velocity[i] = (short)clients[clientID].velocity[i] * 8;
 	}
 
 	if (memcmp(&clients[clientID].old_pmove, &pm.s, sizeof(pm.s)))
@@ -136,7 +136,7 @@ void camera_free_think (int clientID, usercmd_t *cmd)
 	pm.pointcontents = gci.pointcontents;
 
 	// perform a pmove
-	gci.Pmove (&pm);
+	gci.Pmove(&pm);
 
 	// save results of pmove
 	client->ps.pmove = pm.s;
@@ -146,16 +146,16 @@ void camera_free_think (int clientID, usercmd_t *cmd)
 	clients[clientID].watertype = pm.watertype;
 	clients[clientID].groundentity = pm.groundentity;
 
-	for (i=0 ; i<3 ; i++)
+	for (i = 0; i < 3; i++)
 	{
-		ent->s.origin[i] = pm.s.origin[i]*0.125F;
-		clients[clientID].velocity[i] = pm.s.velocity[i]*0.125F;
+		ent->s.origin[i] = pm.s.origin[i] * 0.125F;
+		clients[clientID].velocity[i] = pm.s.velocity[i] * 0.125F;
 	}
 
-	VectorCopy (pm.mins, ent->mins);
-	VectorCopy (pm.maxs, ent->maxs);
-	VectorCopy (pm.viewangles, ent->s.angles);
-	VectorCopy (pm.viewangles, client->ps.viewangles);
-	VectorCopy (pm.viewangles, clients[clientID].v_angle);
+	VectorCopy(pm.mins, ent->mins);
+	VectorCopy(pm.maxs, ent->maxs);
+	VectorCopy(pm.viewangles, ent->s.angles);
+	VectorCopy(pm.viewangles, client->ps.viewangles);
+	VectorCopy(pm.viewangles, clients[clientID].v_angle);
 }
 

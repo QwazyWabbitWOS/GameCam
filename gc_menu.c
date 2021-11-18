@@ -6,15 +6,15 @@
 
 #include "gamecam.h"
 
-void Menu_CameraMode_f (edict_t *ent, struct pmenu_s *entry, int flag);
-void Menu_CameraOptions_f (edict_t *ent, struct pmenu_s *entry, int flag);
-void Menu_JoinGame_f (edict_t *ent, struct pmenu_s *entry, int flag);
-void Menu_Help_f (edict_t *ent, struct pmenu_s *entry, int flag);
-void Menu_PlayerID_f (edict_t *ent, struct pmenu_s *entry, int flag);
-void Menu_Ticker_f (edict_t *ent, struct pmenu_s *entry, int flag);
-void Menu_Fixed_f (edict_t *ent, struct pmenu_s *entry, int flag);
-void Menu_Creep_f (edict_t *ent, struct pmenu_s *entry, int flag);
-void Menu_Demo_f (edict_t *ent, struct pmenu_s *entry, int flag);
+void Menu_CameraMode_f(edict_t* ent, struct pmenu_s* entry, int flag);
+void Menu_CameraOptions_f(edict_t* ent, struct pmenu_s* entry, int flag);
+void Menu_JoinGame_f(edict_t* ent, struct pmenu_s* entry, int flag);
+void Menu_Help_f(edict_t* ent, struct pmenu_s* entry, int flag);
+void Menu_PlayerID_f(edict_t* ent, struct pmenu_s* entry, int flag);
+void Menu_Ticker_f(edict_t* ent, struct pmenu_s* entry, int flag);
+void Menu_Fixed_f(edict_t* ent, struct pmenu_s* entry, int flag);
+void Menu_Creep_f(edict_t* ent, struct pmenu_s* entry, int flag);
+void Menu_Demo_f(edict_t* ent, struct pmenu_s* entry, int flag);
 //void Menu_Arena_f (edict_t *ent, struct pmenu_s *entry, int flag);
 
 char separator[] = "\235\236\236\236\236\236\236\236\236\236\236\236\236\236\236\236\236\236\236\236\236\236\236\236\237";
@@ -85,26 +85,26 @@ pmenu_t menu_options[] = {
 };
 
 
-void Menu_CameraMode_f (edict_t *ent, struct pmenu_s *entry, int flag)
+void Menu_CameraMode_f(edict_t* ent, struct pmenu_s* entry, int flag)
 {
 	int clientID, oldmode;
 
-	clientID = numEdict (ent) - 1;
+	clientID = numEdict(ent) - 1;
 
 	switch (flag)
 	{
 	case PMENU_FLAG_CREATE:
-		entry->option = (char *) gci.TagMalloc (7 * sizeof(char), TAG_GAME);
+		entry->option = (char*)gci.TagMalloc(7 * sizeof(char), TAG_GAME);
 		switch (clients[clientID].mode)
 		{
 		case CAMERA_FREE:
-			strcpy (entry->option, "FREE");
+			strcpy(entry->option, "FREE");
 			break;
 		case CAMERA_CHASE:
-			strcpy (entry->option, "CHASE");
+			strcpy(entry->option, "CHASE");
 			break;
 		case CAMERA_ACTION:
-			strcpy (entry->option, "ACTION");
+			strcpy(entry->option, "ACTION");
 			break;
 		}
 		break;
@@ -125,54 +125,54 @@ void Menu_CameraMode_f (edict_t *ent, struct pmenu_s *entry, int flag)
 				clients[clientID].mode = CAMERA_CHASE;
 				break;
 			}
-			if (clients[clientID].spectator && clients[clientID].mode != oldmode) 
+			if (clients[clientID].spectator && clients[clientID].mode != oldmode)
 			{
-				switch (oldmode) 
+				switch (oldmode)
 				{
 				case CAMERA_FREE:
 					clients[clientID].reset_layouts = (clients[clientID].mode == CAMERA_CHASE);
-					camera_free_wrapup (clientID);
+					camera_free_wrapup(clientID);
 					break;
 				case CAMERA_CHASE:
-					camera_chase_wrapup (clientID);
+					camera_chase_wrapup(clientID);
 					break;
 				case CAMERA_ACTION:
 					clients[clientID].reset_layouts = (clients[clientID].mode == CAMERA_CHASE);
-					camera_action_wrapup (clientID);
+					camera_action_wrapup(clientID);
 				}
-				switch (clients[clientID].mode) 
+				switch (clients[clientID].mode)
 				{
 				case CAMERA_FREE:
-					camera_free_setup (clientID);
+					camera_free_setup(clientID);
 					break;
 				case CAMERA_CHASE:
-					camera_chase_setup (clientID);
+					camera_chase_setup(clientID);
 					break;
 				case CAMERA_ACTION:
-					camera_action_setup (clientID);
+					camera_action_setup(clientID);
 				}
 			}
 		}
-		gci.TagFree (entry->option);
+		gci.TagFree(entry->option);
 		break;
 
 	case PMENU_FLAG_SELECT:
 		switch (*entry->option)
 		{
 		case 'F': // FREE
-			strcpy (entry->option, "ACTION");
+			strcpy(entry->option, "ACTION");
 			break;
 		case 'A': // ACTION
 			if (((int)gc_flags->value) & GCF_ALLOW_CHASE)
-				strcpy (entry->option, "CHASE");
+				strcpy(entry->option, "CHASE");
 			else if (((int)gc_flags->value) & GCF_ALLOW_FREE)
-				strcpy (entry->option, "FREE");
+				strcpy(entry->option, "FREE");
 			break;
 		case 'C': // CHASE
 			if (((int)gc_flags->value) & GCF_ALLOW_FREE)
-				strcpy (entry->option, "FREE");
-			else 
-				strcpy (entry->option, "ACTION");
+				strcpy(entry->option, "FREE");
+			else
+				strcpy(entry->option, "ACTION");
 			break;
 		}
 		break;
@@ -180,11 +180,11 @@ void Menu_CameraMode_f (edict_t *ent, struct pmenu_s *entry, int flag)
 }
 
 
-void Menu_CameraOptions_f (edict_t *ent, struct pmenu_s *entry, int flag)
+void Menu_CameraOptions_f(edict_t* ent, struct pmenu_s* entry, int flag)
 {
 	int clientID;
 
-	clientID = numEdict (ent) - 1;
+	clientID = numEdict(ent) - 1;
 
 	switch (flag)
 	{
@@ -193,13 +193,13 @@ void Menu_CameraOptions_f (edict_t *ent, struct pmenu_s *entry, int flag)
 	case PMENU_FLAG_DESTROY:
 		break;
 	case PMENU_FLAG_SELECT:
-		PMenu_Open (ent , menu_options, -1, sizeof(menu_options) / sizeof(pmenu_t), clients[clientID].menu_hnd);
+		PMenu_Open(ent, menu_options, -1, sizeof(menu_options) / sizeof(pmenu_t), clients[clientID].menu_hnd);
 		break;
 	}
 }
 
 
-void Menu_JoinGame_f (edict_t *ent, struct pmenu_s *entry, int flag)
+void Menu_JoinGame_f(edict_t* ent, struct pmenu_s* entry, int flag)
 {
 	switch (flag)
 	{
@@ -208,17 +208,17 @@ void Menu_JoinGame_f (edict_t *ent, struct pmenu_s *entry, int flag)
 	case PMENU_FLAG_DESTROY:
 		break;
 	case PMENU_FLAG_SELECT:
-		SpectatorEnd (ent, "");
+		SpectatorEnd(ent, "");
 		break;
 	}
 }
 
 
-void Menu_Help_f (edict_t *ent, struct pmenu_s *entry, int flag)
+void Menu_Help_f(edict_t* ent, struct pmenu_s* entry, int flag)
 {
 	int clientID;
 
-	clientID = numEdict (ent) - 1;
+	clientID = numEdict(ent) - 1;
 
 	switch (flag)
 	{
@@ -227,68 +227,68 @@ void Menu_Help_f (edict_t *ent, struct pmenu_s *entry, int flag)
 	case PMENU_FLAG_DESTROY:
 		break;
 	case PMENU_FLAG_SELECT:
-		PMenu_Open (ent , menu_help, -1, sizeof(menu_help) / sizeof(pmenu_t), clients[clientID].menu_hnd);
+		PMenu_Open(ent, menu_help, -1, sizeof(menu_help) / sizeof(pmenu_t), clients[clientID].menu_hnd);
 		break;
 	}
 }
 
 
-void Menu_PlayerID_f (edict_t *ent, struct pmenu_s *entry, int flag)
+void Menu_PlayerID_f(edict_t* ent, struct pmenu_s* entry, int flag)
 {
 	int clientID;
 
-	clientID = numEdict (ent) - 1;
+	clientID = numEdict(ent) - 1;
 
 	switch (flag)
 	{
 	case PMENU_FLAG_CREATE:
-		entry->option = (char *) gci.TagMalloc (4 * sizeof(char), TAG_GAME);
+		entry->option = (char*)gci.TagMalloc(4 * sizeof(char), TAG_GAME);
 		if (clients[clientID].id)
-			strcpy (entry->option, "ON");
+			strcpy(entry->option, "ON");
 		else
-			strcpy (entry->option, "OFF");
+			strcpy(entry->option, "OFF");
 		break;
 
 	case PMENU_FLAG_DESTROY:
-		gci.TagFree (entry->option);
+		gci.TagFree(entry->option);
 		break;
 
 	case PMENU_FLAG_SELECT:
 		if (clients[clientID].id)
-			strcpy (entry->option, "OFF");
+			strcpy(entry->option, "OFF");
 		else
-			strcpy (entry->option, "ON");
+			strcpy(entry->option, "ON");
 		clients[clientID].id = !clients[clientID].id;
 		break;
 	}
 }
 
 
-void Menu_Ticker_f (edict_t *ent, struct pmenu_s *entry, int flag)
+void Menu_Ticker_f(edict_t* ent, struct pmenu_s* entry, int flag)
 {
 	int clientID;
 
-	clientID = numEdict (ent) - 1;
+	clientID = numEdict(ent) - 1;
 
 	switch (flag)
 	{
 	case PMENU_FLAG_CREATE:
-		entry->option = (char *) gci.TagMalloc (4 * sizeof(char), TAG_GAME);
+		entry->option = (char*)gci.TagMalloc(4 * sizeof(char), TAG_GAME);
 		if (clients[clientID].ticker)
-			strcpy (entry->option, "ON");
+			strcpy(entry->option, "ON");
 		else
-			strcpy (entry->option, "OFF");
+			strcpy(entry->option, "OFF");
 		break;
 
 	case PMENU_FLAG_DESTROY:
-		gci.TagFree (entry->option);
+		gci.TagFree(entry->option);
 		break;
 
 	case PMENU_FLAG_SELECT:
 		if (clients[clientID].ticker)
-			strcpy (entry->option, "OFF");
+			strcpy(entry->option, "OFF");
 		else
-			strcpy (entry->option, "ON");
+			strcpy(entry->option, "ON");
 		clients[clientID].ticker = !clients[clientID].ticker;
 		clients[clientID].ticker_frame = 0;
 		break;
@@ -296,45 +296,45 @@ void Menu_Ticker_f (edict_t *ent, struct pmenu_s *entry, int flag)
 }
 
 
-void Menu_Fixed_f (edict_t *ent, struct pmenu_s *entry, int flag)
+void Menu_Fixed_f(edict_t* ent, struct pmenu_s* entry, int flag)
 {
 	int clientID;
 
-	clientID = numEdict (ent) - 1;
+	clientID = numEdict(ent) - 1;
 
 	switch (flag)
 	{
 	case PMENU_FLAG_CREATE:
-		entry->option = (char *) gci.TagMalloc (4 * sizeof(char), TAG_GAME);
+		entry->option = (char*)gci.TagMalloc(4 * sizeof(char), TAG_GAME);
 		if (!cameras)
-			strcpy (entry->option, "NA");
+			strcpy(entry->option, "NA");
 		else
 		{
 			if (clients[clientID].fixed)
-				strcpy (entry->option, "ON");
+				strcpy(entry->option, "ON");
 			else
-				strcpy (entry->option, "OFF");
+				strcpy(entry->option, "OFF");
 		}
 		break;
 
 	case PMENU_FLAG_DESTROY:
-		gci.TagFree (entry->option);
+		gci.TagFree(entry->option);
 		break;
 
 	case PMENU_FLAG_SELECT:
 		if (cameras)
 		{
 			if (clients[clientID].fixed)
-				strcpy (entry->option, "OFF");
+				strcpy(entry->option, "OFF");
 			else
-				strcpy (entry->option, "ON");
+				strcpy(entry->option, "ON");
 			clients[clientID].fixed = !clients[clientID].fixed;
 			if (clients[clientID].fixed)
 			{
 				clients[clientID].camera = NULL;
 				clients[clientID].fixed_switch_time = -1.0F;
 				if (gc_set_fov->value)
-					set_fov (ent, 90, false);
+					set_fov(ent, 90, false);
 			}
 		}
 		break;
@@ -342,31 +342,31 @@ void Menu_Fixed_f (edict_t *ent, struct pmenu_s *entry, int flag)
 }
 
 
-void Menu_Creep_f (edict_t *ent, struct pmenu_s *entry, int flag)
+void Menu_Creep_f(edict_t* ent, struct pmenu_s* entry, int flag)
 {
 	int clientID;
 
-	clientID = numEdict (ent) - 1;
+	clientID = numEdict(ent) - 1;
 
 	switch (flag)
 	{
 	case PMENU_FLAG_CREATE:
-		entry->option = (char *) gci.TagMalloc (4 * sizeof(char), TAG_GAME);
+		entry->option = (char*)gci.TagMalloc(4 * sizeof(char), TAG_GAME);
 		if (clients[clientID].chase_auto)
-			strcpy (entry->option, "ON");
+			strcpy(entry->option, "ON");
 		else
-			strcpy (entry->option, "OFF");
+			strcpy(entry->option, "OFF");
 		break;
 
 	case PMENU_FLAG_DESTROY:
-		gci.TagFree (entry->option);
+		gci.TagFree(entry->option);
 		break;
 
 	case PMENU_FLAG_SELECT:
 		if (clients[clientID].chase_auto)
-			strcpy (entry->option, "OFF");
+			strcpy(entry->option, "OFF");
 		else
-			strcpy (entry->option, "ON");
+			strcpy(entry->option, "ON");
 		clients[clientID].chase_auto = !clients[clientID].chase_auto;
 		clients[clientID].update_chase = true;
 		break;
@@ -374,36 +374,36 @@ void Menu_Creep_f (edict_t *ent, struct pmenu_s *entry, int flag)
 }
 
 
-void Menu_Demo_f (edict_t *ent, struct pmenu_s *entry, int flag)
+void Menu_Demo_f(edict_t* ent, struct pmenu_s* entry, int flag)
 {
 	int clientID;
 
-	clientID = numEdict (ent) - 1;
+	clientID = numEdict(ent) - 1;
 
 	switch (flag)
 	{
 	case PMENU_FLAG_CREATE:
-		entry->option = (char *) gci.TagMalloc (4 * sizeof(char), TAG_GAME);
+		entry->option = (char*)gci.TagMalloc(4 * sizeof(char), TAG_GAME);
 		if (clients[clientID].demo)
-			strcpy (entry->option, "ON");
+			strcpy(entry->option, "ON");
 		else
-			strcpy (entry->option, "OFF");
+			strcpy(entry->option, "OFF");
 		break;
 
 	case PMENU_FLAG_DESTROY:
-		gci.TagFree (entry->option);
+		gci.TagFree(entry->option);
 		break;
 
 	case PMENU_FLAG_SELECT:
 		if (clients[clientID].demo)
-			strcpy (entry->option, "OFF");
+			strcpy(entry->option, "OFF");
 		else
-			strcpy (entry->option, "ON");
+			strcpy(entry->option, "ON");
 		clients[clientID].demo = !clients[clientID].demo;
 		if (clients[clientID].demo)
-			demoON (ent);
+			demoON(ent);
 		else
-			demoOFF (ent);
+			demoOFF(ent);
 		break;
 	}
 }
@@ -433,72 +433,72 @@ void Menu_Arena_f (edict_t *ent, struct pmenu_s *entry, int flag)
 */
 
 
-void showMenu (int clientID)
+void showMenu(int clientID)
 {
-	edict_t *ent;
+	edict_t* ent;
 
-	ent = Edict (clientID + 1);
+	ent = Edict(clientID + 1);
 
 	if (intermission)
 		return;
 
 	if (!clients[clientID].spectator)
-		gci.cprintf (ent, PRINT_HIGH, "camera menu is for spectators only\n");
+		gci.cprintf(ent, PRINT_HIGH, "camera menu is for spectators only\n");
 	else
-		PMenu_Open (ent , menu_main, -1, sizeof(menu_main) / sizeof(pmenu_t), NULL);
+		PMenu_Open(ent, menu_main, -1, sizeof(menu_main) / sizeof(pmenu_t), NULL);
 }
 
 
-void hideMenu (int clientID)
+void hideMenu(int clientID)
 {
-	edict_t *ent;
+	edict_t* ent;
 
-	ent = Edict (clientID + 1);
+	ent = Edict(clientID + 1);
 
 	if (intermission)
 		return;
 
-	PMenu_Close (ent);
+	PMenu_Close(ent);
 	ent->client->ps.stats[STAT_LAYOUTS] &= ~1;
 	if (clients[clientID].mode != CAMERA_CHASE)
-		ticker_restore_statusbar (ent);
+		ticker_restore_statusbar(ent);
 }
 
 
-void PMenu_Open (edict_t *ent, pmenu_t *entries, int cur, int num, pmenuhnd_t *parent)
+void PMenu_Open(edict_t* ent, pmenu_t* entries, int cur, int num, pmenuhnd_t* parent)
 {
-	pmenuhnd_t *hnd;
-	pmenu_t *p;
+	pmenuhnd_t* hnd;
+	pmenu_t* p;
 	int i;
 	int clientID;
 
 	if (!ent->client)
 		return;
 
-	clientID = numEdict (ent) - 1;
+	clientID = numEdict(ent) - 1;
 
-	if (!parent && clients[clientID].menu_hnd) 
+	if (!parent && clients[clientID].menu_hnd)
 	{
 		gci.dprintf("warning, client #%d already has a menu\n", clientID);
 		PMenu_Close(ent);
 	}
 
-	hnd = gci.TagMalloc (sizeof (pmenuhnd_t), TAG_GAME);
-	hnd->entries = gci.TagMalloc (num * sizeof (pmenu_t), TAG_GAME);
-	memcpy (hnd->entries, entries, num * sizeof (pmenu_t));
+	hnd = gci.TagMalloc(sizeof(pmenuhnd_t), TAG_GAME);
+	hnd->entries = gci.TagMalloc(num * sizeof(pmenu_t), TAG_GAME);
+	memcpy(hnd->entries, entries, num * sizeof(pmenu_t));
 	// create menu
 	for (i = 0, p = hnd->entries; i < num; i++, p++)
 		if (p->SelectFunc)
-			p->SelectFunc (ent, p, PMENU_FLAG_CREATE);
+			p->SelectFunc(ent, p, PMENU_FLAG_CREATE);
 	hnd->num = num;
 	hnd->parent = parent;
 
-	if (cur < 0 || !hnd->entries[cur].SelectFunc) 
+	if (cur < 0 || !hnd->entries[cur].SelectFunc)
 	{
 		for (i = 0, p = hnd->entries; i < num; i++, p++)
 			if (p->SelectFunc)
 				break;
-	} 
+	}
 	else
 		i = cur;
 
@@ -514,33 +514,33 @@ void PMenu_Open (edict_t *ent, pmenu_t *entries, int cur, int num, pmenuhnd_t *p
 	clients[clientID].layouts = false;
 	clients[clientID].menu = true;
 
-	PMenu_Update (ent);
+	PMenu_Update(ent);
 }
 
 
-void PMenu_FreeMenu (edict_t *ent, pmenuhnd_t *hnd)
+void PMenu_FreeMenu(edict_t* ent, pmenuhnd_t* hnd)
 {
 	int i;
-	pmenu_t *p;
+	pmenu_t* p;
 
 	for (i = 0, p = hnd->entries; i < hnd->num; i++, p++)
 		if (p->SelectFunc)
-			p->SelectFunc (ent, p, PMENU_FLAG_DESTROY);
-	gci.TagFree (hnd->entries);
-	gci.TagFree (hnd);
+			p->SelectFunc(ent, p, PMENU_FLAG_DESTROY);
+	gci.TagFree(hnd->entries);
+	gci.TagFree(hnd);
 }
 
 
-void PMenu_Close (edict_t *ent)
+void PMenu_Close(edict_t* ent)
 {
 	int clientID;
 
-	clientID = numEdict (ent) - 1;
+	clientID = numEdict(ent) - 1;
 
-	while (clients[clientID].menu_hnd) 
+	while (clients[clientID].menu_hnd)
 	{
-		pmenuhnd_t *parent = clients[clientID].menu_hnd->parent;
-		PMenu_FreeMenu (ent, clients[clientID].menu_hnd);
+		pmenuhnd_t* parent = clients[clientID].menu_hnd->parent;
+		PMenu_FreeMenu(ent, clients[clientID].menu_hnd);
 		clients[clientID].menu_hnd = parent;
 	}
 	clients[clientID].menu = false;
@@ -549,22 +549,22 @@ void PMenu_Close (edict_t *ent)
 }
 
 
-void PMenu_Parent (edict_t *ent)
+void PMenu_Parent(edict_t* ent)
 {
-	pmenuhnd_t *parent = NULL;
+	pmenuhnd_t* parent = NULL;
 	int clientID;
 
-	clientID = numEdict (ent) - 1;
+	clientID = numEdict(ent) - 1;
 
-	if (clients[clientID].menu_hnd) 
+	if (clients[clientID].menu_hnd)
 	{
 		parent = clients[clientID].menu_hnd->parent;
-		PMenu_FreeMenu (ent, clients[clientID].menu_hnd);
+		PMenu_FreeMenu(ent, clients[clientID].menu_hnd);
 	}
 	clients[clientID].menu_hnd = parent;
 	clients[clientID].menu = (clients[clientID].menu_hnd != NULL);
 	if (clients[clientID].menu_hnd)
-		PMenu_Update (ent);
+		PMenu_Update(ent);
 	else
 	{
 		if (clients[clientID].spectator && clients[clientID].mode == CAMERA_CHASE)
@@ -574,20 +574,20 @@ void PMenu_Parent (edict_t *ent)
 }
 
 
-void PMenu_Update(edict_t *ent)
+void PMenu_Update(edict_t* ent)
 {
 	char string[1400];
 	int i;
-	pmenu_t *p;
+	pmenu_t* p;
 	int x;
-	pmenuhnd_t *hnd;
-	char *t;
+	pmenuhnd_t* hnd;
+	char* t;
 	qboolean alt = false;
 	int clientID;
 
-	clientID = numEdict (ent) - 1;
+	clientID = numEdict(ent) - 1;
 
-	if (!clients[clientID].menu_hnd) 
+	if (!clients[clientID].menu_hnd)
 	{
 		gci.dprintf("warning: client #%d has no menu\n", clientID);
 		return;
@@ -603,14 +603,14 @@ void PMenu_Update(edict_t *ent)
 
 	strcpy(string, "xv 32 yv 8 picn inventory ");
 
-	for (i = 0, p = hnd->entries; i < hnd->num; i++, p++) 
+	for (i = 0, p = hnd->entries; i < hnd->num; i++, p++)
 	{
 		char line[MAX_INFO_VALUE];
 
 		if (!p->text || !*(p->text))
 			continue; // blank line
 		t = p->text;
-		if (*t == '*') 
+		if (*t == '*')
 		{
 			alt = true;
 			t++;
@@ -618,22 +618,22 @@ void PMenu_Update(edict_t *ent)
 		if (p->option && *(p->option))
 		{
 			if (hnd->cur == i)
-				sprintf (line, "\\!%-19s\\!%6s", t, p->option);
+				sprintf(line, "\\!%-19s\\!%6s", t, p->option);
 			else
-				sprintf (line, "%-19s\\!%6s\\!", t, p->option);
-			strcpy (line, motd (line));
+				sprintf(line, "%-19s\\!%6s\\!", t, p->option);
+			strcpy(line, motd(line));
 		}
 		else
 		{
-			sprintf (line, "%s", motd (t));
+			sprintf(line, "%s", motd(t));
 			if (hnd->cur == i)
-				highlightText (line);
+				highlightText(line);
 		}
 		sprintf(string + strlen(string), "yv %d ", 32 + i * 8);
 		if (p->align == PMENU_ALIGN_CENTER)
-			x = 196/2 - (int)strlen(line)*4 + 64;
+			x = 196 / 2 - (int)strlen(line) * 4 + 64;
 		else if (p->align == PMENU_ALIGN_RIGHT)
-			x = 64 + (196 - (int)strlen(line)*8);
+			x = 64 + (196 - (int)strlen(line) * 8);
 		else
 			x = 64;
 
@@ -649,24 +649,24 @@ void PMenu_Update(edict_t *ent)
 		alt = false;
 	}
 
-	gci.WriteByte (svc_layout);
-	gci.WriteString (string);
-	gci.unicast (ent, true);
+	gci.WriteByte(svc_layout);
+	gci.WriteString(string);
+	gci.unicast(ent, true);
 	ent->client->ps.stats[STAT_LAYOUTS] |= 1;
 	//gci.dprintf ("strlen(menu)=%d\n", strlen (string));
 }
 
 
-void PMenu_Next(edict_t *ent)
+void PMenu_Next(edict_t* ent)
 {
-	pmenuhnd_t *hnd;
+	pmenuhnd_t* hnd;
 	int i;
-	pmenu_t *p;
+	pmenu_t* p;
 	int clientID;
 
-	clientID = numEdict (ent) - 1;
+	clientID = numEdict(ent) - 1;
 
-	if (!clients[clientID].menu_hnd) 
+	if (!clients[clientID].menu_hnd)
 	{
 		gci.dprintf("warning: client #%d has no menu\n", clientID);
 		return;
@@ -693,16 +693,16 @@ void PMenu_Next(edict_t *ent)
 }
 
 
-void PMenu_Prev(edict_t *ent)
+void PMenu_Prev(edict_t* ent)
 {
-	pmenuhnd_t *hnd;
+	pmenuhnd_t* hnd;
 	int i;
-	pmenu_t *p;
+	pmenu_t* p;
 	int clientID;
 
-	clientID = numEdict (ent) - 1;
+	clientID = numEdict(ent) - 1;
 
-	if (!clients[clientID].menu_hnd) 
+	if (!clients[clientID].menu_hnd)
 	{
 		gci.dprintf("warning: client #%d has no menu\n", clientID);
 		return;
@@ -716,11 +716,11 @@ void PMenu_Prev(edict_t *ent)
 	i = hnd->cur;
 	p = hnd->entries + hnd->cur;
 	do {
-		if (i == 0) 
+		if (i == 0)
 		{
 			i = hnd->num - 1;
 			p = hnd->entries + i;
-		} 
+		}
 		else
 			i--, p--;
 		if (p->SelectFunc)
@@ -733,15 +733,15 @@ void PMenu_Prev(edict_t *ent)
 }
 
 
-void PMenu_Select(edict_t *ent)
+void PMenu_Select(edict_t* ent)
 {
-	pmenuhnd_t *hnd;
-	pmenu_t *p;
+	pmenuhnd_t* hnd;
+	pmenu_t* p;
 	int clientID;
 
-	clientID = numEdict (ent) - 1;
+	clientID = numEdict(ent) - 1;
 
-	if (!clients[clientID].menu_hnd) 
+	if (!clients[clientID].menu_hnd)
 	{
 		gci.dprintf("warning: client #%d has no menu\n", clientID);
 		return;

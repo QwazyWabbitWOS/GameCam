@@ -19,9 +19,9 @@
 #define GAMECAMVERSTATUS "FINAL"
 
 #ifdef _WIN32
-	#include <windows.h>
+#include <windows.h>
 #else
-	#include <dlfcn.h>
+#include <dlfcn.h>
 #endif
 
 #include <assert.h>	// keep this here for debugging. r1q2 DebugBreak sux.
@@ -34,9 +34,9 @@
 #include <ctype.h>
 
 #ifdef _WIN32
-	extern HMODULE hGameDLL;
+extern HMODULE hGameDLL;
 #else
-	extern void *hGameDLL;
+extern void* hGameDLL;
 #endif
 
 #define MIN(a, b)  (((a) < (b)) ? (a) : (b))
@@ -68,7 +68,7 @@
 
 
 typedef unsigned char 		byte;
-typedef enum {false, true} qboolean;
+typedef enum { false, true } qboolean;
 
 #ifndef NULL
 #define NULL ((void *)0)
@@ -90,13 +90,13 @@ typedef enum {false, true} qboolean;
 
 typedef struct cvar_s
 {
-	char		*name;
-	char		*string;
-	char		*latched_string;
+	char* name;
+	char* string;
+	char* latched_string;
 	int			flags;
 	qboolean	modified;
 	float		value;
-	struct cvar_s *next;
+	struct cvar_s* next;
 } cvar_t;
 
 
@@ -181,9 +181,9 @@ typedef struct trace_s
 	float		fraction;
 	vec3_t		endpos;
 	cplane_t	plane;
-	csurface_t	*surface;
+	csurface_t* surface;
 	int			contents;
-	struct edict_s	*ent;
+	struct edict_s* ent;
 } trace_t;
 
 
@@ -304,7 +304,7 @@ typedef struct entity_state_s
 
 typedef struct link_s
 {
-	struct link_s	*prev, *next;
+	struct link_s* prev, * next;
 } link_t;
 
 // edict->svflags
@@ -325,7 +325,7 @@ typedef enum solid_n
 struct edict_s
 {
 	entity_state_t	s;
-	struct gclient_s	*client;
+	struct gclient_s* client;
 	qboolean	inuse;
 	int			linkcount;
 	link_t		area;
@@ -338,7 +338,7 @@ struct edict_s
 	vec3_t		absmin, absmax, size;
 	solid_t		solid;
 	int			clipmask;
-	edict_t		*owner;
+	edict_t* owner;
 };
 
 #define	BUTTON_ATTACK		1
@@ -351,8 +351,8 @@ typedef struct usercmd_s
 	byte	buttons;
 	short	angles[3];
 	short	forwardmove, sidemove, upmove;
-	byte	impulse;		
-	byte	lightlevel;		
+	byte	impulse;
+	byte	lightlevel;
 } usercmd_t;
 
 
@@ -364,14 +364,14 @@ typedef struct pmove_s
 	usercmd_t		cmd;
 	qboolean		snapinitial;
 	int			numtouch;
-	struct edict_s	*touchents[MAXTOUCH];
+	struct edict_s* touchents[MAXTOUCH];
 	vec3_t		viewangles;
 	float		viewheight;
 	vec3_t		mins, maxs;
-	struct edict_s	*groundentity;
+	struct edict_s* groundentity;
 	int			watertype;
 	int			waterlevel;
-	trace_t		(*trace) (vec3_t start, vec3_t mins, vec3_t maxs, vec3_t end);
+	trace_t(*trace) (vec3_t start, vec3_t mins, vec3_t maxs, vec3_t end);
 	int			(*pointcontents) (vec3_t point);
 } pmove_t;
 
@@ -397,60 +397,60 @@ typedef struct pmove_s
 
 typedef enum multicast_n
 {
-    MULTICAST_ALL,
-    MULTICAST_PHS,
-    MULTICAST_PVS,
-    MULTICAST_ALL_R,
-    MULTICAST_PHS_R,
-    MULTICAST_PVS_R
+	MULTICAST_ALL,
+	MULTICAST_PHS,
+	MULTICAST_PVS,
+	MULTICAST_ALL_R,
+	MULTICAST_PHS_R,
+	MULTICAST_PVS_R
 } multicast_t;
 
 
 typedef struct game_import_s
 {
-	void	(*bprintf) (int printlevel, char *fmt, ...);
-	void	(*dprintf) (char *fmt, ...);
-	void	(*cprintf) (edict_t *ent, int printlevel, char *fmt, ...);
-	void	(*centerprintf) (edict_t *ent, char *fmt, ...);
-	void	(*sound) (edict_t *ent, int channel, int soundindex, float volume, float attenuation, float timeofs);
-	void	(*positioned_sound) (vec3_t origin, edict_t *ent, int channel, int soundinedex, float volume, float attenuation, float timeofs);
-	void	(*configstring) (int num, char *string);
-	void	(*error) (char *fmt, ...);
-	int		(*modelindex) (char *name);
-	int		(*soundindex) (char *name);
-	int		(*imageindex) (char *name);
-	void	(*setmodel) (edict_t *ent, char *name);
-	trace_t	(*trace) (vec3_t start, vec3_t mins, vec3_t maxs, vec3_t end, edict_t *passent, int contentmask);
+	void	(*bprintf) (int printlevel, char* fmt, ...);
+	void	(*dprintf) (char* fmt, ...);
+	void	(*cprintf) (edict_t* ent, int printlevel, char* fmt, ...);
+	void	(*centerprintf) (edict_t* ent, char* fmt, ...);
+	void	(*sound) (edict_t* ent, int channel, int soundindex, float volume, float attenuation, float timeofs);
+	void	(*positioned_sound) (vec3_t origin, edict_t* ent, int channel, int soundinedex, float volume, float attenuation, float timeofs);
+	void	(*configstring) (int num, char* string);
+	void	(*error) (char* fmt, ...);
+	int		(*modelindex) (char* name);
+	int		(*soundindex) (char* name);
+	int		(*imageindex) (char* name);
+	void	(*setmodel) (edict_t* ent, char* name);
+	trace_t(*trace) (vec3_t start, vec3_t mins, vec3_t maxs, vec3_t end, edict_t* passent, int contentmask);
 	int		(*pointcontents) (vec3_t point);
-	qboolean	(*inPVS) (vec3_t p1, vec3_t p2);
-	qboolean	(*inPHS) (vec3_t p1, vec3_t p2);
+	qboolean(*inPVS) (vec3_t p1, vec3_t p2);
+	qboolean(*inPHS) (vec3_t p1, vec3_t p2);
 	void		(*SetAreaPortalState) (int portalnum, qboolean open);
-	qboolean	(*AreasConnected) (int area1, int area2);
-	void	(*linkentity) (edict_t *ent);
-	void	(*unlinkentity) (edict_t *ent);
-	int		(*BoxEdicts) (vec3_t mins, vec3_t maxs, edict_t **list,	int maxcount, int areatype);
-	void	(*Pmove) (pmove_t *pmove);
+	qboolean(*AreasConnected) (int area1, int area2);
+	void	(*linkentity) (edict_t* ent);
+	void	(*unlinkentity) (edict_t* ent);
+	int		(*BoxEdicts) (vec3_t mins, vec3_t maxs, edict_t** list, int maxcount, int areatype);
+	void	(*Pmove) (pmove_t* pmove);
 	void	(*multicast) (vec3_t origin, multicast_t to);
-	void	(*unicast) (edict_t *ent, qboolean reliable);
+	void	(*unicast) (edict_t* ent, qboolean reliable);
 	void	(*WriteChar) (int c);
 	void	(*WriteByte) (int c);
 	void	(*WriteShort) (int c);
 	void	(*WriteLong) (int c);
 	void	(*WriteFloat) (float f);
-	void	(*WriteString) (char *s);
+	void	(*WriteString) (char* s);
 	void	(*WritePosition) (vec3_t pos);
 	void	(*WriteDir) (vec3_t pos);
 	void	(*WriteAngle) (float f);
-	void	*(*TagMalloc) (int size, int tag);
-	void	(*TagFree) (void *block);
+	void* (*TagMalloc) (int size, int tag);
+	void	(*TagFree) (void* block);
 	void	(*FreeTags) (int tag);
-	cvar_t	*(*cvar) (char *var_name, char *value, int flags);
-	cvar_t	*(*cvar_set) (char *var_name, char *value);
-	cvar_t	*(*cvar_forceset) (char *var_name, char *value);
+	cvar_t* (*cvar) (char* var_name, char* value, int flags);
+	cvar_t* (*cvar_set) (char* var_name, char* value);
+	cvar_t* (*cvar_forceset) (char* var_name, char* value);
 	int		(*argc) (void);
-	char	*(*argv) (int n);
-	char	*(*args) (void);
-	void	(*AddCommandString) (char *text);
+	char* (*argv) (int n);
+	char* (*args) (void);
+	void	(*AddCommandString) (char* text);
 	void	(*DebugGraph) (float value, int color);
 } game_import_t;
 
@@ -460,20 +460,20 @@ typedef struct game_export_s
 	int			apiversion;
 	void		(*Init) (void);
 	void		(*Shutdown) (void);
-	void		(*SpawnEntities) (char *mapname, char *entstring, char *spawnpoint);
-	void		(*WriteGame) (char *filename, qboolean autosave);
-	void		(*ReadGame) (char *filename);
-	void		(*WriteLevel) (char *filename);
-	void		(*ReadLevel) (char *filename);
-	qboolean	(*ClientConnect) (edict_t *ent, char *userinfo);
-	void		(*ClientBegin) (edict_t *ent);
-	void		(*ClientUserinfoChanged) (edict_t *ent, char *userinfo);
-	void		(*ClientDisconnect) (edict_t *ent);
-	void		(*ClientCommand) (edict_t *ent);
-	void		(*ClientThink) (edict_t *ent, usercmd_t *cmd);
+	void		(*SpawnEntities) (char* mapname, char* entstring, char* spawnpoint);
+	void		(*WriteGame) (char* filename, qboolean autosave);
+	void		(*ReadGame) (char* filename);
+	void		(*WriteLevel) (char* filename);
+	void		(*ReadLevel) (char* filename);
+	qboolean	(*ClientConnect) (edict_t* ent, char* userinfo);
+	void		(*ClientBegin) (edict_t* ent);
+	void		(*ClientUserinfoChanged) (edict_t* ent, char* userinfo);
+	void		(*ClientDisconnect) (edict_t* ent);
+	void		(*ClientCommand) (edict_t* ent);
+	void		(*ClientThink) (edict_t* ent, usercmd_t* cmd);
 	void		(*RunFrame) (void);
 	void		(*ServerCommand) (void);
-	struct edict_s	*edicts;
+	struct edict_s* edicts;
 	int			edict_size;
 	int			num_edicts;
 	int			max_edicts;
@@ -512,7 +512,7 @@ typedef char config_strings_t[MAX_CONFIGSTRINGS][MAX_QPATH + 1];
 //QW// The 2080 magic number comes from q_shared.h of the original game.
 // No game mod can go over this 2080 limit.
 #if (MAX_CONFIGSTRINGS > 2080)
-	#error MAX_CONFIGSTRINGS > 2080
+#error MAX_CONFIGSTRINGS > 2080
 #endif
 
 // math
@@ -616,8 +616,8 @@ typedef struct ticker_s
 	char text[MAX_STRING_CHARS];		// text to be displayed
 	char store[MAX_STRING_CHARS];	// store the original text line
 	//char script[MAX_OSPATH]; 		// path of the script to be chained-to or loaded from this message
-	struct ticker_s *loop;			// pointer to the return place in the script (for loops)
-	struct ticker_s *next;			// pointer to next script function
+	struct ticker_s* loop;			// pointer to the return place in the script (for loops)
+	struct ticker_s* next;			// pointer to next script function
 } ticker_t;
 
 #define TICKER_MAX_CHARS		39	// chars in tape
@@ -629,8 +629,8 @@ typedef struct camera_s
 	vec3_t origin;
 	vec3_t angles;
 	float fov;
-	struct camera_s *prev;
-	struct camera_s *next;
+	struct camera_s* prev;
+	struct camera_s* next;
 } camera_t;
 
 // menus
@@ -650,21 +650,21 @@ enum pmenu_flags_n
 
 typedef struct pmenu_s
 {
-	char *text;
+	char* text;
 	int align;
-	char *option;
-	void (*SelectFunc)(edict_t *ent, struct pmenu_s *entry, int flag);
+	char* option;
+	void (*SelectFunc)(edict_t* ent, struct pmenu_s* entry, int flag);
 } pmenu_t;
 
 typedef struct pmenuhnd_s {
-	pmenu_t *entries;
+	pmenu_t* entries;
 	int cur;
 	int num;
-	struct pmenuhnd_s *parent;
+	struct pmenuhnd_s* parent;
 } pmenuhnd_t;
 
 // clients data
-typedef struct clients_s 
+typedef struct clients_s
 {
 	qboolean	inuse;		// connected?
 	qboolean	begin;		// entered the game?
@@ -696,8 +696,8 @@ typedef struct clients_s
 	int			ticker_frame; // last frame when ticker was updated
 	int			ticker_delay; // delay before status bar is displayed
 	int			select;		  // for random-access to targets (camera select)
-	camera_t	*camera;	  // for manual access to cameras (camera next/prev/auto)
-	pmenuhnd_t	*menu_hnd;	  // menu handle
+	camera_t* camera;	  // for manual access to cameras (camera next/prev/auto)
+	pmenuhnd_t* menu_hnd;	  // menu handle
 
 	// chase camera position
 	qboolean	chase_auto;	  // creep-cam mode enabled
@@ -706,7 +706,7 @@ typedef struct clients_s
 	float 		chase_angle;  // angle of camera
 	float 		chase_yaw;	  // yaw of camera
 	float		chase_pitch;  // pitch of camera
-	edict_t		*creep_target;// secondry target
+	edict_t* creep_target;// secondry target
 	// flood control
 	float		flood_locktill;		// locked from talking
 	float		flood_when[10];		// when messages were said
@@ -715,14 +715,14 @@ typedef struct clients_s
 	// q2cam begin
 	qboolean	reset_layouts;
 	pmtype_t	last_pmtype;
-	edict_t		*pTarget;
+	edict_t* pTarget;
 	int			iMode;
-    qboolean    bWatchingTheDead;
+	qboolean    bWatchingTheDead;
 	qboolean	bWatchingTheWall;
-    vec3_t      vDeadOrigin;
-    float       fXYLag;
-    float       fZLag;
-    float       fAngleLag;
+	vec3_t      vDeadOrigin;
+	float       fXYLag;
+	float       fZLag;
+	float       fAngleLag;
 	float		last_move_time;
 	float		last_switch_time;
 	float		fixed_switch_time;
@@ -738,19 +738,19 @@ typedef struct clients_s
 	vec3_t		velocity;
 	vec3_t		v_angle;
 	float		viewheight;
-	struct edict_s	*groundentity;
+	struct edict_s* groundentity;
 	int			watertype;
 	int			waterlevel;
 	char		ip[24];
 } clients_t;
 
-//#define q_offsetof(t, m)    ((size_t)&((t *)0)->m)
-//#define FOFS(x)     q_offsetof(edict_t, x)
+#define q_offsetof(t, m)    ((size_t)&((t *)0)->m)
+#define FOFS(x)     q_offsetof(edict_t, x)
 
 // edict access macros
 #define Edict(i)		((edict_t *) (((byte *) gce->edicts) + (gce->edict_size * (size_t)(i))))
 #define numEdict(ent)	((((byte *) (ent)) - ((byte *) gce->edicts)) / gce->edict_size)
-#define	FOFS(x)			(int)&(((edict_t *)0)->x)
+//#define	FOFS(x)			(int)&(((edict_t *)0)->x)
 
 extern	edict_t* g_edicts;
 
@@ -797,42 +797,42 @@ extern game_export_t qe;
 #endif
 
 extern game_import_t gci;
-extern game_export_t *gce;
+extern game_export_t* gce;
 
-extern cvar_t *gc_version;
-extern cvar_t *gc_flags;		
-extern cvar_t *gc_count;	
-extern cvar_t *gc_password;	
-extern cvar_t *gc_maxcameras;
-extern cvar_t *gc_motd;		
-extern cvar_t *gc_autocam;	
-extern cvar_t *gc_maxplayers;
-extern cvar_t *gc_ticker;	
-extern cvar_t *gc_maxscores;
-extern cvar_t *gc_teams;
-extern cvar_t *gc_update;
+extern cvar_t* gc_version;
+extern cvar_t* gc_flags;
+extern cvar_t* gc_count;
+extern cvar_t* gc_password;
+extern cvar_t* gc_maxcameras;
+extern cvar_t* gc_motd;
+extern cvar_t* gc_autocam;
+extern cvar_t* gc_maxplayers;
+extern cvar_t* gc_ticker;
+extern cvar_t* gc_maxscores;
+extern cvar_t* gc_teams;
+extern cvar_t* gc_update;
 
-extern cvar_t *proxy;
-extern cvar_t *nextproxy;
+extern cvar_t* proxy;
+extern cvar_t* nextproxy;
 
-extern cvar_t *basedir;
-extern cvar_t *game;
-extern cvar_t *maxclients;
-extern cvar_t *dedicated;
-extern cvar_t *sv_gravity;
-extern cvar_t *timelimit;
-extern cvar_t *dmflags;
-extern cvar_t *maxspectators;
-extern cvar_t *deathmatch;
-extern cvar_t *spectator_password;
-extern cvar_t *needpass;
-extern cvar_t *flood_msgs;
-extern cvar_t *flood_persecond;
-extern cvar_t *flood_waitdelay;
-extern cvar_t *gc_set_fov;
-extern cvar_t *gc_rename_client;
+extern cvar_t* basedir;
+extern cvar_t* game;
+extern cvar_t* maxclients;
+extern cvar_t* dedicated;
+extern cvar_t* sv_gravity;
+extern cvar_t* timelimit;
+extern cvar_t* dmflags;
+extern cvar_t* maxspectators;
+extern cvar_t* deathmatch;
+extern cvar_t* spectator_password;
+extern cvar_t* needpass;
+extern cvar_t* flood_msgs;
+extern cvar_t* flood_persecond;
+extern cvar_t* flood_waitdelay;
+extern cvar_t* gc_set_fov;
+extern cvar_t* gc_rename_client;
 
-extern clients_t *clients;
+extern clients_t* clients;
 extern int cam_count;
 extern qboolean ctf_game;
 
@@ -842,26 +842,26 @@ extern write_buffer_t write_buffer;
 extern char first_print_message[MAX_STRING_CHARS];
 
 void ClearBuffer(void);
-void WriteChar (int c);
-void WriteByte (int c);
-void WriteShort (int c);
-void WriteLong (int c);
-void WriteFloat (float f);
-void WriteString (char *s);
-void WritePosition (vec3_t pos);
-void WriteDir (vec3_t pos);
-void WriteAngle (float f);
-void multicast (vec3_t origin, multicast_t to);
-void unicast (edict_t *ent, qboolean reliable);
-void cprintf (edict_t *ent, int printlevel, char *fmt, ...);
-void centerprintf (edict_t *ent, char *fmt, ...);
+void WriteChar(int c);
+void WriteByte(int c);
+void WriteShort(int c);
+void WriteLong(int c);
+void WriteFloat(float f);
+void WriteString(char* s);
+void WritePosition(vec3_t pos);
+void WriteDir(vec3_t pos);
+void WriteAngle(float f);
+void multicast(vec3_t origin, multicast_t to);
+void unicast(edict_t* ent, qboolean reliable);
+void cprintf(edict_t* ent, int printlevel, char* fmt, ...);
+void centerprintf(edict_t* ent, char* fmt, ...);
 
 // gc_config.c
 
 extern config_strings_t ConfigStrings;
-void configstring (int num, char *string);
-void setmodel (edict_t *ent, char *name);
-int modelindex (char *name);
+void configstring(int num, char* string);
+void setmodel(edict_t* ent, char* name);
+int modelindex(char* name);
 
 // gc_frame.c
 
@@ -874,156 +874,156 @@ extern qboolean match_started;
 extern qboolean match_10sec;
 extern qboolean intermission;
 
-void RunFrame (void);
-void ClientThink (edict_t *ent, usercmd_t *cmd);
-void Pmove (pmove_t *pmove);
+void RunFrame(void);
+void ClientThink(edict_t* ent, usercmd_t* cmd);
+void Pmove(pmove_t* pmove);
 
 // gc_connect.c
 
 extern vec3_t spawn_origin;
 
-qboolean ClientConnect (edict_t *ent, char *userinfo);
-void ClientBegin (edict_t *ent);
-void ClientUserinfoChanged (edict_t *ent, char *userinfo);
-void ClientDisconnect (edict_t *ent);
-void SpawnEntities (char *mapname, char *entstring, char *spawnpoint);
+qboolean ClientConnect(edict_t* ent, char* userinfo);
+void ClientBegin(edict_t* ent);
+void ClientUserinfoChanged(edict_t* ent, char* userinfo);
+void ClientDisconnect(edict_t* ent);
+void SpawnEntities(char* mapname, char* entstring, char* spawnpoint);
 
 // gc_cmd.c
 
-extern edict_t *wait_camera;
-extern edict_t *wait_inven;
-extern edict_t *wait_score;
-extern edict_t *wait_help;
-extern edict_t *wait_cprintf;
+extern edict_t* wait_camera;
+extern edict_t* wait_inven;
+extern edict_t* wait_score;
+extern edict_t* wait_help;
+extern edict_t* wait_cprintf;
 extern char captured_print_message[MAX_STRING_CHARS];
 
-void demoOFF (edict_t *ent);
-void demoON (edict_t *ent);
-void ClientCommand (edict_t *ent);
-void ServerCommand (void);
-void GameCommand (edict_t *ent, char *command);
-int gc_argc (void);
-char *gc_argv (int n);
-char *gc_args (void);
-void UpdateScore (int clientID);
-void ReturnToGame (edict_t *ent);
-void CameraOff (edict_t *ent);
-void SpectatorBegin (edict_t *ent, char *password, qboolean validate);
-void SpectatorEnd (edict_t *ent, char *password);
+void demoOFF(edict_t* ent);
+void demoON(edict_t* ent);
+void ClientCommand(edict_t* ent);
+void ServerCommand(void);
+void GameCommand(edict_t* ent, char* command);
+int gc_argc(void);
+char* gc_argv(int n);
+char* gc_args(void);
+void UpdateScore(int clientID);
+void ReturnToGame(edict_t* ent);
+void CameraOff(edict_t* ent);
+void SpectatorBegin(edict_t* ent, char* password, qboolean validate);
+void SpectatorEnd(edict_t* ent, char* password);
 
 // gc_utils.c
 
-extern edict_t	*pm_passent;
+extern edict_t* pm_passent;
 
-trace_t	PM_trace (vec3_t start, vec3_t mins, vec3_t maxs, vec3_t end);
-int SpectatorOf (edict_t *ent, int mask);
-int NextClient (int clientID);
-int PrevClient (int clientID);
+trace_t	PM_trace(vec3_t start, vec3_t mins, vec3_t maxs, vec3_t end);
+int SpectatorOf(edict_t* ent, int mask);
+int NextClient(int clientID);
+int PrevClient(int clientID);
 int ClosestClient(int clientID);
-qboolean IsVisible(edict_t *pPlayer1, edict_t *pPlayer2, float maxrange);
-edict_t *ClosestVisible(edict_t *ent, float maxrange, qboolean pvs);
+qboolean IsVisible(edict_t* pPlayer1, edict_t* pPlayer2, float maxrange);
+edict_t* ClosestVisible(edict_t* ent, float maxrange, qboolean pvs);
 int numPlayers(void);
-int getBestClient (void);
-qboolean detect_intermission (void);
-char *highlightText (char *text);
-char *motd (char *motdstr);
-qboolean trimcmp (char *a, char *b);
-qboolean blank_or_remark (char *line);
-void set_fov (edict_t *ent, float fov, qboolean force);
-qboolean sameTeam (edict_t *player1, edict_t *player2);
-float anglemod (float angle);
-float anglediff (float a, float b);
+int getBestClient(void);
+qboolean detect_intermission(void);
+char* highlightText(char* text);
+char* motd(char* motdstr);
+qboolean trimcmp(char* a, char* b);
+qboolean blank_or_remark(char* line);
+void set_fov(edict_t* ent, float fov, qboolean force);
+qboolean sameTeam(edict_t* player1, edict_t* player2);
+float anglemod(float angle);
+float anglediff(float a, float b);
 
 // gc_id.c
 
 extern vec3_t vec3_origin;
 
-void Com_sprintf (char *dest, int size, char *fmt, ...);
-int Q_stricmp (char *s1, char *s2);
-int	Q_strcasecmp(const char *s1, const char *s2);
-int Q_strncasecmp(const char *s1, const char *s2, size_t n);
-void Info_SetValueForKey (char *s, char *key, char *value);
-char *Info_ValueForKey (char *s, char *key);
-char *COM_Parse (char **data_p);
-void SV_CalcBlend (edict_t *ent);
-void AngleVectors (vec3_t angles, vec3_t forward, vec3_t right, vec3_t up);
-vec_t VectorNormalize (vec3_t v);
-void VectorMA (vec3_t veca, float scale, vec3_t vecb, vec3_t vecc);
-void VectorScale (vec3_t in, vec_t scale, vec3_t out);
+void Com_sprintf(char* dest, int size, char* fmt, ...);
+int Q_stricmp(char* s1, char* s2);
+int	Q_strcasecmp(const char* s1, const char* s2);
+int Q_strncasecmp(const char* s1, const char* s2, size_t n);
+void Info_SetValueForKey(char* s, char* key, char* value);
+char* Info_ValueForKey(char* s, char* key);
+char* COM_Parse(char** data_p);
+void SV_CalcBlend(edict_t* ent);
+void AngleVectors(vec3_t angles, vec3_t forward, vec3_t right, vec3_t up);
+vec_t VectorNormalize(vec3_t v);
+void VectorMA(vec3_t veca, float scale, vec3_t vecb, vec3_t vecc);
+void VectorScale(vec3_t in, vec_t scale, vec3_t out);
 float VectorLength(vec3_t v);
-void vectoangles (vec3_t value1, vec3_t angles);
-float *tv (float x, float y, float z);
-char *vtos (vec3_t v);
-float vectoyaw (vec3_t vec);
-void SetIDView(edict_t *ent, qboolean exclude_bots);
+void vectoangles(vec3_t value1, vec3_t angles);
+float* tv(float x, float y, float z);
+char* vtos(vec3_t v);
+float vectoyaw(vec3_t vec);
+void SetIDView(edict_t* ent, qboolean exclude_bots);
 
 // gc_menu.c
 
-void showMenu (int clientID);
-void hideMenu (int clientID);
-void PMenu_Open (edict_t *ent, pmenu_t *entries, int cur, int num, pmenuhnd_t *parent);
-void PMenu_Close (edict_t *ent);
-void PMenu_Parent (edict_t *ent);
-void PMenu_Update (edict_t *ent);
-void PMenu_Next (edict_t *ent);
-void PMenu_Prev (edict_t *ent);
-void PMenu_Select (edict_t *ent);
+void showMenu(int clientID);
+void hideMenu(int clientID);
+void PMenu_Open(edict_t* ent, pmenu_t* entries, int cur, int num, pmenuhnd_t* parent);
+void PMenu_Close(edict_t* ent);
+void PMenu_Parent(edict_t* ent);
+void PMenu_Update(edict_t* ent);
+void PMenu_Next(edict_t* ent);
+void PMenu_Prev(edict_t* ent);
+void PMenu_Select(edict_t* ent);
 
 // gc_ticker.c
 
 extern int ticker_flags;
 
-void ticker_clear (edict_t *ent);
-void ticker_setup (edict_t *ent);
-void ticker_wrapup (edict_t *ent);
-void ticker_frame (edict_t *ent);
-int  ticker_update (void);
-void ticker_init (void);
-void ticker_shutdown (void);
-void ticker_update_camera (edict_t *ent, camera_t *camera);
-void ticker_remove_statusbar (edict_t *ent);
-void ticker_restore_statusbar (edict_t *ent);
+void ticker_clear(edict_t* ent);
+void ticker_setup(edict_t* ent);
+void ticker_wrapup(edict_t* ent);
+void ticker_frame(edict_t* ent);
+int  ticker_update(void);
+void ticker_init(void);
+void ticker_shutdown(void);
+void ticker_update_camera(edict_t* ent, camera_t* camera);
+void ticker_remove_statusbar(edict_t* ent);
+void ticker_restore_statusbar(edict_t* ent);
 
 // gc_fixed.c
 
 extern char current_map[MAX_INFO_VALUE];
-extern camera_t *cameras;
+extern camera_t* cameras;
 
-void camera_fixed_free (void);
-void camera_fixed_load (char *mapname);
-void camera_fixed_save (char *mapname);
-camera_t *camera_fixed_add (edict_t *ent, char *name);
-void camera_fixed_update (camera_t *camera, edict_t *ent, char *name);
-void camera_fixed_remove (camera_t *camera);
-void camera_fixed_list (edict_t *ent);
-camera_t *camera_fixed_find (edict_t *ent);
-void camera_fixed_select (camera_t *camera, edict_t *ent, edict_t *target);
+void camera_fixed_free(void);
+void camera_fixed_load(char* mapname);
+void camera_fixed_save(char* mapname);
+camera_t* camera_fixed_add(edict_t* ent, char* name);
+void camera_fixed_update(camera_t* camera, edict_t* ent, char* name);
+void camera_fixed_remove(camera_t* camera);
+void camera_fixed_list(edict_t* ent);
+camera_t* camera_fixed_find(edict_t* ent);
+void camera_fixed_select(camera_t* camera, edict_t* ent, edict_t* target);
 
 // gc_free.c
 
-void camera_free_setup (int clientID);
-void camera_free_wrapup (int clientID);
-void camera_free_begin (int clientID);
-void camera_free_add_target (int other);
-void camera_free_remove_target (int other);
-void camera_free_frame (int clientID);
-void camera_free_think (int clientID, usercmd_t *cmd);
+void camera_free_setup(int clientID);
+void camera_free_wrapup(int clientID);
+void camera_free_begin(int clientID);
+void camera_free_add_target(int other);
+void camera_free_remove_target(int other);
+void camera_free_frame(int clientID);
+void camera_free_think(int clientID, usercmd_t* cmd);
 
 // gc_chase.c
 
-void camera_chase_setup (int clientID);
-void camera_chase_wrapup (int clientID);
-void camera_chase_begin (int clientID);
-void camera_chase_add_target (int other);
-void camera_chase_remove_target (int other);
-void camera_chase_frame (int clientID);
-void camera_chase_think (int clientID, usercmd_t *cmd);
+void camera_chase_setup(int clientID);
+void camera_chase_wrapup(int clientID);
+void camera_chase_begin(int clientID);
+void camera_chase_add_target(int other);
+void camera_chase_remove_target(int other);
+void camera_chase_frame(int clientID);
+void camera_chase_think(int clientID, usercmd_t* cmd);
 
 // gc_creep.c 
 
-edict_t *camera_creep_target (int clientID);
-void camera_creep_angle (int clientID);
-void camera_creep_viewangles (int clientID);
+edict_t* camera_creep_target(int clientID);
+void camera_creep_angle(int clientID);
+void camera_creep_viewangles(int clientID);
 
 // gc_action.c
 
@@ -1043,26 +1043,26 @@ typedef struct priority_list_s {
 	char path[MAX_QPATH];
 	int	 effects;
 	int	 renderfx;
-	struct priority_list_s *next;
+	struct priority_list_s* next;
 } priority_list_t;
 
-extern priority_list_t *priority_list;
+extern priority_list_t* priority_list;
 
-void camera_action_setup (int clientID);
-void camera_action_wrapup (int clientID);
-void camera_action_begin (int clientID);
-void camera_action_add_target (int other);
-void camera_action_remove_target (int other);
-void camera_action_frame (int clientID);
-void camera_action_think (int clientID, usercmd_t *cmd);
-qboolean ParsePriorityList (void);
+void camera_action_setup(int clientID);
+void camera_action_wrapup(int clientID);
+void camera_action_begin(int clientID);
+void camera_action_add_target(int other);
+void camera_action_remove_target(int other);
+void camera_action_frame(int clientID);
+void camera_action_think(int clientID, usercmd_t* cmd);
+qboolean ParsePriorityList(void);
 
 // q2cam begin
 
 enum cam_modes_n
 {
-    CAM_NORMAL_MODE,
-    CAM_FOLLOW_MODE
+	CAM_NORMAL_MODE,
+	CAM_FOLLOW_MODE
 };
 
 #define DAMP_ANGLE_Y				6
@@ -1073,7 +1073,7 @@ enum cam_modes_n
 #define CAMERA_DEAD_SWITCH_TIME		2
 #define CAMERA_MIN_SWITCH_TIME		4
 #define CAMERA_FIXED_SWITCH_TIME	2
-extern edict_t *pDeadPlayer;
+extern edict_t* pDeadPlayer;
 
 // q2cam end
 

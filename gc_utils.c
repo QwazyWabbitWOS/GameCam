@@ -6,58 +6,58 @@
 
 #include "gamecam.h"
 
-char *dayNameShort[] =
+char* dayNameShort[] =
 { "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" };
 
-char *dayName[] =
-{"Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"};
+char* dayName[] =
+{ "Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday" };
 
-char *monthNameShort[] =
-{"Jan","Feb","Mar","Apr","May","Jun", "Jul","Aug","Sep","Oct","Nov","Dec"};
+char* monthNameShort[] =
+{ "Jan","Feb","Mar","Apr","May","Jun", "Jul","Aug","Sep","Oct","Nov","Dec" };
 
-char *monthName[] =
-{"January","February","March","April","May","June", "July","August","September","October","November","December"};
+char* monthName[] =
+{ "January","February","March","April","May","June", "July","August","September","October","November","December" };
 
 
-edict_t	*pm_passent;
+edict_t* pm_passent;
 
 // pmove doesn't need to know about passent and contentmask
-trace_t	PM_trace (vec3_t start, vec3_t mins, vec3_t maxs, vec3_t end)
+trace_t	PM_trace(vec3_t start, vec3_t mins, vec3_t maxs, vec3_t end)
 {
-	return gci.trace (start, mins, maxs, end, pm_passent, MASK_PLAYERSOLID);
+	return gci.trace(start, mins, maxs, end, pm_passent, MASK_PLAYERSOLID);
 }
 
 
 int PrevClient(int clientID)
 {
 	int prev;
-	edict_t *target;
+	edict_t* target;
 	qboolean found = false;
-	qboolean chase_observers = ((((int) gc_flags->value) & GCF_CHASE_OBSERVERS) != 0);
+	qboolean chase_observers = ((((int)gc_flags->value) & GCF_CHASE_OBSERVERS) != 0);
 
 	for (prev = clientID - 1; prev >= 0 && !found; prev--)
 	{
-		target = Edict (prev + 1);
-		found = (clients[prev].inuse && 
-			clients[prev].begin && 
+		target = Edict(prev + 1);
+		found = (clients[prev].inuse &&
+			clients[prev].begin &&
 			!clients[prev].spectator &&
 			(chase_observers ||
-			(target->client && 
-			target->client->ps.pmove.pm_type != PM_SPECTATOR &&
-			target->client->ps.pmove.pm_type != PM_FREEZE)));
+				(target->client &&
+					target->client->ps.pmove.pm_type != PM_SPECTATOR &&
+					target->client->ps.pmove.pm_type != PM_FREEZE)));
 	}
 	if (!found)
 	{
-		for (prev = (int) maxclients->value - 1; prev > clientID && !found; prev--)
+		for (prev = (int)maxclients->value - 1; prev > clientID && !found; prev--)
 		{
-			target = Edict (prev + 1);
+			target = Edict(prev + 1);
 			found = (clients[prev].inuse &&
-				clients[prev].begin && 
+				clients[prev].begin &&
 				!clients[prev].spectator &&
 				(chase_observers ||
-				(target->client && 
-				target->client->ps.pmove.pm_type != PM_SPECTATOR &&
-				target->client->ps.pmove.pm_type != PM_FREEZE)));
+					(target->client &&
+						target->client->ps.pmove.pm_type != PM_SPECTATOR &&
+						target->client->ps.pmove.pm_type != PM_FREEZE)));
 		}
 	}
 	return (found) ? prev + 1 : clientID;
@@ -67,33 +67,33 @@ int PrevClient(int clientID)
 int NextClient(int clientID)
 {
 	int next;
-	edict_t *target;
+	edict_t* target;
 	qboolean found = false;
-	qboolean chase_observers = ((((int) gc_flags->value) & GCF_CHASE_OBSERVERS) != 0);
+	qboolean chase_observers = ((((int)gc_flags->value) & GCF_CHASE_OBSERVERS) != 0);
 
-	for (next = clientID + 1; next < (int) maxclients->value && !found; next++)
+	for (next = clientID + 1; next < (int)maxclients->value && !found; next++)
 	{
-		target = Edict (next + 1);
+		target = Edict(next + 1);
 		found = (clients[next].inuse &&
-			clients[next].begin && 
+			clients[next].begin &&
 			!clients[next].spectator &&
 			(chase_observers ||
-			(target->client && 
-			target->client->ps.pmove.pm_type != PM_SPECTATOR &&
-			target->client->ps.pmove.pm_type != PM_FREEZE)));
+				(target->client &&
+					target->client->ps.pmove.pm_type != PM_SPECTATOR &&
+					target->client->ps.pmove.pm_type != PM_FREEZE)));
 	}
 	if (!found)
 	{
 		for (next = 0; next < clientID && !found; next++)
 		{
-			target = Edict (next + 1);
-			found = (clients[next].inuse && 
-				clients[next].begin && 
+			target = Edict(next + 1);
+			found = (clients[next].inuse &&
+				clients[next].begin &&
 				!clients[next].spectator &&
 				(chase_observers ||
-				(target->client && 
-				target->client->ps.pmove.pm_type != PM_SPECTATOR &&
-				target->client->ps.pmove.pm_type != PM_FREEZE)));
+					(target->client &&
+						target->client->ps.pmove.pm_type != PM_SPECTATOR &&
+						target->client->ps.pmove.pm_type != PM_FREEZE)));
 		}
 	}
 	return (found) ? next - 1 : clientID;
@@ -105,37 +105,37 @@ int ClosestClient(int clientID)
 	int i, other;
 	short stat_id_view;
 	float range, min_range = -1.0F;
-	edict_t *ent, *target;
+	edict_t* ent, * target;
 	vec3_t diff = { 0 };
-	qboolean chase_observers = ((((int) gc_flags->value) & GCF_CHASE_OBSERVERS) != 0);
+	qboolean chase_observers = ((((int)gc_flags->value) & GCF_CHASE_OBSERVERS) != 0);
 
 	ent = Edict(clientID + 1);
 	// use SetIDView to find which client is in view
 	stat_id_view = ent->client->ps.stats[STAT_ID_VIEW]; // save
-	SetIDView (ent, true); // true means that only *real* clients are found (can't chase bots)
+	SetIDView(ent, true); // true means that only *real* clients are found (can't chase bots)
 	//	SetIDView (ent, false);
 	other = ent->client->ps.stats[STAT_ID_VIEW];
 	ent->client->ps.stats[STAT_ID_VIEW] = stat_id_view; // restore
 	// if there's a client in view return its number
-	if (other) 
+	if (other)
 		return (other - CS_PLAYERSKINS);
 
 	// if no clients are in view then find the closest one
-	for (i = 0; i < maxclients->value; i++) 
+	for (i = 0; i < maxclients->value; i++)
 	{
-		target = Edict (i + 1);
+		target = Edict(i + 1);
 		if (i != clientID &&
-			clients[i].inuse && 
-			clients[i].begin && 
+			clients[i].inuse &&
+			clients[i].begin &&
 			!clients[i].spectator &&
 			(chase_observers ||
-			(target->client && 
-			target->client->ps.pmove.pm_type != PM_SPECTATOR &&
-			target->client->ps.pmove.pm_type != PM_FREEZE)))
+				(target->client &&
+					target->client->ps.pmove.pm_type != PM_SPECTATOR &&
+					target->client->ps.pmove.pm_type != PM_FREEZE)))
 		{
 			VectorSubtract(ent->s.origin, target->s.origin, diff);
 			range = VectorLength(diff);
-			if (min_range < 0 || range < min_range) 
+			if (min_range < 0 || range < min_range)
 			{
 				min_range = range;
 				other = i;
@@ -151,7 +151,7 @@ int ClosestClient(int clientID)
 }
 
 
-qboolean IsVisible(edict_t *pPlayer1, edict_t *pPlayer2, float maxrange)
+qboolean IsVisible(edict_t* pPlayer1, edict_t* pPlayer2, float maxrange)
 {
 	vec3_t vLength = { 0 };
 	float distance;
@@ -161,7 +161,7 @@ qboolean IsVisible(edict_t *pPlayer1, edict_t *pPlayer2, float maxrange)
 	if (!gci.inPVS(pPlayer1->s.origin, pPlayer2->s.origin))
 		return false;
 
-	trace = gci.trace (pPlayer1->s.origin, vec3_origin, vec3_origin, pPlayer2->s.origin, pPlayer1, MASK_SOLID);
+	trace = gci.trace(pPlayer1->s.origin, vec3_origin, vec3_origin, pPlayer2->s.origin, pPlayer1, MASK_SOLID);
 
 	VectorSubtract(pPlayer1->s.origin, pPlayer2->s.origin, vLength);
 	distance = VectorLength(vLength);
@@ -170,11 +170,11 @@ qboolean IsVisible(edict_t *pPlayer1, edict_t *pPlayer2, float maxrange)
 }
 
 
-edict_t *ClosestVisible(edict_t *ent, float maxrange, qboolean pvs)
+edict_t* ClosestVisible(edict_t* ent, float maxrange, qboolean pvs)
 {
 	int i;
-	edict_t *pTarget;
-	edict_t *pBest = NULL;
+	edict_t* pTarget;
+	edict_t* pBest = NULL;
 	vec3_t vDistance = { 0 };
 	float fCurrent, fClosest = -1.0F;
 
@@ -183,16 +183,16 @@ edict_t *ClosestVisible(edict_t *ent, float maxrange, qboolean pvs)
 		pTarget = Edict(i + 1);
 		if (pTarget != ent &&
 			((clients[i].inuse &&
-			clients[i].begin &&
-			!clients[i].spectator) ||
-			(pTarget->inuse &&
-			pTarget->s.modelindex !=0)) &&
+				clients[i].begin &&
+				!clients[i].spectator) ||
+				(pTarget->inuse &&
+					pTarget->s.modelindex != 0)) &&
 			pTarget->client &&
 			pTarget->client->ps.pmove.pm_type != PM_SPECTATOR &&
 			pTarget->client->ps.pmove.pm_type != PM_FREEZE &&
 			clients[i].last_pmtype != PM_DEAD &&
 			clients[i].last_pmtype != PM_GIB &&
-			((pvs)? gci.inPVS (ent->s.origin, pTarget->s.origin):IsVisible (ent, pTarget, maxrange)))
+			((pvs) ? gci.inPVS(ent->s.origin, pTarget->s.origin) : IsVisible(ent, pTarget, maxrange)))
 		{
 			VectorSubtract(pTarget->s.origin, ent->s.origin, vDistance);
 			fCurrent = VectorLength(vDistance);
@@ -211,35 +211,35 @@ edict_t *ClosestVisible(edict_t *ent, float maxrange, qboolean pvs)
 int numPlayers(void)
 {
 	int i, count = 0;
-	edict_t *current;
+	edict_t* current;
 
-	for (i = 0; i < maxclients->value; i++) 
+	for (i = 0; i < maxclients->value; i++)
 	{
-		current = Edict(i+1);
+		current = Edict(i + 1);
 		if (((clients[i].inuse &&
 			clients[i].begin &&
 			!clients[i].spectator) ||
 			(current->inuse &&
-			current->s.modelindex != 0)) &&
+				current->s.modelindex != 0)) &&
 			current->client &&
 			current->client->ps.pmove.pm_type != PM_SPECTATOR &&
 			current->client->ps.pmove.pm_type != PM_FREEZE)
-			count ++;
+			count++;
 	}
 	return count;
 }
 
 
-int getBestClient (void)
+int getBestClient(void)
 {
 	int i;
 	int clientID = -1;
 	int frags = 0;
-	edict_t *current;
+	edict_t* current;
 
-	for (i = 0; i < maxclients->value; i++) 
+	for (i = 0; i < maxclients->value; i++)
 	{
-		current = Edict(i+1);
+		current = Edict(i + 1);
 		if ((clients[i].inuse &&
 			clients[i].begin &&
 			!clients[i].spectator) &&
@@ -253,22 +253,22 @@ int getBestClient (void)
 }
 
 
-qboolean detect_intermission (void)
+qboolean detect_intermission(void)
 {
 	qboolean intermission = true;
 	qboolean found = false;
 	int i;
-	edict_t *current;
+	edict_t* current;
 
 	for (i = 0; i < maxclients->value; i++)
 	{
-		current = Edict(i+1);
+		current = Edict(i + 1);
 		if (!found)
 			found = clients[i].inuse && clients[i].begin && !clients[i].spectator;
 		if (!found)
 			continue;
-		if (clients[i].inuse && 
-			clients[i].begin && 
+		if (clients[i].inuse &&
+			clients[i].begin &&
 			!clients[i].spectator)
 			if (!(current->client->ps.stats[STAT_LAYOUTS] & 1) ||
 				current->client->ps.pmove.pm_type != PM_FREEZE)
@@ -276,11 +276,11 @@ qboolean detect_intermission (void)
 				intermission = false;
 				break;
 			}
-	}	
+	}
 	return (found && intermission);
 }
 
-char getHexDigit (char hex_char)
+char getHexDigit(char hex_char)
 {
 	if (hex_char >= '0' && hex_char <= '9')
 		return hex_char - '0';
@@ -291,20 +291,20 @@ char getHexDigit (char hex_char)
 	return '?'; // not a hex digit?
 }
 
-int getHex (char *hex_string, char *hex_number)
+int getHex(char* hex_string, char* hex_number)
 {
 	*hex_number = 0;
 	if ((hex_string[0] >= '0' && hex_string[0] <= '9') ||
 		(hex_string[0] >= 'A' && hex_string[0] <= 'F') ||
 		(hex_string[0] >= 'a' && hex_string[0] <= 'f'))
 	{
-		*hex_number = getHexDigit (hex_string[0]);
+		*hex_number = getHexDigit(hex_string[0]);
 		if ((hex_string[1] >= '0' && hex_string[1] <= '9') ||
 			(hex_string[1] >= 'A' && hex_string[1] <= 'F') ||
 			(hex_string[1] >= 'a' && hex_string[1] <= 'f'))
 		{
 			*hex_number *= 16;
-			*hex_number += getHexDigit (hex_string[1]);
+			*hex_number += getHexDigit(hex_string[1]);
 			return 2;
 		}
 		else
@@ -315,7 +315,7 @@ int getHex (char *hex_string, char *hex_number)
 }
 
 
-int getOct (char *oct_string, char *oct_number)
+int getOct(char* oct_string, char* oct_number)
 {
 	*oct_number = 0;
 	if (oct_string[0] >= '0' && oct_string[0] <= '7')
@@ -342,7 +342,7 @@ int getOct (char *oct_string, char *oct_number)
 }
 
 
-char *highlightText (char *text)
+char* highlightText(char* text)
 {
 	while (*text)
 		*text++ |= 0x80;
@@ -350,18 +350,18 @@ char *highlightText (char *text)
 }
 
 
-int sortScores (const void *a, const void *b)
+int sortScores(const void* a, const void* b)
 {
-	return ((Edict(((int *)b)[0] + 1))->client->ps.stats[STAT_FRAGS] - 
-		(Edict(((int *)a)[0] + 1))->client->ps.stats[STAT_FRAGS]);
+	return ((Edict(((int*)b)[0] + 1))->client->ps.stats[STAT_FRAGS] -
+		(Edict(((int*)a)[0] + 1))->client->ps.stats[STAT_FRAGS]);
 }
 
 
-char *scoreBoard (char *text)
+char* scoreBoard(char* text)
 {
 	int i, j;
 	int hiscores[MAX_CLIENTS] = { 0 };
-	edict_t *current;
+	edict_t* current;
 
 	for (i = 0, j = 0; i < maxclients->value; i++)
 	{
@@ -371,7 +371,7 @@ char *scoreBoard (char *text)
 			clients[i].begin &&
 			!clients[i].spectator) ||
 			(current->inuse &&
-			current->s.modelindex != 0)) &&
+				current->s.modelindex != 0)) &&
 			current->client &&
 			current->client->ps.pmove.pm_type != PM_SPECTATOR &&
 			current->client->ps.pmove.pm_type != PM_FREEZE)
@@ -379,25 +379,25 @@ char *scoreBoard (char *text)
 	}
 	if (j)
 	{
-		strcpy (text, "\213");
-		qsort (hiscores, j, sizeof(int), sortScores);
-		for (i = 0; i < ((gc_maxscores->value)? MIN(j, gc_maxscores->value):j); i++)
+		strcpy(text, "\213");
+		qsort(hiscores, j, sizeof(int), sortScores);
+		for (i = 0; i < ((gc_maxscores->value) ? MIN(j, gc_maxscores->value) : j); i++)
 		{
 			char currentScore[MAX_INFO_STRING];
 			char currentName[MAX_INFO_VALUE];
 
-			strcpy (currentName, ConfigStrings[CS_PLAYERSKINS + hiscores[i]]);
-			char* tp = strstr (currentName, "\\"); // chomp off skin
+			strcpy(currentName, ConfigStrings[CS_PLAYERSKINS + hiscores[i]]);
+			char* tp = strstr(currentName, "\\"); // chomp off skin
 			if (tp) *tp = '\0';
-			sprintf (currentScore, " %s - %d \213", currentName, (Edict(hiscores[i] + 1))->client->ps.stats[STAT_FRAGS]);
-			if (strlen (text) + strlen (currentScore) < MAX_STRING_CHARS)
-				strcat (text, currentScore);
+			sprintf(currentScore, " %s - %d \213", currentName, (Edict(hiscores[i] + 1))->client->ps.stats[STAT_FRAGS]);
+			if (strlen(text) + strlen(currentScore) < MAX_STRING_CHARS)
+				strcat(text, currentScore);
 			else
 				break;
 		}
 	}
 	else
-		highlightText (strcpy (text, "\235\236server\236is\236empty\236\237"));
+		highlightText(strcpy(text, "\235\236server\236is\236empty\236\237"));
 	return text;
 }
 
@@ -522,29 +522,29 @@ char* motd(char* motdstr)
 
 
 // trim a and compare it to b
-qboolean trimcmp (char *a, char *b)
+qboolean trimcmp(char* a, char* b)
 {
-	char *pos_head, *pos_tail;
+	char* pos_head, * pos_tail;
 
-	if ((pos_head = pos_tail = strstr (a, b)) == NULL)
+	if ((pos_head = pos_tail = strstr(a, b)) == NULL)
 		return false;
 	while (pos_head != a)
-		if (!isspace (*(--pos_head)))
+		if (!isspace(*(--pos_head)))
 			return false;
-	pos_tail += strlen (b);
+	pos_tail += strlen(b);
 	while (*pos_tail)
-		if (!isspace (*(pos_tail++)))
+		if (!isspace(*(pos_tail++)))
 			return false;
 	return true;
 }
 
 
 // test if line is blank or remark (starts with '//')
-qboolean blank_or_remark (char *line)
+qboolean blank_or_remark(char* line)
 {
-	while (*line && isspace (*line)) 
+	while (*line && isspace(*line))
 		line++;
-	return ((*line == '\0') || (*line == '/' && *(line+1) == '/'));
+	return ((*line == '\0') || (*line == '/' && *(line + 1) == '/'));
 }
 
 
@@ -553,78 +553,78 @@ qboolean blank_or_remark (char *line)
 // so that client is forced to change info - letting us
 // to modify the name reported to GameSpy by the server
 // (the name stuff is done in ClientUserinfoChanged)
-void set_fov (edict_t *ent, float fov, qboolean force)
+void set_fov(edict_t* ent, float fov, qboolean force)
 {
 	char fov_cmd[MAX_INFO_VALUE];
 
 	if (force)
 	{
-		int clientID = numEdict (ent) - 1;
+		int clientID = numEdict(ent) - 1;
 
 		ent->client->ps.fov = 90;
-		if (strcmp (Info_ValueForKey (clients[clientID].userinfo, "fov"), "90"))
-			strcpy (fov_cmd, "fov 90\n");
+		if (strcmp(Info_ValueForKey(clients[clientID].userinfo, "fov"), "90"))
+			strcpy(fov_cmd, "fov 90\n");
 		else
-			strcpy (fov_cmd, "fov 90.0\n");
+			strcpy(fov_cmd, "fov 90.0\n");
 	}
 	else
 	{
 		if (ent->client->ps.fov == fov)
 			return;
 		ent->client->ps.fov = fov;
-		sprintf (fov_cmd, "fov %d\n", (int) fov);
+		sprintf(fov_cmd, "fov %d\n", (int)fov);
 	}
-	gci.WriteByte (svc_stufftext);
-	gci.WriteString (fov_cmd);
-	gci.unicast (ent, true);
+	gci.WriteByte(svc_stufftext);
+	gci.WriteString(fov_cmd);
+	gci.unicast(ent, true);
 }
 
 
-qboolean sameTeam (edict_t *player1, edict_t *player2)
+qboolean sameTeam(edict_t* player1, edict_t* player2)
 {
-	char *skin1, *skin2, model1[MAX_INFO_VALUE], model2[MAX_INFO_VALUE];
+	char* skin1, * skin2, model1[MAX_INFO_VALUE], model2[MAX_INFO_VALUE];
 	int client1, client2;
 
 	// no teams
-	if ((((int)(dmflags->value) & (DF_MODELTEAMS | DF_SKINTEAMS)) == 0) && 
+	if ((((int)(dmflags->value) & (DF_MODELTEAMS | DF_SKINTEAMS)) == 0) &&
 		gc_teams->string[0] == '\0' && !ctf_game)
 		return false;
 	// detect teams by model/skin
-	client1 = numEdict (player1) - 1;
-	client2 = numEdict (player2) - 1;
-	skin1 = strstr (ConfigStrings[CS_PLAYERSKINS + client1], "\\") + 1;
-	skin2 = strstr (ConfigStrings[CS_PLAYERSKINS + client2], "\\") + 1;
+	client1 = numEdict(player1) - 1;
+	client2 = numEdict(player2) - 1;
+	skin1 = strstr(ConfigStrings[CS_PLAYERSKINS + client1], "\\") + 1;
+	skin2 = strstr(ConfigStrings[CS_PLAYERSKINS + client2], "\\") + 1;
 
 	if (!skin1 || !skin2) //QW this is here to silence the compiler
 		return false;
 
-	if ((((int) dmflags->value) & DF_SKINTEAMS) ||
-		((((int) gc_flags->value) & GCF_TEAMS) && strcmp (gc_teams->string, "skin") == 0) ||
-		(!(((int) gc_flags->value) & GCF_TEAMS) && ctf_game))
+	if ((((int)dmflags->value) & DF_SKINTEAMS) ||
+		((((int)gc_flags->value) & GCF_TEAMS) && strcmp(gc_teams->string, "skin") == 0) ||
+		(!(((int)gc_flags->value) & GCF_TEAMS) && ctf_game))
 	{
-		skin1 = strchr (skin1, '/') + 1;
-		skin2 = strchr (skin2, '/') + 1;
-		return (strcmp (skin1, skin2) == 0);
+		skin1 = strchr(skin1, '/') + 1;
+		skin2 = strchr(skin2, '/') + 1;
+		return (strcmp(skin1, skin2) == 0);
 	}
-	if ((((int) dmflags->value) & DF_MODELTEAMS) || 
-		((((int) gc_flags->value) & GCF_TEAMS) && strcmp (gc_teams->string, "model") == 0))
+	if ((((int)dmflags->value) & DF_MODELTEAMS) ||
+		((((int)gc_flags->value) & GCF_TEAMS) && strcmp(gc_teams->string, "model") == 0))
 	{
-		strcpy (model1, skin1);
-		*(strchr (model1, '/')) = '\0';
-		strcpy (model2, skin2);
-		*(strchr (model2, '/')) = '\0';
-		return (strcmp (model1, model2) == 0);
+		strcpy(model1, skin1);
+		*(strchr(model1, '/')) = '\0';
+		strcpy(model2, skin2);
+		*(strchr(model2, '/')) = '\0';
+		return (strcmp(model1, model2) == 0);
 	}
 	// detect teams by other model
-	if (((int) gc_flags->value) & GCF_TEAMS)
+	if (((int)gc_flags->value) & GCF_TEAMS)
 	{
-		if (strcmp (gc_teams->string, "gun") == 0)
+		if (strcmp(gc_teams->string, "gun") == 0)
 			return (player1->client->ps.gunindex == player2->client->ps.gunindex);
-		if (strcmp (gc_teams->string, "model2") == 0)
+		if (strcmp(gc_teams->string, "model2") == 0)
 			return (player1->s.modelindex2 == player2->s.modelindex2);
-		if (strcmp (gc_teams->string, "model3") == 0)
+		if (strcmp(gc_teams->string, "model3") == 0)
 			return (player1->s.modelindex3 == player2->s.modelindex3);
-		if (strcmp (gc_teams->string, "model4") == 0)
+		if (strcmp(gc_teams->string, "model4") == 0)
 			return (player1->s.modelindex4 == player2->s.modelindex4);
 	}
 	// false by default
@@ -633,9 +633,9 @@ qboolean sameTeam (edict_t *player1, edict_t *player2)
 
 
 // limit angle to [-180, 180]
-float anglemod (float angle)
+float anglemod(float angle)
 {
-	while (fabs (angle) > 180)
+	while (fabs(angle) > 180)
 		if (angle > 0)
 			angle -= 360;
 		else
@@ -646,7 +646,7 @@ float anglemod (float angle)
 
 // subtract angle b from a to give minimum difference
 // assume a and b are in [-180, 180]
-float anglediff (float a, float b)
+float anglediff(float a, float b)
 {
 	float c, c1, c2, c3;
 
@@ -654,9 +654,9 @@ float anglediff (float a, float b)
 	c2 = a - (b + 360);
 	c3 = a - (b - 360);
 	c = c1;
-	if (fabs (c2) < fabs (c))
+	if (fabs(c2) < fabs(c))
 		c = c2;
-	if (fabs (c3) < fabs (c))
+	if (fabs(c3) < fabs(c))
 		c = c3;
 	return c;
 }
@@ -665,11 +665,11 @@ float anglediff (float a, float b)
 // case independent string compare
 // if s1 is contained within s2 then return 0, they are "equal".
 // else return the lexicographical difference between them.
-int	Q_strcasecmp(const char *s1, const char *s2)
+int	Q_strcasecmp(const char* s1, const char* s2)
 {
 	const unsigned char
-		*uc1 = (const unsigned char *)s1,
-		*uc2 = (const unsigned char *)s2;
+		* uc1 = (const unsigned char*)s1,
+		* uc2 = (const unsigned char*)s2;
 
 	while (tolower(*uc1) == tolower(*uc2++))
 		if (*uc1++ == '\0')
@@ -681,11 +681,11 @@ int	Q_strcasecmp(const char *s1, const char *s2)
 // compare strings up to length n or until the end of s1
 // if s1 is contained within s2 then return 0
 // else return the lexicographical difference between them.
-int Q_strncasecmp(const char *s1, const char *s2, size_t n)
+int Q_strncasecmp(const char* s1, const char* s2, size_t n)
 {
 	const unsigned char
-		*uc1 = (const unsigned char *)s1,
-		*uc2 = (const unsigned char *)s2;
+		* uc1 = (const unsigned char*)s1,
+		* uc2 = (const unsigned char*)s2;
 
 	if (n != 0) {
 		do {

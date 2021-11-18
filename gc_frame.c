@@ -16,10 +16,10 @@ qboolean match_started = false;
 qboolean intermission = false;
 int best_clientID;
 
-void RunFrame (void)
+void RunFrame(void)
 {
 	int clientID;
-	edict_t *ent;
+	edict_t* ent;
 	float save_timelimit = 0.0F;
 	char s_save_timelimit[MAX_INFO_VALUE];
 	char s_timelimit[MAX_INFO_VALUE];
@@ -40,13 +40,13 @@ void RunFrame (void)
 					float minutes_left = timelimit->value - (framenum - match_startframe) / 600.0F;
 					match_updateframes = 0;
 					if (minutes_left > 0)
-						gci.bprintf (PRINT_CHAT, "[GameCam]: match ends in %d minutes\n", (int) minutes_left);
+						gci.bprintf(PRINT_CHAT, "[GameCam]: match ends in %d minutes\n", (int)minutes_left);
 				}
 			}
-			if (timelimit->value && !match_10sec && ((long) (timelimit->value * 600.0F)) - (framenum - match_startframe) <= 100)
+			if (timelimit->value && !match_10sec && ((long)(timelimit->value * 600.0F)) - (framenum - match_startframe) <= 100)
 			{
 				match_10sec = true;
-				gci.sound (gce->edicts, CHAN_AUTO, gci.soundindex ("world/10_0.wav"), 1, ATTN_NONE, 0);
+				gci.sound(gce->edicts, CHAN_AUTO, gci.soundindex("world/10_0.wav"), 1, ATTN_NONE, 0);
 			}
 		}
 		else
@@ -54,37 +54,37 @@ void RunFrame (void)
 		if (timelimit->value)
 		{
 			save_timelimit = timelimit->value;
-			strcpy (s_save_timelimit, timelimit->string);
+			strcpy(s_save_timelimit, timelimit->string);
 			if (match_started)
 			{
-				sprintf (s_timelimit, "%f", timelimit->value + match_offsetframes / 600.0);
-				gci.cvar_set ("timelimit", s_timelimit);
+				sprintf(s_timelimit, "%f", timelimit->value + match_offsetframes / 600.0);
+				gci.cvar_set("timelimit", s_timelimit);
 			}
 			else
-				gci.cvar_set ("timelimit", "0");
+				gci.cvar_set("timelimit", "0");
 		}
 	}
 
 	ge.RunFrame();
 
 	if (gc_autocam->value && save_timelimit)
-		gci.cvar_set ("timelimit", s_save_timelimit);
+		gci.cvar_set("timelimit", s_save_timelimit);
 
 	if (!intermission)
 	{
-		intermission = detect_intermission ();
+		intermission = detect_intermission();
 		if (intermission)
 		{
-			best_clientID = getBestClient ();
+			best_clientID = getBestClient();
 			for (clientID = 0; clientID < maxclients->value; clientID++)
 				clients[clientID].intermission = false;
 		}
 	}
 
 	// update ticker tape
-	ticker_flags = (cam_count)? ticker_update () : 0;
+	ticker_flags = (cam_count) ? ticker_update() : 0;
 
-	for (clientID = 0; clientID < maxclients->value; clientID++) 
+	for (clientID = 0; clientID < maxclients->value; clientID++)
 	{
 		ent = Edict(clientID + 1);
 		if (clients[clientID].ticker_delay)
@@ -93,59 +93,59 @@ void RunFrame (void)
 			if (clients[clientID].ticker_delay < 0)
 				clients[clientID].ticker_delay = 0;
 			if (clients[clientID].ticker_delay == 0)
-				ticker_setup (ent);
+				ticker_setup(ent);
 		}
 		if (gc_autocam->value && clients[clientID].motddelay)
 		{
 			clients[clientID].motddelay--;
 			if (!clients[clientID].motddelay)
-				gci.centerprintf (ent, motd (gc_motd->string));
+				gci.centerprintf(ent, motd(gc_motd->string));
 		}
 
-		if (clients[clientID].inuse && 
-			clients[clientID].begin && 
+		if (clients[clientID].inuse &&
+			clients[clientID].begin &&
 			clients[clientID].spectator)
 		{
 			// is spectator in limbo?
-			if (clients[clientID].limbo_time == 0) 
-			{ 
+			if (clients[clientID].limbo_time == 0)
+			{
 				// not in limbo
-				switch (clients[clientID].mode) 
+				switch (clients[clientID].mode)
 				{
 				case CAMERA_FREE:
-					camera_free_frame (clientID);
+					camera_free_frame(clientID);
 					break;
 				case CAMERA_CHASE:
-					camera_chase_frame (clientID);
+					camera_chase_frame(clientID);
 					break;
 				case CAMERA_ACTION:
-					camera_action_frame (clientID);
+					camera_action_frame(clientID);
 				}
 				if (!intermission)
 				{
 					if (clients[clientID].score && !(framenum & 31))
-						UpdateScore (clientID);
-					if (clients[clientID].inven) 
+						UpdateScore(clientID);
+					if (clients[clientID].inven)
 					{
 						ent->client->ps.stats[STAT_LAYOUTS] = 2;
 						ent->client->ps.stats[STAT_SELECTED_ITEM] = clients[clientID].item;
 					}
-					else 
+					else
 					{
 						if (!clients[clientID].layouts)
 							ent->client->ps.stats[STAT_LAYOUTS] &= ~2;
 					}
 				}
-				else 
+				else
 				{
 					if (!clients[clientID].intermission)
 					{
 						clients[clientID].intermission = true;
-						ticker_remove_statusbar (ent);
+						ticker_remove_statusbar(ent);
 						if (clients[clientID].last_score != framenum) // prevent overflow
-						{ 
-							gci.WriteByte (svc_layout);
-							gci.WriteString (clients[best_clientID].layout);
+						{
+							gci.WriteByte(svc_layout);
+							gci.WriteString(clients[best_clientID].layout);
 							gci.unicast(ent, true);
 							clients[clientID].last_score = framenum;
 						}
@@ -157,19 +157,19 @@ void RunFrame (void)
 				if (clients[clientID].mode != CAMERA_CHASE &&
 					!clients[clientID].score &&
 					!intermission)
-					ticker_frame (ent);
-			} 
-			else 
-			{   
+					ticker_frame(ent);
+			}
+			else
+			{
 				// spectator in limbo
 				clients[clientID].limbo_time--;
 				switch (clients[clientID].limbo_time)
 				{
 				case 0:
-					ReturnToGame (ent);
+					ReturnToGame(ent);
 					break;
 				case 1:
-					CameraOff (ent);
+					CameraOff(ent);
 					break;
 				default:
 					break;
@@ -177,13 +177,13 @@ void RunFrame (void)
 			}
 		}
 		// find out who has just died
-		if ((clients[clientID].inuse && 
-			clients[clientID].begin &&	
-			!clients[clientID].spectator) || 
+		if ((clients[clientID].inuse &&
+			clients[clientID].begin &&
+			!clients[clientID].spectator) ||
 			(ent->inuse &&
-			ent->s.modelindex != 0))
+				ent->s.modelindex != 0))
 		{
-			if (ent->client->ps.pmove.pm_type != clients[clientID].last_pmtype) 
+			if (ent->client->ps.pmove.pm_type != clients[clientID].last_pmtype)
 			{
 				clients[clientID].last_pmtype = ent->client->ps.pmove.pm_type;
 				if (clients[clientID].last_pmtype == PM_DEAD)
@@ -194,14 +194,14 @@ void RunFrame (void)
 		if (clients[clientID].menu)
 			ent->client->ps.stats[STAT_LAYOUTS] |= 1;
 		else if (clients[clientID].menu_hnd)
-			PMenu_Close (ent);
+			PMenu_Close(ent);
 	}
 }
 
 
 int current_client = -1;
 
-void ClientThink (edict_t *ent, usercmd_t *cmd)
+void ClientThink(edict_t* ent, usercmd_t* cmd)
 {
 	int clientID;
 
@@ -215,25 +215,25 @@ void ClientThink (edict_t *ent, usercmd_t *cmd)
 	if (clients[clientID].limbo_time == 0)
 	{
 		if (clients[clientID].spectator)
-			switch (clients[clientID].mode) 
-		{
+			switch (clients[clientID].mode)
+			{
 			case CAMERA_FREE:
-				camera_free_think (clientID, cmd);
+				camera_free_think(clientID, cmd);
 				break;
 			case CAMERA_CHASE:
-				camera_chase_think (clientID, cmd);
+				camera_chase_think(clientID, cmd);
 				break;
 			case CAMERA_ACTION:
-				camera_action_think (clientID, cmd);
-		}
-		else 
+				camera_action_think(clientID, cmd);
+			}
+		else
 		{
 			current_client = clientID;
-			ge.ClientThink (ent, cmd);
+			ge.ClientThink(ent, cmd);
 			current_client = -1;
 		}
 	}
-	/*	else 
+	/*	else
 	{
 	int i;
 
@@ -246,9 +246,9 @@ void ClientThink (edict_t *ent, usercmd_t *cmd)
 }
 
 
-void Pmove (pmove_t *pmove)
+void Pmove(pmove_t* pmove)
 {
-	gci.Pmove (pmove);
+	gci.Pmove(pmove);
 
 	if (current_client < 0)
 		return;
@@ -259,9 +259,9 @@ void Pmove (pmove_t *pmove)
 	clients[current_client].waterlevel = pmove->waterlevel;
 	clients[current_client].watertype = pmove->watertype;
 	clients[current_client].groundentity = pmove->groundentity;
-	clients[current_client].velocity[0] = pmove->s.velocity[0]*0.125F;
-	clients[current_client].velocity[1] = pmove->s.velocity[1]*0.125F;
-	clients[current_client].velocity[2] = pmove->s.velocity[2]*0.125F;
-	VectorCopy (pmove->viewangles, clients[current_client].v_angle);
+	clients[current_client].velocity[0] = pmove->s.velocity[0] * 0.125F;
+	clients[current_client].velocity[1] = pmove->s.velocity[1] * 0.125F;
+	clients[current_client].velocity[2] = pmove->s.velocity[2] * 0.125F;
+	VectorCopy(pmove->viewangles, clients[current_client].v_angle);
 }
 
