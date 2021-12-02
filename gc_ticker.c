@@ -236,9 +236,7 @@ int ticker_update(void)
 				{
 					// original text
 					ticker_current->text[0] = '\0';
-					strncpy(ticker_current->text,
-						ticker_spaces,
-						ticker_offset / 8 + ((ticker_offset % 8) ? 1 : 0));
+					strncpy(ticker_current->text, ticker_spaces, (size_t)(ticker_offset / 8 + ((ticker_offset % 8) ? 1 : 0)));
 					if (ticker_offset % 8)
 						ticker_current->place = 1;
 					ticker_current->text[ticker_offset / 8 + ((ticker_offset % 8) ? 1 : 0)] = '\0';
@@ -304,9 +302,8 @@ int ticker_update(void)
 				ticker_offset = 4;
 				ticker_current->place++;
 			}
-			strncpy(ticker_text,
-				&(ticker_current->text[ticker_current->place]),
-				TICKER_MAX_CHARS - ((ticker_offset) ? 1 : 0));
+			strncpy(ticker_text, &(ticker_current->text[ticker_current->place]),
+				(size_t)TICKER_MAX_CHARS - ((ticker_offset) ? 1 : 0));
 			ticker_text[TICKER_MAX_CHARS - ((ticker_offset) ? 1 : 0)] = '\0'; // clip
 			ticker_flags |= TICKER_UPDATE_TEXT;
 			if (ticker_current->offset != ticker_offset ||
@@ -353,7 +350,8 @@ int ticker_update(void)
 			}
 			else
 				ticker_offset = 4;
-			strncpy(ticker_text, &ticker_current->text[ticker_current->place], TICKER_MAX_CHARS - ((ticker_offset % 8) ? 1 : 0));
+			strncpy(ticker_text, &ticker_current->text[ticker_current->place], 
+				(size_t)TICKER_MAX_CHARS - ((ticker_offset % 8) ? 1 : 0));
 			ticker_text[TICKER_MAX_CHARS - ((ticker_offset % 8) ? 1 : 0)] = '\0';
 			ticker_flags |= TICKER_UPDATE_TEXT;
 			if (ticker_current->place > 0 ||
@@ -480,9 +478,8 @@ qboolean ticker_parse_getparam(char* line, char* sub, char** value)
 {
 	char* i;
 	char* j;
-	static char tmp[MAX_STRING_CHARS];
+	static char tmp[MAX_STRING_CHARS] = { 0 };
 
-	tmp[0] = '\0';
 	i = strstr(line, sub);
 	j = (i) ? strstr(line, "text") : NULL;
 	*value = tmp;

@@ -7,10 +7,8 @@
 #ifdef _WIN32
 #pragma warning(disable : 4244)	// C4244 conversion from 'type1' to 'type2', possible loss of data
 #pragma warning(disable : 4100)	// C4100 unreferenced formal parameter
-#if _MSC_VER > 1500
 #pragma warning(disable : 4996)	// disable warnings from VS 2010 about deprecated CRT functions (_CRT_SECURE_NO_WARNINGS).
 #pragma warning(disable : 4459)	// declaration of 'var' hides global declaration.
-#endif
 #endif
 
 #define	GAME_API_VERSION	3

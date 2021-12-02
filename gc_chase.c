@@ -100,13 +100,16 @@ void camera_chase_remove_target(int other)
 
 void camera_chase_frame(int clientID)
 {
-	vec3_t o, ownerv, goal, vDiff;
+	vec3_t o;
+	vec3_t ownerv = { 0 };
+	vec3_t goal = { 0 };
+	vec3_t vDiff = { 0 };
 	edict_t* target;
 	edict_t* ent;
 	vec3_t forward, right;
 	trace_t trace;
 	int i;
-	vec3_t angles;
+	vec3_t angles = { 0 };
 
 	if (clients[clientID].target < 0)
 		return;
@@ -264,8 +267,8 @@ void camera_chase_frame(int clientID)
 		((framenum & 31) == 0 || clients[clientID].update_chase))
 	{
 		char s[MAX_STRING_CHARS];
-		char target1st[MAX_INFO_VALUE];
-		char target2nd[MAX_INFO_VALUE];
+		char target1st[MAX_INFO_VALUE] = { 0 };
+		char target2nd[MAX_INFO_VALUE] = { 0 };
 
 		target1st[0] = '\0';
 		target2nd[0] = '\0';
@@ -318,7 +321,7 @@ void camera_chase_think(int clientID, usercmd_t* cmd)
 	}
 	else
 	{
-		vec3_t oldangles;
+		vec3_t oldangles = { 0 };
 
 		clients[clientID].chase_distance -= cmd->forwardmove * (((float)cmd->msec) / 2500.0F);
 		if (clients[clientID].chase_distance > 128)

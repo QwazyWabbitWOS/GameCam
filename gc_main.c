@@ -11,7 +11,7 @@ void* hGameDLL = NULL;
 #endif
 
 
-#ifdef _WIN32
+#if defined _WIN32 && !defined (_M_X64) // Windows, but not Win64
 #if defined _HH_
 #define GAME_MODULE     "hhx86.dll"  //cascade with HeadHunters 
 #elif defined LOX
@@ -24,9 +24,22 @@ void* hGameDLL = NULL;
 #endif
 #endif
 #define PROXY_MODULE    "gamex86.dll"	// the name loaded if cvar nextproxy is blank
+#elif defined _WIN32 // Windows and Win64 
+#if defined _HH_
+#define GAME_MODULE     "hhx86_64.dll"  //cascade with HeadHunters 
+#elif defined LOX
+#define GAME_MODULE     "gamex86_64.lox.dll"  //cascade with LOX
+#else
+#if defined Q2ADMIN
+#define GAME_MODULE    "q2admin64.dll" // cascade to q2admin
+#else
+#define GAME_MODULE    "gamex86_64.real.dll" // cascade as if GameCam was q2admin
+#endif
+#endif
+#define PROXY_MODULE    "gamex86_64.dll"	// the name loaded if cvar nextproxy is blank
 #endif
 
-#ifdef __GNUC__
+#if defined __GNUC__
 void* hGameDLL;
 
 #ifdef LINUXAXP
@@ -141,7 +154,7 @@ void InitGameCam(void)
 	for (i=0; i<256; i++)
 	gci.dprintf ("[%.3d]=%c\n",i,i);
 	***/
-	gci.dprintf("==== Init (GameCam "GAMECAMVERNUM" "__DATE__") ====\n");
+	gci.dprintf("==== Init (GameCam %s %s) ====\n", GAMECAMVERNUM, __DATE__);
 	ClearBuffer();
 	clients = gci.TagMalloc(sizeof(clients_t) * ((int)maxclients->value), TAG_GAME);
 	memset(clients, 0, sizeof(clients_t) * ((int)maxclients->value));
@@ -162,19 +175,19 @@ void LoadGameModule(char* game_basedir, char* game_dir)
 	{
 		gci.cvar_forceset("nextproxy", "");
 		sprintf(GameLibPath, "%s/baseq2/" GAME_MODULE, basedir->string);
-		gci.dprintf("...loading default game module \"%s\": ", GameLibPath);
+		gci.dprintf("GameCam is loading default game module \"%s\": ", GameLibPath);
 	}
 	else if (game_basedir[0] != '\0')
 	{
 		// load next proxy module
 		sprintf(GameLibPath, "%s/%s/%s/" PROXY_MODULE, basedir->string, game_basedir, game_dir);
-		gci.dprintf("...loading proxy module \"%s\": ", GameLibPath);
+		gci.dprintf("GameCam is loading proxy module \"%s\": ", GameLibPath);
 	}
 	else
 	{
 		// load real game module
 		sprintf(GameLibPath, "%s/%s/" GAME_MODULE, basedir->string, game_dir);
-		gci.dprintf("...loading game module \"%s\": ", GameLibPath);
+		gci.dprintf("GameCam is loading game module \"%s\": ", GameLibPath);
 	}
 
 #ifdef _WIN32

@@ -15,8 +15,9 @@ edict_t* camera_creep_target(int clientID)
 {
 	int i;
 	edict_t* pTarget1st, * pTarget2nd;
-	edict_t* pBest1 = NULL, * pBest2 = NULL;
-	vec3_t vDistance;
+	edict_t* pBest1 = NULL;
+	edict_t* pBest2 = NULL;
+	vec3_t vDistance = { 0 };
 	float fCurrent, fClosest1 = -1.0F, fClosest2 = -1.0F;
 
 	pTarget1st = Edict(clients[clientID].target + 1);
@@ -66,7 +67,7 @@ void camera_creep_angle(int clientID)
 	//edict_t *camera;
 	edict_t* target;
 	edict_t* player;
-	vec3_t player2target, vDiff;
+	vec3_t player2target, vDiff = { 0 };
 	float best_angle, chase_diff, target_distance, target_yaw;
 	float gamma, best_angle1, best_angle2, chase_diff1, chase_diff2;
 
@@ -148,7 +149,7 @@ void camera_creep_viewangles(int clientID)
 	// determine desired yaw and pitch
 	if (clients[clientID].creep_target)
 	{
-		vec3_t vDiff, target_angles;
+		vec3_t vDiff = { 0 }, target_angles;
 
 		VectorSubtract(clients[clientID].creep_target->s.origin, ent->s.origin, vDiff);
 		vectoangles(vDiff, target_angles);
