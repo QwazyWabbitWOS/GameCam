@@ -63,19 +63,19 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>c:\quake2\lox\</OutDir>
+    <OutDir>$(Q2DIR)\lox\</OutDir>
     <TargetName>gamex86</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutDir>c:\quake2\lox\</OutDir>
+    <OutDir>$(Q2DIR)\lox\</OutDir>
     <TargetName>gamex86_64</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>c:\quake2\lox\</OutDir>
+    <OutDir>$(Q2DIR)\lox\</OutDir>
     <TargetName>gamex86</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutDir>c:\quake2\lox\</OutDir>
+    <OutDir>$(Q2DIR)\lox\</OutDir>
     <TargetName>gamex86_64</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
