@@ -661,7 +661,6 @@ float anglediff(float a, float b)
 	return c;
 }
 
-
 // case independent string compare
 // if s1 is contained within s2 then return 0, they are "equal".
 // else return the lexicographical difference between them.
@@ -671,10 +670,10 @@ int	Q_strcasecmp(const char* s1, const char* s2)
 		* uc1 = (const unsigned char*)s1,
 		* uc2 = (const unsigned char*)s2;
 
-	while (tolower(*uc1) == tolower(*uc2++))
+	while (Q_tolower(*uc1) == Q_tolower(*uc2++))
 		if (*uc1++ == '\0')
 			return (0);
-	return (tolower(*uc1) - tolower(*--uc2));
+	return (Q_tolower(*uc1) - Q_tolower(*--uc2));
 }
 
 // case independent string compare of length n
@@ -689,8 +688,8 @@ int Q_strncasecmp(const char* s1, const char* s2, size_t n)
 
 	if (n != 0) {
 		do {
-			if (tolower(*uc1) != tolower(*uc2++))
-				return (tolower(*uc1) - tolower(*--uc2));
+			if (Q_tolower(*uc1) != Q_tolower(*uc2++))
+				return (Q_tolower(*uc1) - Q_tolower(*--uc2));
 			if (*uc1++ == '\0')
 				break;
 		} while (--n != 0);

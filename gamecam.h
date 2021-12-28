@@ -936,6 +936,25 @@ float anglediff(float a, float b);
 
 extern vec3_t vec3_origin;
 
+// fast "C" macros
+#define Q_isupper(c)    ((c) >= 'A' && (c) <= 'Z')
+#define Q_islower(c)    ((c) >= 'a' && (c) <= 'z')
+#define Q_isdigit(c)    ((c) >= '0' && (c) <= '9')
+#define Q_isalpha(c)    (Q_isupper(c) || Q_islower(c))
+#define Q_isalnum(c)    (Q_isalpha(c) || Q_isdigit(c))
+#define Q_isprint(c)    ((c) >= 32 && (c) < 127)
+#define Q_isgraph(c)    ((c) > 32 && (c) < 127)
+#define Q_isspace(c)    (c == ' ' || c == '\f' || c == '\n' || \
+                         c == '\r' || c == '\t' || c == '\v')
+
+__inline int Q_tolower(int c)
+{
+	if (Q_isupper(c)) {
+		c += ('a' - 'A');
+	}
+	return c;
+}
+
 void Com_sprintf(char* dest, int size, char* fmt, ...);
 int Q_stricmp(char* s1, char* s2);
 int	Q_strcasecmp(const char* s1, const char* s2);
