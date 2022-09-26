@@ -1,0 +1,15 @@
+gc_action.o: gc_action.c gamecam.h
+gc_chase.o: gc_chase.c gamecam.h
+gc_cmd.o: gc_cmd.c gamecam.h
+gc_config.o: gc_config.c gamecam.h
+gc_connect.o: gc_connect.c gamecam.h
+gc_creep.o: gc_creep.c gamecam.h
+gc_fixed.o: gc_fixed.c gamecam.h
+gc_frame.o: gc_frame.c gamecam.h
+gc_free.o: gc_free.c gamecam.h
+gc_id.o: gc_id.c gamecam.h
+gc_main.o: gc_main.c gamecam.h
+gc_menu.o: gc_menu.c gamecam.h
+gc_net.o: gc_net.c gamecam.h
+gc_ticker.o: gc_ticker.c gamecam.h
+gc_utils.o: gc_utils.c gamecam.h
