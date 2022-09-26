@@ -34,5 +34,4 @@ That's it. Have fun.
 
 Usage
 =====
-Refer to the v1.02 manual, or visit the GameCam site at
-http://www.telefragged.com/zungbang/gamecam
+Refer to the v1.02 manual contained in this archive.
