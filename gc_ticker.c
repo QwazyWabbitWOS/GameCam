@@ -216,7 +216,7 @@ int ticker_update(void)
 			else
 			{
 				ticker_offset = 0;
-				strncpy(&ticker_text[ticker_current->startspace], ticker_temp, (size_t)(TICKER_MAX_CHARS - ticker_current->startspace));
+				strncpy(&ticker_text[ticker_current->startspace], ticker_temp, ((size_t)TICKER_MAX_CHARS - ticker_current->startspace));
 			}
 			ticker_text[TICKER_MAX_CHARS] = '\0'; // clip
 			ticker_flags |= TICKER_UPDATE_TEXT;
@@ -236,7 +236,7 @@ int ticker_update(void)
 				{
 					// original text
 					ticker_current->text[0] = '\0';
-					strncpy(ticker_current->text, ticker_spaces, (size_t)(ticker_offset / 8 + ((ticker_offset % 8) ? 1 : 0)));
+					strncpy(ticker_current->text, ticker_spaces, ((size_t)ticker_offset / 8 + ((ticker_offset % 8) ? 1 : 0)));
 					if (ticker_offset % 8)
 						ticker_current->place = 1;
 					ticker_current->text[ticker_offset / 8 + ((ticker_offset % 8) ? 1 : 0)] = '\0';

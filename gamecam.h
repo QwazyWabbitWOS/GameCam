@@ -746,9 +746,8 @@ typedef struct clients_s
 #define FOFS(x)     q_offsetof(edict_t, x)
 
 // edict access macros
-#define Edict(i)		((edict_t *) (((byte *) gce->edicts) + (gce->edict_size * (size_t)(i))))
+#define Edict(i)		((edict_t *) (((byte *) gce->edicts) + (gce->edict_size * ((size_t)i))))
 #define numEdict(ent)	((((byte *) (ent)) - ((byte *) gce->edicts)) / gce->edict_size)
-//#define	FOFS(x)			(int)&(((edict_t *)0)->x)
 
 extern	edict_t* g_edicts;
 
