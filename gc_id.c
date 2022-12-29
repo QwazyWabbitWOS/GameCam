@@ -42,9 +42,8 @@ key and returns the associated value, or an empty string.
 char* Info_ValueForKey(char* s, char* key)
 {
 	char	pkey[512] = { 0 };
-	static	char value[2][512];	// use two buffers so compares
-	// work without stomping on each other
-	static	int	valueindex;
+	static	char value[2][MAX_INFO_STRING] = { "" }; // Use two buffers so compares work without stomping on each other.
+	static	int	valueindex = 1;
 	char* o;
 
 	valueindex ^= 1;
@@ -596,7 +595,7 @@ void vectoangles(vec3_t value1, vec3_t angles)
 
 float* tv(float x, float y, float z)
 {
-	static	int		index;
+	static	int		index = 0;
 	static	vec3_t	vecs[8];
 	float* v;
 

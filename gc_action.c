@@ -1024,7 +1024,7 @@ void FreePriorityList(void)
 qboolean ParsePriorityList(void)
 {
 	FILE* rfp;
-	unsigned int i, j, linenum = 0;
+	size_t i, j, linenum = 0;
 	int	priority = 0;
 	char line[MAX_STRING_CHARS], path[MAX_OSPATH];
 	qboolean prev_blank = true;
@@ -1102,7 +1102,7 @@ qboolean ParsePriorityList(void)
 		if (i == strlen(line) || !line[i])
 			goto ERR_BADTARGET;
 		// valid value?
-		for (j = 0; i + j < (int)strlen(line) && line[i + j] > ' ' && !(line[i + j] == '/' && line[i + j - 1] == '/'); j++);
+		for (j = 0; i + j < strlen(line) && line[i + j] > ' ' && !(line[i + j] == '/' && line[i + j - 1] == '/'); j++);
 		if (line[i + j] == '/')
 			j--;
 		if (j >= MAX_QPATH)
