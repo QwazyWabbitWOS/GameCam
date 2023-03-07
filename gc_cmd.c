@@ -1611,7 +1611,7 @@ void GameCommand(edict_t* ent, char* command)
 			command_temp++;
 		}
 		if (command_temp)
-			strncpy(command_args, command_temp, MAX_STRING_CHARS - 1);
+			Q_strncpyz(command_args, command_temp, MAX_STRING_CHARS - 1);
 		else
 			command_args[0] = '\0';
 	}
@@ -1620,11 +1620,11 @@ void GameCommand(edict_t* ent, char* command)
 		camera_command_flag = false;
 		return;
 	}
-	strncpy(command_argv[0], com_token, MAX_TOKEN_CHARS);
+	Q_strncpyz(command_argv[0], com_token, MAX_TOKEN_CHARS - 1);
 	while (strlen((com_token = COM_Parse(&command_temp))))
 	{
 		command_argc++;
-		strncpy(command_argv[command_argc], com_token, MAX_TOKEN_CHARS);
+		Q_strncpyz(command_argv[command_argc], com_token, MAX_TOKEN_CHARS - 1);
 	}
 	command_argc++;
 	ge.ClientCommand(ent);

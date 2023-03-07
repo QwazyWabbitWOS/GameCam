@@ -696,3 +696,36 @@ int Q_strncasecmp(const char* s1, const char* s2, size_t n)
 	}
 	return (0);
 }
+
+static void Com_Printf(char* msg, ...)
+{
+	va_list		argptr;
+	char		text[1024];
+
+	va_start(argptr, msg);
+	vsprintf(text, msg, argptr);
+	va_end(argptr);
+
+	gi.dprintf("%s", text);
+}
+
+size_t Q_strncpyz(char* dst, const char* src, size_t dstSize)
+{
+	char* d = dst;
+	const char* s = src;
+	size_t        decSize = dstSize;
+
+	if (!dst || !src || dstSize < 1) {
+		Com_Printf("Bad arguments passed to %s\n", __func__);
+		return 0;
+	}
+
+	while (--decSize && *s)
+		*d++ = *s++;
+	*d = 0;
+
+	if (decSize == 0)    // Insufficent room in dst, return count + length of remaining src
+		return (s - src + strlen(s));
+	else
+		return (s - src);    // returned count excludes NUL terminator
+}

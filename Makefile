@@ -22,7 +22,7 @@ ARCH := $(shell uname -m | sed -e s/i.86/i386/ \
 # On 64-bit OS use the command: setarch i386 make all
 # to obtain the 32-bit binary DLL on 64-bit Linux.
 
-CC = gcc -std=c11 -Wall -Wextra -Wno-unused-parameter
+CC = gcc -std=c11 -Wall
 
 # on x64 machines do this preparation:
 # sudo apt-get install ia32-libs
@@ -45,16 +45,12 @@ CFLAGS += -DQ2ADMIN
 
 # flavors of Linux
 ifeq ($(shell uname),Linux)
-#SVNDEV := -D'SVN_REV="$(shell svnversion -n .)"'
-#CFLAGS += $(SVNDEV)
 CFLAGS += -DLINUX
 LIBTOOL = ldd
 endif
 
 # OS X wants to be Linux and FreeBSD too.
 ifeq ($(shell uname),Darwin)
-#SVNDEV := -D'SVN_REV="$(shell svnversion -n .)"'
-#CFLAGS += $(SVNDEV)
 CFLAGS += -DLINUX
 LIBTOOL = otool
 endif
@@ -88,11 +84,12 @@ clean:
 	-rm -f $(GAME_OBJS_GC)
 
 all:
-	-rm -f $(GAME_OBJS_GC)
+	make clean
+	make depends
 	make
 
 depends:
-	$(CC) $(CFLAGS) -MM *.c > dependencies
+	$(CC) $(CFLAGS) -MM *.c > .dependencies
 
 #############################################################################
 # DEPENDENCIES
@@ -100,4 +97,4 @@ depends:
 
 ### GameCam
 
--include dependencies
+-include .dependencies
