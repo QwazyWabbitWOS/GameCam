@@ -154,7 +154,7 @@ void InitGameCam(void)
 	for (i=0; i<256; i++)
 	gci.dprintf ("[%.3d]=%c\n",i,i);
 	***/
-	gci.dprintf("==== Init (GameCam %s %s) ====\n", GAMECAMVERNUM, __DATE__);
+	gci.dprintf("==== Init (GameCam %s %s %s) ====\n", GAMECAMVERNUM, __DATE__, BUILD);
 	ClearBuffer();
 	clients = gci.TagMalloc(sizeof(clients_t) * ((int)maxclients->value), TAG_GAME);
 	memset(clients, 0, sizeof(clients_t) * ((int)maxclients->value));
