@@ -34,7 +34,7 @@ CC = gcc -std=c11 -Wall
 CFLAGS=-O3 -DARCH="$(ARCH)" -DSTDC_HEADERS
 # This is for 32-bit build on 64-bit host
 ifeq ($(ARCH),i386)
-CFLAGS =-m32 -O3 -DARCH="$(ARCH)" -DSTDC_HEADERS -I/usr/include
+CFLAGS +=-m32 -DSTDC_HEADERS -I/usr/include
 endif
 
 # use this when debugging

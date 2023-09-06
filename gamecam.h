@@ -964,7 +964,6 @@ __inline int Q_tolower(int c)
 }
 
 void Com_sprintf(char* dest, int size, char* fmt, ...);
-int Q_stricmp(char* s1, char* s2);
 int	Q_strcasecmp(const char* s1, const char* s2);
 int Q_strncasecmp(const char* s1, const char* s2, size_t n);
 size_t Q_strncpyz(char* dst, const char* src, size_t dstSize);
