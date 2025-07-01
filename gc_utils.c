@@ -595,7 +595,10 @@ qboolean sameTeam(edict_t* player1, edict_t* player2)
 	skin1 = strstr(ConfigStrings[CS_PLAYERSKINS + client1], "\\") + 1;
 	skin2 = strstr(ConfigStrings[CS_PLAYERSKINS + client2], "\\") + 1;
 
-	if (!skin1 || !skin2) //QW this is here to silence the compiler
+	//QW This is here to silence the Microsoft compiler about potential NULL skin1 or skin2
+	// in the blocks that follow. It should not be possible for the engine to return a null 
+	// configstring pointer but we handle it here just in case. Note: most engines terminate.
+	if (!skin1 || !skin2)
 		return false;
 
 	if ((((int)dmflags->value) & DF_SKINTEAMS) ||

@@ -794,7 +794,7 @@ void ticker_update_camera(edict_t* ent, camera_t* camera)
 	camera_location[32] = '\0';
 	highlightText(camera_location);
 	// update HUD
-	ent->client->ps.stats[STAT_CAM_OFFSET] = offset_lo;
+	ent->client->ps.stats[STAT_CAM_OFFSET] = (short)offset_lo;
 	ent->client->ps.stats[STAT_CAM_LOCATION] = CS_CAM_LOCATION;
 	gci.WriteByte(svc_configstring);
 	gci.WriteShort(CS_CAM_LOCATION);

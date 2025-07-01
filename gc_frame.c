@@ -128,7 +128,7 @@ void RunFrame(void)
 					if (clients[clientID].inven)
 					{
 						ent->client->ps.stats[STAT_LAYOUTS] = 2;
-						ent->client->ps.stats[STAT_SELECTED_ITEM] = clients[clientID].item;
+                        ent->client->ps.stats[STAT_SELECTED_ITEM] = (short)clients[clientID].item;
 					}
 					else
 					{

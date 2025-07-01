@@ -196,7 +196,7 @@ void Info_SetValueForKey(char* s, char* key, char* value)
 		c = *v++;
 		c &= 127;		// strip high bits
 		if (c >= 32 && c < 127)
-			*s++ = c;
+			*s++ = (char)c;
 	}
 	*s = 0;
 }
@@ -264,7 +264,7 @@ skipwhite:
 			}
 			if (len < MAX_TOKEN_CHARS)
 			{
-				com_token[len] = c;
+				com_token[len] = (char)c;
 				len++;
 			}
 		}
@@ -275,7 +275,7 @@ skipwhite:
 	{
 		if (len < MAX_TOKEN_CHARS)
 		{
-			com_token[len] = c;
+			com_token[len] = (char)c;
 			len++;
 		}
 		data++;
@@ -722,7 +722,7 @@ void SetIDView(edict_t* ent, qboolean exclude_bots)
 	if (tr.fraction < 1 && tr.ent && tr.ent->client)
 	{
 		ent->client->ps.stats[STAT_ID_VIEW] =
-			CS_PLAYERSKINS + numEdict(tr.ent) - 1;
+			(short)(CS_PLAYERSKINS + numEdict(tr.ent) - 1);
 		return;
 	}
 
@@ -752,6 +752,6 @@ void SetIDView(edict_t* ent, qboolean exclude_bots)
 		}
 	}
 	if (bd > 0.90)
-		ent->client->ps.stats[STAT_ID_VIEW] = (best) ? CS_PLAYERSKINS + best - 1 : 0;
+	   ent->client->ps.stats[STAT_ID_VIEW] = (short)((best) ? CS_PLAYERSKINS + best - 1 : 0);
 }
 

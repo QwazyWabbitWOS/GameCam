@@ -5,7 +5,6 @@
 // gamecam.h -- shared definitions for camera proxy module
 
 #ifdef _WIN32
-#pragma warning(disable : 4244)	// C4244 conversion from 'type1' to 'type2', possible loss of data
 #pragma warning(disable : 4100)	// C4100 unreferenced formal parameter
 #pragma warning(disable : 4996)	// disable warnings from VS 2010 about deprecated CRT functions (_CRT_SECURE_NO_WARNINGS).
 #pragma warning(disable : 4459)	// declaration of 'var' hides global declaration.
@@ -28,7 +27,7 @@
 #include <dlfcn.h>
 #endif
 
-#include <assert.h>	// keep this here for debugging. r1q2 DebugBreak sux.
+#include <assert.h>
 #include <math.h>
 #include <stdio.h>
 #include <stdarg.h>
@@ -73,10 +72,6 @@ extern void* hGameDLL;
 
 typedef unsigned char 		byte;
 typedef enum { false, true } qboolean;
-
-#ifndef NULL
-#define NULL ((void *)0)
-#endif
 
 // angle indexes
 
@@ -756,7 +751,7 @@ typedef struct clients_s
 
 // edict access macros
 #define Edict(i)		((edict_t *) (((byte *) gce->edicts) + (gce->edict_size * ((size_t)i))))
-#define numEdict(ent)	((((byte *) (ent)) - ((byte *) gce->edicts)) / gce->edict_size)
+#define numEdict(ent)	(int)((((byte *) (ent)) - ((byte *) gce->edicts)) / gce->edict_size)
 
 extern	edict_t* g_edicts;
 
