@@ -14,6 +14,8 @@
 # q2admin.so (the q2admin mod)
 # gamei386.real.so (your game mod)
 
+.DEFAULT_GOAL := game
+
 # this nice line comes from the linux kernel makefile
 ARCH := $(shell uname -m | sed -e s/i.86/i386/ \
 	-e s/sun4u/sparc64/ -e s/arm.*/arm/ \
@@ -27,14 +29,14 @@ CC = gcc -std=c11 -Wall
 # on x64 machines do this preparation:
 # sudo apt-get install ia32-libs
 # sudo apt-get install libc6-dev-i386
-# On Ubuntu 16.x use sudo apt install libc6-dev-i386
+# On Ubuntu 16.x and higher use sudo apt install libc6-dev-i386
 # this will let you build 32-bits on ia64 systems
 #
 # This is for native build
 CFLAGS=-O3 -DARCH="$(ARCH)" -DSTDC_HEADERS
 # This is for 32-bit build on 64-bit host
 ifeq ($(ARCH),i386)
-CFLAGS +=-m32 -DSTDC_HEADERS -I/usr/include
+CFLAGS += -m32 -I/usr/include
 endif
 
 # use this when debugging
@@ -59,42 +61,50 @@ LDFLAGS=-ldl -shared -o
 SHLIBEXT=so
 #set position independent code
 SHLIBCFLAGS=-fPIC
-SHLIBLDFLAGS=-shared
 
+# Build directory
+BUILD_DIR = build$(ARCH)
+
+# Ensure build directory exists
+$(BUILD_DIR):
+	mkdir -p $(BUILD_DIR)
 DO_SHLIB_CC=$(CC) $(CFLAGS) $(SHLIBCFLAGS) -o $@ -c $<
 
-.c.o:
-	$(DO_SHLIB_CC)
 
-GAME_OBJS_GC = \
-	gc_action.o gc_chase.o gc_cmd.o gc_config.o gc_connect.o \
-	gc_creep.o gc_fixed.o gc_frame.o gc_free.o gc_id.o \
-	gc_main.o gc_menu.o gc_net.o gc_ticker.o gc_utils.o
+# List of source and object files
+GAME_SRCS = \
+	gc_action.c gc_chase.c gc_cmd.c gc_config.c gc_connect.c \
+	gc_creep.c gc_fixed.c gc_frame.c gc_free.c gc_id.c \
+	gc_main.c gc_menu.c gc_net.c gc_ticker.c gc_utils.c
 
-game$(ARCH).$(SHLIBEXT) : $(GAME_OBJS_GC)
-	$(CC) $(CFLAGS) $(SHLIBLDFLAGS) -o $@ $(GAME_OBJS_GC) -ldl -lm
-	ldd -r $@
+GAME_OBJS = $(GAME_SRCS:%.c=$(BUILD_DIR)/%.o)
 
+# Pattern rule to place objects in build directory
+$(BUILD_DIR)/%.o: %.c | $(BUILD_DIR)
+	$(CC) $(CFLAGS) $(SHLIBCFLAGS) -MMD -MP -MF $(@:.o=.d) -o $@ -c $<
+-include $(GAME_OBJS:.o=.d)
+# Build all object files that are out-of-date
+game: $(GAME_OBJS) game$(ARCH).$(SHLIBEXT)
+
+
+# Main target: depends on all object files
+game$(ARCH).$(SHLIBEXT): $(GAME_OBJS)
+	$(CC) $(CFLAGS) -shared -o $@ $(GAME_OBJS) -ldl -lm
+	$(LIBTOOL) -r $@
+	file $@
+
+# Build everything (always rebuild all objects and the shared library)
+all:
+	$(MAKE) clean
+	$(MAKE) $(BUILD_DIR)
+	$(MAKE) $(GAME_OBJS)
+	$(MAKE) game$(ARCH).$(SHLIBEXT)
 
 #############################################################################
 # MISC
 #############################################################################
 
 clean:
-	-rm -f $(GAME_OBJS_GC)
+	rm -rf $(BUILD_DIR)
 
-all:
-	$(MAKE) clean
-	$(MAKE) depends
-	$(MAKE)
 
-depends:
-	$(CC) $(CFLAGS) -MM *.c > .dependencies
-
-#############################################################################
-# DEPENDENCIES
-#############################################################################
-
-### GameCam
-
--include .dependencies
