@@ -39,9 +39,6 @@ ifeq ($(ARCH),i386)
 CFLAGS += -m32 -I/usr/include
 endif
 
-# use this when debugging
-#CFLAGS=-g -Og -DDEBUG -DARCH="$(ARCH)" -Wall -pedantic
-
 # This selects whether we want to use q2admin with our server.
 CFLAGS += -DQ2ADMIN
 
@@ -68,7 +65,6 @@ BUILD_DIR = build$(ARCH)
 # Ensure build directory exists
 $(BUILD_DIR):
 	mkdir -p $(BUILD_DIR)
-DO_SHLIB_CC=$(CC) $(CFLAGS) $(SHLIBCFLAGS) -o $@ -c $<
 
 
 # List of source and object files
@@ -99,10 +95,6 @@ all:
 	$(MAKE) $(BUILD_DIR)
 	$(MAKE) $(GAME_OBJS)
 	$(MAKE) game$(ARCH).$(SHLIBEXT)
-
-#############################################################################
-# MISC
-#############################################################################
 
 clean:
 	rm -rf $(BUILD_DIR)
