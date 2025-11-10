@@ -75,7 +75,7 @@ void* hGameDLL;
 
 
 
-#define GAMECAMVERSION  GAMECAMVERNUM " " __DATE__ " " GAMECAMVERSTATUS
+#define GAMECAMVERSION  GAMECAMVERNUM " " __DATE__
 
 #ifndef GAME_MODULE
 #error Architecture not defined!
@@ -231,7 +231,7 @@ game_export_t* GetGameAPI(game_import_t* gimport)
 
 	//gci.dprintf("\nGameCam v" GAMECAMVERNUM " " GAMECAMVERSTATUS "\n(C) 1998-99, Avi \"Zung!\" Rozen\ne-mail: zungbang@telefragged.com\n\n");
 
-	gc_version = gci.cvar("gc_version", GAMECAMVERSION, CVAR_NOSET);
+	gc_version = gci.cvar("gc_version", GAMECAMVERSION, CVAR_SERVERINFO);
 	gc_flags = gci.cvar("gc_flags", "18147", CVAR_ARCHIVE);
 	gc_count = gci.cvar("gc_count", "0", CVAR_NOSET);
 	gc_password = gci.cvar("gc_password", "", 0);
