@@ -214,77 +214,57 @@ Parse a token out of a string
 */
 char* COM_Parse(char** data_p)
 {
-	int		c;
-	int		len;
-	char* data;
-
-	data = *data_p;
-	len = 0;
+	char c;
+	int len = 0;
+	char* data = *data_p;
 	com_token[0] = 0;
 
-	if (!data)
-	{
+	if (!data) {
 		*data_p = NULL;
 		return "";
 	}
 
-	// skip whitespace
-skipwhite:
-	while ((c = *data) <= ' ')
-	{
-		if (c == 0)
-		{
-			*data_p = NULL;
-			return "";
-		}
-		data++;
-	}
-
-	// skip // comments
-	if (c == '/' && data[1] == '/')
-	{
-		while (*data && *data != '\n')
+	// Skip whitespace and comments
+	while (1) {
+		while ((c = *data) <= ' ') {
+			if (c == 0) {
+				*data_p = NULL;
+				return "";
+			}
 			data++;
-		goto skipwhite;
+		}
+		if (c == '/' && data[1] == '/') {
+			while (*data && *data != '\n')
+				data++;
+		}
+		else {
+			break;
+		}
 	}
 
-
-	// handle quoted strings specially
-	if (c == '\"')
-	{
+	// Handle quoted strings
+	if (c == '\"') {
 		data++;
-		for (;;)
-		{
+		while (1) {
 			c = *data++;
 			if (c == '\"' || !c)
-			{
-				com_token[len] = 0;
-				*data_p = data;
-				return com_token;
-			}
+				break;
 			if (len < MAX_TOKEN_CHARS)
-			{
-				com_token[len] = (char)c;
-				len++;
-			}
+				com_token[len++] = c;
 		}
 	}
+	else {
+		// Parse a regular word
+		do {
+			if (len < MAX_TOKEN_CHARS)
+				com_token[len++] = c;
+			data++;
+			c = *data;
+		} while (c > 32);
+	}
 
-	// parse a regular word
-	do
-	{
-		if (len < MAX_TOKEN_CHARS)
-		{
-			com_token[len] = (char)c;
-			len++;
-		}
-		data++;
-		c = *data;
-	} while (c > 32);
-
-	if (len == MAX_TOKEN_CHARS)
-	{
-		//Com_Printf ("Token exceeded %i chars, discarded.\n", MAX_TOKEN_CHARS);
+	if (len == MAX_TOKEN_CHARS) {
+		gi.dprintf("Token exceeded %i chars, discarded.\n", MAX_TOKEN_CHARS);
 		len = 0;
 	}
 	com_token[len] = 0;
