@@ -7,3 +7,6 @@ ipch/
 *.o
 *.so
 *.sdf
+*.aps
+*.user
+build*/
