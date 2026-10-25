@@ -1,4 +1,4 @@
-### GameCam v1.04 Linux Makefile ###
+### GameCam v1.05qw Linux Makefile ###
 
 # Cascade Proxy Technique:
 # This mod will name itself gamei386.so or gamex86_64.so under
@@ -9,10 +9,9 @@
 # or gamex86_64.real.so.
 
 # Load order: 
-# server
-# gamei386.so (this module)
-# q2admin.so (the q2admin mod)
-# gamei386.real.so (your game mod)
+# gamei386.so or gamex86_64.so (this GameCam module)
+# q2admin.so (the q2admin mod is always named this)
+# gamei386.real.so or gamex86_64.real.so (your game mod)
 
 .DEFAULT_GOAL := game
 

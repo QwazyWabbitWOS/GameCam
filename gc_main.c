@@ -69,7 +69,7 @@ void* hGameDLL;
 #endif
 #if defined Q2ADMIN
 #undef GAME_MODULE
-#define GAME_MODULE     "q2admin.so"
+#define GAME_MODULE     "q2admin.so" // Always this name regardless of arch.
 #endif
 #endif
 
